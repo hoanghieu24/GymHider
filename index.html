@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giảm Cân Thông Minh - Kế Hoạch 7 Ngày</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-weight"></i> Giảm Cân Thông Minh
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#diet">Thực Đơn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#exercise">Lịch Tập</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#progress">Theo Dõi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#stats">Thống Kê</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ai">AI Hỗ Trợ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Kế Hoạch Giảm Cân 7 Ngày</h1>
+            <p class="lead">Kết hợp chế độ dinh dưỡng và tập luyện khoa học để đạt được mục tiêu của bạn</p>
+            <button id="startDayBtn" class="btn btn-light btn-lg mt-3 me-2">Bắt Đầu Ngày Mới</button>
+            <button id="completeDayBtn" class="btn btn-success btn-lg mt-3" disabled>Hoàn Thành Ngày</button>
+            <button id="newWeekBtn" class="btn btn-warning btn-lg mt-3 d-none">Bắt Đầu Tuần Mới</button>
+            <button id="resetAllBtn" class="btn btn-danger btn-lg mt-3">Reset Toàn Bộ</button>
+        </div>
+    </section>
+    <section class="container mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="streak-counter">
+                    <h4><i class="fas fa-fire"></i> Chuỗi ngày tập</h4>
+                    <h2 id="streakCount">0 ngày</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="streak-counter" style="background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);">
+                    <h4><i class="fas fa-trophy"></i> Cấp độ</h4>
+                    <h2 id="userLevel">Mới bắt đầu</h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="streak-counter" style="background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);">
+                    <h4><i class="fas fa-star"></i> Điểm kinh nghiệm</h4>
+                    <h2 id="xpPoints">0 XP</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-progress">
+            <div id="levelProgressBar" class="level-progress-bar" style="width: 0%"></div>
+        </div>
+        <p class="text-center">Tiến trình đến cấp tiếp theo: <span id="levelProgressText">0%</span></p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <!-- Diet Plan Section -->
+        <section id="diet" class="mb-5">
+            <h2 class="text-center mb-4">Thực Đơn Giảm Cân 7 Ngày</h2>
+            <div class="row" id="dietContainer">
+                <!-- Day 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 1</h5>
+                            <p class="text-muted">Calories: ~1200 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> 2 quả trứng luộc + 1 củ khoai</p>
+                            <p><span class="meal-time">Trưa:</span> Ức gà luộc + rau muống luộc + 1 bát cơm</p>
+                            <p><span class="meal-time">Xế:</span> 1 quả chuối</p>
+                            <p><span class="meal-time">Tối:</span> Đậu phụ sốt cà chua + dưa leo + ½ bát cơm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 2</h5>
+                            <p class="text-muted">Calories: ~1250 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> 1 bánh mì thường kẹp trứng + trà xanh</p>
+                            <p><span class="meal-time">Trưa:</span> Cá rô phi kho + rau cải xào + 1 bát cơm</p>
+                            <p><span class="meal-time">Xế:</span> 1 quả táo</p>
+                            <p><span class="meal-time">Tối:</span> 2 quả trứng ốp + rau luộc</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 3</h5>
+                            <p class="text-muted">Calories: ~1180 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> Khoai lang luộc + 1 quả trứng</p>
+                            <p><span class="meal-time">Trưa:</span> Ức gà rang gừng (ít dầu) + canh bí xanh + 1 bát cơm
+                            </p>
+                            <p><span class="meal-time">Xế:</span> 1 quả ổi</p>
+                            <p><span class="meal-time">Tối:</span> Đậu phụ hấp + salad dưa leo cà chua</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional days (hidden by default) -->
+                <div class="col-md-6 col-lg-4 d-none more-days">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 4</h5>
+                            <p class="text-muted">Calories: ~1220 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> 2 quả trứng luộc + 1 lát bánh mì</p>
+                            <p><span class="meal-time">Trưa:</span> Cá nục kho + rau muống + 1 bát cơm</p>
+                            <p><span class="meal-time">Xế:</span> 1 quả chuối</p>
+                            <p><span class="meal-time">Tối:</span> Trứng luộc (1-2 quả) + rau xào</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 d-none more-days">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 5</h5>
+                            <p class="text-muted">Calories: ~1190 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> 1 củ khoai + 1 quả trứng ốp</p>
+                            <p><span class="meal-time">Trưa:</span> Gà luộc + rau cải luộc + 1 bát cơm</p>
+                            <p><span class="meal-time">Xế:</span> 1 quả táo</p>
+                            <p><span class="meal-time">Tối:</span> Đậu phụ chiên ít dầu + dưa leo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 d-none more-days">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 6</h5>
+                            <p class="text-muted">Calories: ~1210 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> 2 quả trứng luộc + 1 củ khoai</p>
+                            <p><span class="meal-time">Trưa:</span> Cá basa kho + rau cải + 1 bát cơm</p>
+                            <p><span class="meal-time">Xế:</span> 1 quả ổi</p>
+                            <p><span class="meal-time">Tối:</span> Trứng ốp + salad cà chua</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 d-none more-days">
+                    <div class="card day-card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Ngày 7</h5>
+                            <p class="text-muted">Calories: ~1230 kcal</p>
+                        </div>
+                        <div class="card-body">
+                            <p><span class="meal-time">Sáng:</span> Bánh mì thường kẹp trứng + sữa đậu nành không đường
+                            </p>
+                            <p><span class="meal-time">Trưa:</span> Ức gà áp chảo + rau luộc + 1 bát cơm</p>
+                            <p><span class="meal-time">Xế:</span> 1 quả chuối</p>
+                            <p><span class="meal-time">Tối:</span> Cá nhỏ kho (cá cơm, cá nục) + rau muống (½ bát cơm
+                                hoặc không cơm)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button id="showAllDaysBtn" class="btn btn-primary">Xem Tất Cả 7 Ngày</button>
+            </div>
+        </section>
+
+        <!-- Exercise Plan Section -->
+        <section id="exercise" class="mb-5">
+            <h2 class="text-center mb-4">Lịch Tập Thể Dục Giảm Cân</h2>
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle"></i> Hãy đánh dấu các bài tập bạn đã hoàn thành để theo dõi tiến độ.
+            </div>
+
+            <div class="row" id="exerciseContainer">
+                <!-- Monday -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Thứ 2</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="1">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="1" data-exercise="warmup">
+                                <span><strong>Khởi động:</strong> 5 phút xoay khớp, chạy bước nhỏ</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="1" data-exercise="cardio">
+                                <span><strong>Cardio:</strong> Đi bộ nhanh / chạy bộ 20 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="1" data-exercise="pushup">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp chống đẩy (10 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="1" data-exercise="squat">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp squat (15 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="1" data-exercise="plank">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp plank (30s)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tuesday -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Thứ 3</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="2">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="2" data-exercise="warmup">
+                                <span><strong>Khởi động:</strong> 5 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="2" data-exercise="cardio">
+                                <span><strong>Cardio:</strong> Nhảy dây hoặc leo cầu thang 15 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="2" data-exercise="crunch">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp gập bụng (15 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="2" data-exercise="lunge">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp lunge (12 cái mỗi chân)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="2" data-exercise="sideplank">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp plank nghiêng (20s mỗi bên)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wednesday -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Thứ 4</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="3">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="3" data-exercise="warmup">
+                                <span><strong>Khởi động:</strong> 5 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="3" data-exercise="cardio">
+                                <span><strong>Cardio:</strong> Đi bộ nhanh / chạy nhẹ 25 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="3" data-exercise="pushup">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp chống đẩy (12 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="3" data-exercise="squat">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp squat (20 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="3" data-exercise="plank">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp plank (40s)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional days (hidden by default) -->
+                <div class="col-md-6 col-lg-4 d-none more-exercises">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Thứ 5</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="4">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="4" data-exercise="warmup">
+                                <span><strong>Khởi động:</strong> 5 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="4" data-exercise="cardio">
+                                <span><strong>Cardio:</strong> Nhảy dây hoặc HIIT (20s nhanh - 40s chậm) trong 15
+                                    phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="4" data-exercise="crunch">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp gập bụng (20 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="4" data-exercise="lunge">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp lunge (12 cái mỗi chân)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="4" data-exercise="plank">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp plank (45s)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 d-none more-exercises">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Thứ 6</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="5">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="5" data-exercise="warmup">
+                                <span><strong>Khởi động:</strong> 5 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="5" data-exercise="cardio">
+                                <span><strong>Cardio:</strong> Đi bộ nhanh / chạy bộ 30 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="5" data-exercise="pushup">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp chống đẩy (15 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="5" data-exercise="squat">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp squat (20 cái)</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="5" data-exercise="plank">
+                                <span><strong>Sức mạnh:</strong> 3 hiệp plank (1 phút)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 d-none more-exercises">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Thứ 7</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="6">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="6" data-exercise="warmup">
+                                <span><strong>Khởi động:</strong> 5 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="6" data-exercise="cardio">
+                                <span><strong>Cardio:</strong> Đá bóng, đạp xe, bơi lội hoặc vận động thể thao 30-45
+                                    phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="6" data-exercise="stretch">
+                                <span><strong>Sức mạnh:</strong> Nhẹ nhàng co giãn toàn thân</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="6" data-exercise="plank">
+                                <span><strong>Sức mạnh:</strong> Plank 30s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 d-none more-exercises">
+                    <div class="card exercise-card">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Chủ nhật</h5>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input day-toggle" type="checkbox" data-day="7">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="7" data-exercise="walk">
+                                <span><strong>Nghỉ ngơi:</strong> Đi dạo nhẹ 20 phút</span>
+                            </div>
+                            <div class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" data-day="7" data-exercise="yoga">
+                                <span><strong>Thư giãn:</strong> Kéo giãn cơ thể, yoga nhẹ 15 phút</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button id="showAllExercisesBtn" class="btn btn-primary">Xem Lịch Tập Đầy Đủ</button>
+            </div>
+        </section>
+        <section id="motivation" class="container mb-5">
+            <h2 class="text-center mb-4">Động Lực Hàng Ngày</h2>
+
+            <div class="motivation-card">
+                <h4><i class="fas fa-quote-left"></i> <span id="dailyQuote">Không có gì là không thể với người biết cố
+                        gắng!</span> <i class="fas fa-quote-right"></i></h4>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title"><i class="fas fa-award"></i> Thành tích đạt được</h5>
+                        </div>
+                        <div class="card-body" id="achievementsContainer">
+                            <p class="text-center">Chưa có thành tích nào. Hãy bắt đầu tập luyện!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title"><i class="fas fa-bullseye"></i> Mục tiêu tuần</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="weeklyGoal">Mục tiêu của bạn:</label>
+                                <select class="form-control" id="weeklyGoal">
+                                    <option value="3">Tập 3 ngày/tuần</option>
+                                    <option value="5" selected>Tập 5 ngày/tuần</option>
+                                    <option value="7">Tập cả 7 ngày</option>
+                                </select>
+                            </div>
+                            <div class="progress mb-3">
+                                <div id="weeklyGoalProgress" class="progress-bar" style="width: 0%">0%</div>
+                            </div>
+                            <p id="weeklyGoalText">Bạn đã hoàn thành 0/5 ngày tập</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Progress Tracking Section -->
+        <section id="progress" class="mb-5">
+            <h2 class="text-center mb-4">Theo Dõi Tiến Trình</h2>
+
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <h5>Ngày Hiện Tại</h5>
+                            <h3 class="text-primary" id="currentDay">Chưa bắt đầu</h3>
+                            <div class="progress mt-3">
+                                <div id="dayProgress" class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <h5>Calories Hôm Nay</h5>
+                            <h3 class="text-primary" id="todayCalories">0 kcal</h3>
+                            <p class="text-muted">Mục tiêu: <span id="calorieGoal">1200</span> kcal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <h5>Bài Tập Hoàn Thành</h5>
+                            <h3 class="text-primary" id="exerciseCompletion">0%</h3>
+                            <div class="progress mt-3">
+                                <div id="exerciseProgress" class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="progressChart"></canvas>
+            </div>
+
+            <h4 class="mb-3">Chuỗi Ngày Thực Hiện</h4>
+            <div class="timeline" id="progressTimeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h5>Chưa có dữ liệu</h5>
+                        <p>Hãy bắt đầu ngày mới và hoàn thành bài tập để theo dõi tiến trình</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section id="stats" class="mb-5">
+            <h2 class="text-center mb-4">Thống Kê Tuần</h2>
+
+            <div class="week-summary" id="weekSummary">
+                <div class="text-center">
+                    <h3><i class="fas fa-trophy"></i> Tổng Kết Tuần</h3>
+                    <p>Hoàn thành <span id="completedDaysCount">0</span>/7 ngày</p>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-4 text-center">
+                        <h4 id="totalExercises">0</h4>
+                        <p>Bài tập hoàn thành</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h4 id="avgCompletion">0%</h4>
+                        <p>Tỷ lệ hoàn thành TB</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h4 id="weightLoss">0 kg</h4>
+                        <p>Ước tính giảm cân</p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button id="viewDetailsBtn" class="btn btn-light me-2">Xem Chi Tiết</button>
+                    <button id="startNewWeekBtn" class="btn btn-warning">Bắt Đầu Tuần Mới</button>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="ai" class="ai-section mb-5">
+            <h2 class="text-center mb-4">Trợ Lý AI Cá Nhân</h2>
+
+            <div class="ai-thinking" id="aiThinking">
+                <i class="fas fa-spinner fa-spin"></i> AI đang suy nghĩ...
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Phân Tích Tiến Độ</h5>
+                        </div>
+                        <div class="card-body" id="aiAnalysis">
+                            <p>Chưa có đủ dữ liệu để phân tích. Hãy hoàn thành ít nhất một ngày tập luyện.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title">Đề Xuất Cá Nhân Hóa</h5>
+                        </div>
+                        <div class="card-body" id="aiSuggestions">
+                            <p>Hãy bắt đầu kế hoạch để nhận đề xuất cá nhân hóa từ AI.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h4 class="mb-3">Hỏi Đáp Với AI</h4>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="aiQuestionInput" placeholder="Câu hỏi về giảm cân...">
+                    <button class="btn btn-primary" id="askAIButton">Gửi</button>
+                </div>
+                <div id="aiConversation">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p><strong>AI:</strong> Chào bạn! Tôi là trợ lý ảo chuyên về giảm cân và thể dục. Hãy hỏi
+                                tôi bất kỳ điều gì về chế độ ăn uống, tập luyện hoặc các thắc mắc về kế hoạch giảm cân
+                                của bạn!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>© 2023 Giảm Cân Thông Minh. Tất cả quyền được bảo lưu.</p>
+            <p>Lưu ý: Tham khảo ý kiến bác sĩ trước khi bắt đầu bất kỳ chế độ ăn kiêng hoặc tập thể dục nào.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
