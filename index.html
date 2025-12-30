@@ -15,6 +15,10 @@
             --dark: #1d3557;
             --light: #f8f9fa;
             --gray: #6c757d;
+            --confirmed: #4CAF50;
+            --shipping: #FF9800;
+            --delivered: #2196F3;
+            --received: #9C27B0;
         }
         
         * {
@@ -419,16 +423,31 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
+            color: white;
         }
         
         .badge-primary {
             background: var(--primary);
-            color: white;
         }
         
         .badge-success {
             background: var(--success);
-            color: white;
+        }
+        
+        .badge-confirmed {
+            background: var(--confirmed);
+        }
+        
+        .badge-shipping {
+            background: var(--shipping);
+        }
+        
+        .badge-delivered {
+            background: var(--delivered);
+        }
+        
+        .badge-received {
+            background: var(--received);
         }
         
         .flex {
@@ -455,7 +474,177 @@
             margin-top: 15px;
             border-left: 4px solid var(--warning);
             white-space: pre-line;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .stats-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .monthly-total {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid var(--primary);
+        }
+        
+        .monthly-total h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .monthly-total h3 i {
+            margin-right: 10px;
+        }
+        
+        .monthly-total-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .month-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .month-item .month-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .month-item .month-total {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .status-select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #e1e5e9;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .status-select.confirmed {
+            border-color: var(--confirmed);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        
+        .status-select.shipping {
+            border-color: var(--shipping);
+            background-color: rgba(255, 152, 0, 0.1);
+        }
+        
+        .status-select.delivered {
+            border-color: var(--delivered);
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+        
+        .status-select.received {
+            border-color: var(--received);
+            background-color: rgba(156, 39, 176, 0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+        
+        .close-modal {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .detail-label {
+            width: 150px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .detail-value {
+            flex: 1;
         }
         
         @media (max-width: 768px) {
@@ -469,6 +658,24 @@
             
             .actions {
                 flex-direction: column;
+            }
+            
+            .stats-card {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .monthly-total-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+            }
+            
+            .detail-label {
+                width: 100%;
+                margin-bottom: 5px;
             }
         }
     </style>
@@ -489,6 +696,9 @@
             </div>
             <div class="tab" data-tab="history">
                 <i class="fas fa-history"></i> Lịch sử
+            </div>
+            <div class="tab" data-tab="stats">
+                <i class="fas fa-chart-bar"></i> Thống kê
             </div>
         </div>
         
@@ -645,6 +855,7 @@
                             <th>Khách hàng</th>
                             <th>Số SP</th>
                             <th>Tổng tiền (VNĐ)</th>
+                            <th>Trạng thái</th>
                             <th>Ngày tạo</th>
                             <th>Thao tác</th>
                         </tr>
@@ -673,6 +884,103 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Thống kê -->
+        <div class="tab-content" id="stats">
+            <div class="stats-card">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-products">0</div>
+                    <div class="stat-label">Sản phẩm</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-orders">0</div>
+                    <div class="stat-label">Tổng đơn hàng</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-revenue">0</div>
+                    <div class="stat-label">Tổng doanh thu (VNĐ)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="month-revenue">0</div>
+                    <div class="stat-label">Doanh thu tháng này (VNĐ)</div>
+                </div>
+            </div>
+            
+            <div class="monthly-total">
+                <h3><i class="fas fa-chart-line"></i> Tổng đơn theo tháng</h3>
+                <div class="monthly-total-content" id="monthly-total-list">
+                    <!-- Thống kê theo tháng sẽ hiển thị ở đây -->
+                </div>
+                <div id="monthly-empty" class="empty-message">
+                    <i class="fas fa-calendar-alt"></i>
+                    <p>Chưa có dữ liệu thống kê theo tháng.</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-filter"></i> Thống kê theo trạng thái</h2>
+                <div class="flex">
+                    <div class="stat-item flex-1" style="text-align: center; padding: 15px; background: rgba(76, 175, 80, 0.1); border-radius: 10px;">
+                        <div class="stat-value" id="confirmed-orders">0</div>
+                        <div class="stat-label">Đã xác nhận</div>
+                    </div>
+                    <div class="stat-item flex-1" style="text-align: center; padding: 15px; background: rgba(255, 152, 0, 0.1); border-radius: 10px;">
+                        <div class="stat-value" id="shipping-orders">0</div>
+                        <div class="stat-label">Đang giao</div>
+                    </div>
+                    <div class="stat-item flex-1" style="text-align: center; padding: 15px; background: rgba(33, 150, 243, 0.1); border-radius: 10px;">
+                        <div class="stat-value" id="delivered-orders">0</div>
+                        <div class="stat-label">Đã giao</div>
+                    </div>
+                    <div class="stat-item flex-1" style="text-align: center; padding: 15px; background: rgba(156, 39, 176, 0.1); border-radius: 10px;">
+                        <div class="stat-value" id="received-orders">0</div>
+                        <div class="stat-label">Đã nhận hàng</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal xem chi tiết đơn hàng -->
+    <div class="modal" id="order-detail-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Chi tiết đơn hàng</h3>
+                <button class="close-modal" id="close-detail-modal">&times;</button>
+            </div>
+            <div id="order-detail-content">
+                <!-- Nội dung chi tiết đơn hàng sẽ được hiển thị ở đây -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="edit-order-btn">
+                    <i class="fas fa-edit"></i> Sửa đơn hàng
+                </button>
+                <button class="btn btn-outline" id="close-detail-btn">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal sửa đơn hàng -->
+    <div class="modal" id="edit-order-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Sửa đơn hàng</h3>
+                <button class="close-modal" id="close-edit-modal">&times;</button>
+            </div>
+            <div id="edit-order-content">
+                <!-- Form sửa đơn hàng sẽ được hiển thị ở đây -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="save-order-btn">
+                    <i class="fas fa-save"></i> Lưu thay đổi
+                </button>
+                <button class="btn btn-outline" id="cancel-edit-btn">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
     </div>
     
     <div id="notification" class="notification">
@@ -688,6 +996,7 @@
         let currentOrderItems = [];
         let selectedImages = [];
         let currentCustomerInfo = {};
+        let currentEditingOrderId = null;
         
         // DOM Elements
         const productsList = document.getElementById('products-list');
@@ -709,10 +1018,33 @@
         const productImagesInput = document.getElementById('product-images');
         const imagePreviewContainer = document.getElementById('image-preview-container');
         
+        // Thống kê elements
+        const totalProducts = document.getElementById('total-products');
+        const totalOrders = document.getElementById('total-orders');
+        const totalRevenue = document.getElementById('total-revenue');
+        const monthRevenue = document.getElementById('month-revenue');
+        const monthlyTotalList = document.getElementById('monthly-total-list');
+        const confirmedOrders = document.getElementById('confirmed-orders');
+        const shippingOrders = document.getElementById('shipping-orders');
+        const deliveredOrders = document.getElementById('delivered-orders');
+        const receivedOrders = document.getElementById('received-orders');
+        
         // Customer info display
         const displayCustomerName = document.getElementById('display-customer-name');
         const displayCustomerPhone = document.getElementById('display-customer-phone');
         const displayCustomerAddress = document.getElementById('display-customer-address');
+        
+        // Modal elements
+        const orderDetailModal = document.getElementById('order-detail-modal');
+        const editOrderModal = document.getElementById('edit-order-modal');
+        const orderDetailContent = document.getElementById('order-detail-content');
+        const editOrderContent = document.getElementById('edit-order-content');
+        const closeDetailModal = document.getElementById('close-detail-modal');
+        const closeDetailBtn = document.getElementById('close-detail-btn');
+        const closeEditModal = document.getElementById('close-edit-modal');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const editOrderBtn = document.getElementById('edit-order-btn');
+        const saveOrderBtn = document.getElementById('save-order-btn');
         
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
@@ -722,6 +1054,11 @@
                 
                 tab.classList.add('active');
                 document.getElementById(tab.dataset.tab).classList.add('active');
+                
+                // Nếu chuyển sang tab thống kê, cập nhật thống kê
+                if (tab.dataset.tab === 'stats') {
+                    updateStats();
+                }
             });
         });
         
@@ -734,6 +1071,9 @@
             
             // Kiểm tra và hiển thị thông báo nếu có dữ liệu trống
             checkEmptyStates();
+            
+            // Cập nhật thống kê
+            updateStats();
         }
         
         // Hiển thị thông báo
@@ -1097,24 +1437,23 @@
             orderTotal.textContent = `Tổng cộng: ${finalTotal.toLocaleString()} VNĐ`;
             
             // Tạo tóm tắt đơn hàng theo định dạng yêu cầu
-            const today = new Date();
-            const dateStr = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-            
-            let orderText = `Đơn ${orders.length + 1} ${dateStr}\n`;
+            let orderText = '';
             
             currentOrderItems.forEach(item => {
-                orderText += `${item.quantity} ${item.name}\n`;
+                const itemTotal = item.price * item.quantity;
+                orderText += `${item.quantity} ${item.name}(${(item.price/1000).toFixed(0)}k/1) = ${(itemTotal/1000).toFixed(0)}k\n`;
             });
             
-            orderText += `Tổng: ${(total/1000).toFixed(0)}k`;
+            const totalK = total/1000;
+            orderText += `Tổng: ${totalK.toFixed(0)}k`;
             
             if (currentCustomerInfo.shippingFee > 0) {
                 orderText += ` + cước ${(currentCustomerInfo.shippingFee/1000).toFixed(0)}k`;
             }
             
-            orderText += `\n anh / Chị: ${currentCustomerInfo.name}`;
-            orderText += `\n Số điện thoại : ${currentCustomerInfo.phone}`;
-            orderText += `\n Địa chỉ: ${currentCustomerInfo.address}`;
+            orderText += `\nanh / Chị: ${currentCustomerInfo.name}`;
+            orderText += `\nSố điện thoại: ${currentCustomerInfo.phone}`;
+            orderText += `\nĐịa chỉ: ${currentCustomerInfo.address}`;
             
             orderSummary.textContent = orderText;
             
@@ -1127,6 +1466,22 @@
                     showNotification('Đã xóa sản phẩm khỏi đơn hàng!');
                 });
             });
+        }
+        
+        // Lấy số thứ tự đơn hàng trong ngày
+        function getOrderNumberForToday() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
+            
+            // Lọc các đơn hàng trong ngày hôm nay
+            const todayOrders = orders.filter(order => {
+                const orderDate = new Date(order.createdAt);
+                const orderDateStr = orderDate.toISOString().split('T')[0];
+                return orderDateStr === todayStr;
+            });
+            
+            // Số thứ tự đơn hàng trong ngày
+            return todayOrders.length + 1;
         }
         
         // Hoàn tất đơn hàng
@@ -1145,23 +1500,49 @@
             const total = currentOrderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             const finalTotal = total + (currentCustomerInfo.shippingFee || 0);
             
+            // Tạo tóm tắt đơn hàng
+            let orderSummaryText = '';
+            currentOrderItems.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                orderSummaryText += `${item.quantity} ${item.name}(${(item.price/1000).toFixed(0)}k/1) = ${(itemTotal/1000).toFixed(0)}k\n`;
+            });
+            
+            const totalK = total/1000;
+            orderSummaryText += `Tổng: ${totalK.toFixed(0)}k`;
+            
+            if (currentCustomerInfo.shippingFee > 0) {
+                orderSummaryText += ` + cước ${(currentCustomerInfo.shippingFee/1000).toFixed(0)}k`;
+            }
+            
+            orderSummaryText += `\nanh / Chị: ${currentCustomerInfo.name}`;
+            orderSummaryText += `\nSố điện thoại: ${currentCustomerInfo.phone}`;
+            orderSummaryText += `\nĐịa chỉ: ${currentCustomerInfo.address}`;
+            
+            // Lấy số thứ tự đơn hàng trong ngày
+            const orderNumber = getOrderNumberForToday();
+            const today = new Date();
+            const dateStr = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+            
             const order = {
                 id: Date.now(),
+                orderNumber: orderNumber,
+                orderDate: dateStr,
                 customerName: currentCustomerInfo.name,
                 customerPhone: currentCustomerInfo.phone,
                 customerAddress: currentCustomerInfo.address,
                 shippingFee: currentCustomerInfo.shippingFee || 0,
                 items: [...currentOrderItems],
                 total: finalTotal,
-                date: new Date().toLocaleString('vi-VN'),
-                summary: orderSummary.textContent
+                createdAt: new Date().toISOString(),
+                status: 'pending', // pending, confirmed, shipping, delivered, received
+                summary: orderSummaryText
             };
             
             orders.push(order);
             saveData();
             renderOrders();
             
-            addHistory('Tạo đơn hàng', `Đã tạo đơn hàng #${order.id} cho khách hàng "${customerName}" với tổng giá trị ${finalTotal.toLocaleString()} VNĐ`);
+            addHistory('Tạo đơn hàng', `Đã tạo đơn hàng #${orderNumber} ngày ${dateStr} cho khách hàng "${customerName}" với tổng giá trị ${finalTotal.toLocaleString()} VNĐ`);
             showNotification('Đã tạo đơn hàng thành công!');
             
             // Reset hoàn toàn
@@ -1187,17 +1568,32 @@
             const ordersToRender = filteredOrders || orders;
             ordersList.innerHTML = '';
             
+            // Sắp xếp đơn hàng theo thời gian tạo mới nhất
+            ordersToRender.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
             ordersToRender.forEach(order => {
+                const statusBadge = getStatusBadge(order.status);
+                const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
+                
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>#${order.id}</td>
+                    <td>Đơn ${order.orderNumber} ${order.orderDate}</td>
                     <td>
                         <div><strong>${order.customerName}</strong></div>
                         <div style="font-size: 0.8rem; color: #6c757d;">${order.customerPhone}</div>
                     </td>
-                    <td>${order.items.reduce((sum, item) => sum + item.quantity, 0)}</td>
+                    <td>${totalItems}</td>
                     <td>${order.total.toLocaleString()} VNĐ</td>
-                    <td>${order.date}</td>
+                    <td>
+                        <select class="status-select ${order.status}" data-id="${order.id}" data-status="${order.status}">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                            <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Đã xác nhận</option>
+                            <option value="shipping" ${order.status === 'shipping' ? 'selected' : ''}>Đang giao</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Đã giao</option>
+                            <option value="received" ${order.status === 'received' ? 'selected' : ''}>Đã nhận hàng</option>
+                        </select>
+                    </td>
+                    <td>${new Date(order.createdAt).toLocaleDateString('vi-VN')}</td>
                     <td class="actions">
                         <button class="btn btn-warning view-order" data-id="${order.id}">
                             <i class="fas fa-eye"></i> Xem
@@ -1225,7 +1621,68 @@
                 });
             });
             
+            // Thêm sự kiện cho dropdown trạng thái
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const orderId = parseInt(this.dataset.id);
+                    const newStatus = this.value;
+                    updateOrderStatus(orderId, newStatus);
+                });
+            });
+            
             checkEmptyStates();
+            updateStats();
+        }
+        
+        // Lấy badge cho trạng thái đơn hàng
+        function getStatusBadge(status) {
+            const statusText = {
+                'pending': 'Chờ xác nhận',
+                'confirmed': 'Đã xác nhận',
+                'shipping': 'Đang giao',
+                'delivered': 'Đã giao',
+                'received': 'Đã nhận hàng'
+            };
+            
+            const statusClass = {
+                'pending': 'badge-primary',
+                'confirmed': 'badge-confirmed',
+                'shipping': 'badge-shipping',
+                'delivered': 'badge-delivered',
+                'received': 'badge-received'
+            };
+            
+            return `<span class="badge ${statusClass[status]}">${statusText[status]}</span>`;
+        }
+        
+        // Cập nhật trạng thái đơn hàng
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) return;
+            
+            const oldStatus = order.status;
+            order.status = newStatus;
+            
+            // Cập nhật class của select để phản ánh trạng thái mới
+            const selectElement = document.querySelector(`.status-select[data-id="${orderId}"]`);
+            if (selectElement) {
+                selectElement.className = `status-select ${newStatus}`;
+                selectElement.dataset.status = newStatus;
+            }
+            
+            saveData();
+            
+            const statusText = {
+                'pending': 'Chờ xác nhận',
+                'confirmed': 'Đã xác nhận',
+                'shipping': 'Đang giao',
+                'delivered': 'Đã giao',
+                'received': 'Đã nhận hàng'
+            };
+            
+            addHistory('Cập nhật trạng thái', `Đã cập nhật đơn hàng #${order.orderNumber} từ "${statusText[oldStatus]}" sang "${statusText[newStatus]}"`);
+            showNotification('Đã cập nhật trạng thái đơn hàng!');
+            updateStats();
         }
         
         // Xem chi tiết đơn hàng
@@ -1233,35 +1690,213 @@
             const order = orders.find(o => o.id === id);
             if (!order) return;
             
-            let itemsText = 'Chi tiết đơn hàng:\n\n';
+            let detailHTML = `
+                <div class="detail-row">
+                    <div class="detail-label">Mã đơn:</div>
+                    <div class="detail-value">Đơn ${order.orderNumber} ${order.orderDate}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Trạng thái:</div>
+                    <div class="detail-value">${getStatusBadge(order.status)}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Ngày tạo:</div>
+                    <div class="detail-value">${new Date(order.createdAt).toLocaleString('vi-VN')}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Tên khách hàng:</div>
+                    <div class="detail-value">${order.customerName}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Số điện thoại:</div>
+                    <div class="detail-value">${order.customerPhone}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Địa chỉ:</div>
+                    <div class="detail-value">${order.customerAddress}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Chi tiết sản phẩm:</div>
+                    <div class="detail-value">
+            `;
+            
             order.items.forEach(item => {
-                itemsText += `- ${item.name} x ${item.quantity}: ${(item.price * item.quantity).toLocaleString()} VNĐ\n`;
+                const itemTotal = item.price * item.quantity;
+                detailHTML += `<div>${item.quantity} x ${item.name} - ${item.price.toLocaleString()} VNĐ = ${itemTotal.toLocaleString()} VNĐ</div>`;
             });
             
-            if (order.shippingFee > 0) {
-                itemsText += `- Phí vận chuyển: ${order.shippingFee.toLocaleString()} VNĐ\n`;
+            detailHTML += `
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Phí vận chuyển:</div>
+                    <div class="detail-value">${order.shippingFee.toLocaleString()} VNĐ</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Tổng cộng:</div>
+                    <div class="detail-value"><strong>${order.total.toLocaleString()} VNĐ</strong></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Tóm tắt đơn hàng:</div>
+                    <div class="detail-value">
+                        <div class="order-summary" style="margin-top: 10px;">
+                            ${order.summary}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            orderDetailContent.innerHTML = detailHTML;
+            orderDetailModal.style.display = 'flex';
+            
+            // Lưu ID đơn hàng đang xem để có thể sửa
+            currentEditingOrderId = order.id;
+        }
+        
+        // Sửa đơn hàng
+        editOrderBtn.addEventListener('click', function() {
+            if (!currentEditingOrderId) return;
+            
+            const order = orders.find(o => o.id === currentEditingOrderId);
+            if (!order) return;
+            
+            let editHTML = `
+                <div class="form-group">
+                    <label for="edit-customer-name">Tên khách hàng *</label>
+                    <input type="text" id="edit-customer-name" value="${order.customerName}" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-customer-phone">Số điện thoại *</label>
+                    <input type="tel" id="edit-customer-phone" value="${order.customerPhone}" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-customer-address">Địa chỉ giao hàng *</label>
+                    <textarea id="edit-customer-address" rows="2" required>${order.customerAddress}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-shipping-fee">Phí vận chuyển (VNĐ)</label>
+                    <input type="number" id="edit-shipping-fee" min="0" value="${order.shippingFee}">
+                </div>
+                <div class="form-group">
+                    <label for="edit-status">Trạng thái đơn hàng</label>
+                    <select id="edit-status" class="status-select ${order.status}">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Chờ xác nhận</option>
+                        <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Đã xác nhận</option>
+                        <option value="shipping" ${order.status === 'shipping' ? 'selected' : ''}>Đang giao</option>
+                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Đã giao</option>
+                        <option value="received" ${order.status === 'received' ? 'selected' : ''}>Đã nhận hàng</option>
+                    </select>
+                </div>
+            `;
+            
+            // Thêm các sản phẩm trong đơn hàng để chỉnh sửa số lượng
+            editHTML += '<div class="form-group"><label>Sản phẩm trong đơn hàng:</label></div>';
+            
+            order.items.forEach((item, index) => {
+                editHTML += `
+                    <div class="flex" style="margin-bottom: 10px;">
+                        <div class="flex-1" style="padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                            <strong>${item.name}</strong> - ${item.price.toLocaleString()} VNĐ
+                        </div>
+                        <div style="width: 150px;">
+                            <input type="number" min="1" value="${item.quantity}" class="edit-item-quantity" data-index="${index}" style="width: 100%; padding: 10px;">
+                        </div>
+                    </div>
+                `;
+            });
+            
+            editOrderContent.innerHTML = editHTML;
+            
+            // Đóng modal chi tiết và mở modal sửa
+            orderDetailModal.style.display = 'none';
+            editOrderModal.style.display = 'flex';
+        });
+        
+        // Lưu thay đổi đơn hàng
+        saveOrderBtn.addEventListener('click', function() {
+            if (!currentEditingOrderId) return;
+            
+            const order = orders.find(o => o.id === currentEditingOrderId);
+            if (!order) return;
+            
+            const customerName = document.getElementById('edit-customer-name').value.trim();
+            const customerPhone = document.getElementById('edit-customer-phone').value.trim();
+            const customerAddress = document.getElementById('edit-customer-address').value.trim();
+            const shippingFee = parseInt(document.getElementById('edit-shipping-fee').value) || 0;
+            const status = document.getElementById('edit-status').value;
+            
+            if (!customerName || !customerPhone || !customerAddress) {
+                showNotification('Vui lòng điền đầy đủ thông tin khách hàng!', 'error');
+                return;
             }
             
-            itemsText += `\nTổng cộng: ${order.total.toLocaleString()} VNĐ\n\n`;
-            itemsText += `Thông tin khách hàng:\n`;
-            itemsText += `- Tên: ${order.customerName}\n`;
-            itemsText += `- Điện thoại: ${order.customerPhone}\n`;
-            itemsText += `- Địa chỉ: ${order.customerAddress}\n\n`;
-            itemsText += `Tóm tắt đơn hàng:\n${order.summary}`;
+            // Cập nhật số lượng sản phẩm
+            const quantityInputs = document.querySelectorAll('.edit-item-quantity');
+            quantityInputs.forEach(input => {
+                const index = parseInt(input.dataset.index);
+                const newQuantity = parseInt(input.value);
+                
+                if (newQuantity > 0 && order.items[index]) {
+                    order.items[index].quantity = newQuantity;
+                }
+            });
             
-            alert(itemsText);
-        }
+            // Lưu thông tin cũ để lịch sử
+            const oldCustomerName = order.customerName;
+            const oldTotal = order.total;
+            
+            // Cập nhật thông tin đơn hàng
+            order.customerName = customerName;
+            order.customerPhone = customerPhone;
+            order.customerAddress = customerAddress;
+            order.shippingFee = shippingFee;
+            order.status = status;
+            
+            // Tính lại tổng tiền
+            const itemsTotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            order.total = itemsTotal + shippingFee;
+            
+            // Cập nhật tóm tắt đơn hàng
+            let orderSummaryText = '';
+            order.items.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                orderSummaryText += `${item.quantity} ${item.name}(${(item.price/1000).toFixed(0)}k/1) = ${(itemTotal/1000).toFixed(0)}k\n`;
+            });
+            
+            const totalK = itemsTotal/1000;
+            orderSummaryText += `Tổng: ${totalK.toFixed(0)}k`;
+            
+            if (shippingFee > 0) {
+                orderSummaryText += ` + cước ${(shippingFee/1000).toFixed(0)}k`;
+            }
+            
+            orderSummaryText += `\nanh / Chị: ${customerName}`;
+            orderSummaryText += `\nSố điện thoại: ${customerPhone}`;
+            orderSummaryText += `\nĐịa chỉ: ${customerAddress}`;
+            
+            order.summary = orderSummaryText;
+            
+            saveData();
+            renderOrders();
+            updateStats();
+            
+            addHistory('Sửa đơn hàng', `Đã sửa đơn hàng #${order.orderNumber} của khách hàng "${oldCustomerName}" (tổng cũ: ${oldTotal.toLocaleString()} VNĐ, tổng mới: ${order.total.toLocaleString()} VNĐ)`);
+            showNotification('Đã cập nhật đơn hàng thành công!');
+            
+            // Đóng modal
+            editOrderModal.style.display = 'none';
+        });
         
         // Xóa đơn hàng
         function deleteOrder(id) {
             const order = orders.find(o => o.id === id);
             if (!order) return;
             
-            if (confirm(`Bạn có chắc chắn muốn xóa đơn hàng #${order.id} của "${order.customerName}"?`)) {
+            if (confirm(`Bạn có chắc chắn muốn xóa đơn hàng #${order.orderNumber} ngày ${order.orderDate} của "${order.customerName}"?`)) {
                 orders = orders.filter(o => o.id !== id);
                 saveData();
                 renderOrders();
-                addHistory('Xóa đơn hàng', `Đã xóa đơn hàng #${order.id} của khách hàng "${order.customerName}"`);
+                addHistory('Xóa đơn hàng', `Đã xóa đơn hàng #${order.orderNumber} ngày ${order.orderDate} của khách hàng "${order.customerName}"`);
                 showNotification('Đã xóa đơn hàng thành công!');
             }
         }
@@ -1282,6 +1917,106 @@
             });
             
             checkEmptyStates();
+        }
+        
+        // Cập nhật thống kê
+        function updateStats() {
+            // Tổng sản phẩm
+            totalProducts.textContent = products.length;
+            
+            // Tổng đơn hàng
+            totalOrders.textContent = orders.length;
+            
+            // Tổng doanh thu
+            const totalRevenueValue = orders.reduce((sum, order) => sum + order.total, 0);
+            totalRevenue.textContent = totalRevenueValue.toLocaleString();
+            
+            // Doanh thu tháng này
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            const monthRevenueValue = orders
+                .filter(order => {
+                    const orderDate = new Date(order.createdAt);
+                    return orderDate.getMonth() === currentMonth && orderDate.getFullYear() === currentYear;
+                })
+                .reduce((sum, order) => sum + order.total, 0);
+            
+            monthRevenue.textContent = monthRevenueValue.toLocaleString();
+            
+            // Thống kê theo trạng thái
+            const confirmedCount = orders.filter(order => order.status === 'confirmed').length;
+            const shippingCount = orders.filter(order => order.status === 'shipping').length;
+            const deliveredCount = orders.filter(order => order.status === 'delivered').length;
+            const receivedCount = orders.filter(order => order.status === 'received').length;
+            
+            confirmedOrders.textContent = confirmedCount;
+            shippingOrders.textContent = shippingCount;
+            deliveredOrders.textContent = deliveredCount;
+            receivedOrders.textContent = receivedCount;
+            
+            // Tổng đơn theo tháng
+            updateMonthlyStats();
+        }
+        
+        // Cập nhật thống kê theo tháng
+        function updateMonthlyStats() {
+            monthlyTotalList.innerHTML = '';
+            
+            // Nhóm đơn hàng theo tháng
+            const monthlyData = {};
+            
+            orders.forEach(order => {
+                const orderDate = new Date(order.createdAt);
+                const monthYear = `${orderDate.getMonth() + 1}/${orderDate.getFullYear()}`;
+                
+                if (!monthlyData[monthYear]) {
+                    monthlyData[monthYear] = {
+                        total: 0,
+                        count: 0
+                    };
+                }
+                
+                monthlyData[monthYear].total += order.total;
+                monthlyData[monthYear].count += 1;
+            });
+            
+            // Chuyển đổi thành mảng và sắp xếp theo thời gian
+            const monthlyArray = Object.entries(monthlyData)
+                .map(([monthYear, data]) => {
+                    return {
+                        monthYear,
+                        ...data
+                    };
+                })
+                .sort((a, b) => {
+                    // Sắp xếp theo thời gian mới nhất trước
+                    const [aMonth, aYear] = a.monthYear.split('/').map(Number);
+                    const [bMonth, bYear] = b.monthYear.split('/').map(Number);
+                    
+                    if (aYear !== bYear) return bYear - aYear;
+                    return bMonth - aMonth;
+                });
+            
+            // Hiển thị thống kê theo tháng
+            if (monthlyArray.length === 0) {
+                document.getElementById('monthly-empty').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('monthly-empty').style.display = 'none';
+            
+            monthlyArray.forEach(item => {
+                const monthItem = document.createElement('div');
+                monthItem.className = 'month-item';
+                monthItem.innerHTML = `
+                    <div class="month-name">Tháng ${item.monthYear}</div>
+                    <div>Số đơn: ${item.count}</div>
+                    <div class="month-total">Tổng: ${item.total.toLocaleString()} VNĐ</div>
+                `;
+                monthlyTotalList.appendChild(monthItem);
+            });
         }
         
         // Tìm kiếm sản phẩm
@@ -1318,7 +2053,8 @@
             
             const filteredOrders = orders.filter(order => 
                 order.customerName.toLowerCase().includes(searchTerm) ||
-                order.customerPhone.includes(searchTerm)
+                order.customerPhone.includes(searchTerm) ||
+                order.orderNumber.toString().includes(searchTerm)
             );
             
             renderOrders(filteredOrders);
@@ -1328,6 +2064,37 @@
         document.getElementById('clear-order-search').addEventListener('click', function() {
             orderSearch.value = '';
             renderOrders();
+        });
+        
+        // Xử lý đóng modal
+        closeDetailModal.addEventListener('click', function() {
+            orderDetailModal.style.display = 'none';
+            currentEditingOrderId = null;
+        });
+        
+        closeDetailBtn.addEventListener('click', function() {
+            orderDetailModal.style.display = 'none';
+            currentEditingOrderId = null;
+        });
+        
+        closeEditModal.addEventListener('click', function() {
+            editOrderModal.style.display = 'none';
+        });
+        
+        cancelEditBtn.addEventListener('click', function() {
+            editOrderModal.style.display = 'none';
+        });
+        
+        // Đóng modal khi click bên ngoài
+        window.addEventListener('click', function(event) {
+            if (event.target === orderDetailModal) {
+                orderDetailModal.style.display = 'none';
+                currentEditingOrderId = null;
+            }
+            
+            if (event.target === editOrderModal) {
+                editOrderModal.style.display = 'none';
+            }
         });
         
         // Khởi chạy ứng dụng
