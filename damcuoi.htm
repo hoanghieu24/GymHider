@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Duy Trung ❤️ Thu Trang | Thiệp cưới đẳng cấp - Chuyện tình muôn thuở</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- AOS Library cho hiệu ứng cuộn mượt -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #fef9f2;
+            font-family: 'Montserrat', sans-serif;
+            color: #2d2a27;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, .script-font {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+        /* Hero - cinematic mở rộng */
+        .hero {
+            height: 110vh;
+            min-height: 800px;
+            background: linear-gradient(135deg, #1e1915 0%, #2b241f 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        .hero-video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.35;
+            filter: brightness(0.6) contrast(1.2);
+        }
+        .hero-overlay-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 25% 40%, rgba(210,180,140,0.1) 2%, transparent 2.5%);
+            background-size: 35px 35px;
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            animation: riseGlow 1.5s ease-out;
+        }
+        .hero-sub {
+            font-size: 0.9rem;
+            letter-spacing: 8px;
+            color: #e7cfaa;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+        .hero-names {
+            font-size: clamp(3.5rem, 12vw, 7rem);
+            color: #fff7ea;
+            text-shadow: 0 6px 18px rgba(0,0,0,0.4);
+            margin: 0.5rem 0;
+        }
+        .hero-date {
+            background: rgba(255,245,225,0.12);
+            backdrop-filter: blur(12px);
+            display: inline-block;
+            padding: 0.8rem 2.4rem;
+            border-radius: 50px;
+            font-weight: 400;
+            border: 1px solid rgba(210,180,140,0.6);
+            color: #f3e2ca;
+            font-size: 1rem;
+            margin-top: 2rem;
+        }
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: #e7cfaa;
+            animation: bounceSoft 2s infinite;
+            cursor: pointer;
+            z-index: 20;
+        }
+        /* sections */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+        .section-title {
+            font-size: 3.2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #3e332b;
+            position: relative;
+        }
+        .section-title:after {
+            content: "✦";
+            display: block;
+            font-size: 1.8rem;
+            color: #b8895f;
+            margin-top: 0.5rem;
+        }
+        .story-long {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            align-items: center;
+        }
+        .story-text {
+            flex: 1.2;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+        .story-text p {
+            margin-bottom: 1.4rem;
+        }
+        .story-photo {
+            flex: 0.9;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 35px 45px -18px rgba(0,0,0,0.25);
+        }
+        .milestones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .milestone-card {
+            background: white;
+            padding: 32px 20px;
+            border-radius: 36px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: 0.25s;
+            border: 1px solid #f0e2d4;
+        }
+        .milestone-card:hover { transform: translateY(-8px); border-color: #ddb78a; }
+        .milestone-year { font-size: 2rem; font-weight: 700; color: #b9825a; font-family: 'Playfair Display';}
+        .countdown-wrap {
+            background: linear-gradient(125deg, #fff6eb, #fffbf4);
+            border-radius: 56px;
+            padding: 55px 20px;
+            text-align: center;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.05);
+        }
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .timer-card {
+            background: white;
+            width: 110px;
+            padding: 20px 0;
+            border-radius: 28px;
+            transition: 0.2s;
+        }
+        .timer-number {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #b87c5a;
+        }
+        .info-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 35px;
+            margin-top: 20px;
+        }
+        .venue-card {
+            flex: 1;
+            background: #fffbf7;
+            border-radius: 48px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #f1e2d2;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #c2a071;
+            padding: 10px 24px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+            color: #6f4e37;
+            text-decoration: none;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+        .gallery-item {
+            border-radius: 28px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1.1;
+            background: #e7dbce;
+            cursor: pointer;
+        }
+        .rsvp-modern {
+            background: #fffaf2;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            border-radius: 58px;
+            box-shadow: 0 25px 40px -16px rgba(0,0,0,0.08);
+        }
+        .input-field {
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 60px;
+            border: 1px solid #eadbcb;
+            margin-bottom: 20px;
+            font-family: inherit;
+        }
+        .btn-gold {
+            background: #2f2a26;
+            color: #ffefdb;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 60px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .playlist-area {
+            background: #fff3e8;
+            border-radius: 48px;
+            padding: 40px;
+            text-align: center;
+        }
+        .footer {
+            background: #1c1814;
+            color: #c8b69f;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        @keyframes riseGlow {
+            0% { opacity: 0; transform: translateY(40px); filter: blur(5px);}
+            100% { opacity: 1; transform: translateY(0); filter: blur(0);}
+        }
+        @keyframes bounceSoft {
+            0%,100%{ transform: translateX(-50%) translateY(0);}
+            50%{ transform: translateX(-50%) translateY(10px);}
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .section-title { font-size: 2.2rem; }
+            .timer-card { width: 75px; padding: 12px 0; }
+            .timer-number { font-size: 1.8rem; }
+        }
+        .floating-icon {
+            font-size: 1.8rem;
+            color: #bc8f64;
+            margin: 0 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <video class="hero-video-bg" autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-wedding-couple-in-love-at-sunset-32804-large.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay-pattern"></div>
+    <div class="hero-content">
+        <div class="hero-sub">CHUYỆN TÌNH ĐỊNH MỆNH</div>
+        <h1 class="hero-names">Duy Trung & Thu Trang</h1>
+        <div class="hero-date">⸻ 10 · 05 · 2026 — Tại .......... · ........ ⸻</div>
+    </div>
+    <div class="scroll-down" onclick="document.getElementById('loveStory').scrollIntoView({behavior:'smooth'})">
+        <i class="fas fa-angle-double-down"></i>
+    </div>
+</div>
+
+<main>
+    <!-- Câu chuyện dài, mới lạ, cảm xúc -->
+    <section id="loveStory">
+        <div class="container">
+            <div class="story-long" data-aos="fade-up">
+                <div class="story-text">
+                    <h2 class="section-title" style="text-align: left;">Hành trình <br>hai người lạ</h2>
+                    <p>Không phải "tình yêu sét đánh", cũng chẳng phải định mệnh sắp đặt kiểu sân khấu. Duy Trung và Thu Trang gặp nhau giữa những xô bồ của phố cổ Hà Nội – một buổi chiều mưa bất chợt, Trang vội vàng che ô cho chú cún nhỏ, còn Trung vô tình bước vào cùng một mái hiên. Ánh mắt đầu tiên chạm nhau, cả hai chỉ nghĩ đó là một khoảnh khắc lướt qua.</p>
+                    <p>Rồi những lần tình cờ lặp lại: cùng một quán cà phê vỉa hè, cùng một triển lãm tranh trừu tượng, cùng rung động trước một bản nhạc của Chopin. Họ bắt đầu trò chuyện từ nửa đêm đến bình minh, phát hiện ra vô số điểm đồng điệu kỳ lạ. Từ hai tâm hồn cô đơn, họ trở thành điểm tựa của nhau. Duy Trung – chàng kiến trúc sư với đam mê du lịch bụi, và Thu Trang – cô nàng thiết kế đồ họa yêu thiên nhiên, đã cùng nhau vẽ nên bức tranh tình yêu không lời kết.</p>
+                    <p><i>“Em không chỉ là tình yêu, em là nhà, là nơi anh thuộc về.”</i> — Duy Trung. Và Trang cười: <i>“Anh đến như một điều tự nhiên, nhưng lại khiến cuộc đời em rực rỡ hơn bao giờ hết.”</i> Hơn 7 năm bên nhau, qua bao biến cố, họ vẫn giữ được sự ngọt ngào thuở ban đầu. Và giờ đây, họ quyết định trở thành vợ chồng – một lời hứa trọn đời.</p>
+                </div>
+                <div class="story-photo" data-aos="fade-left">
+                    <img src="https://picsum.photos/id/127/700/800" alt="tình yêu đôi lứa" style="width:100%;height:auto;display:block;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cột mốc đáng nhớ – tạo điểm nhấn mới lạ -->
+    <section style="background: #fef7ef;">
+        <div class="container">
+            <h2 class="section-title">Những cột mốc trái tim</h2>
+            <div class="milestones">
+                <div class="milestone-card" data-aos="zoom-in" data-aos-delay="300"><div class="milestone-year">2026</div><i class="fas fa-ring fa-2x" style="color:#c2a071; margin:15px 0; display:block;"></i><p>Đám cưới cổ tích · Lời thề nguyện bên gia đình và bạn bè</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown & lời chúc -->
+    <section>
+        <div class="container">
+            <div class="countdown-wrap" data-aos="flip-up">
+                <h2 class="section-title" style="margin-bottom:0;">Ngày trọng đại cận kề</h2>
+                <p style="font-size:1.1rem">Chúng tôi đang rất nóng lòng chờ đón bạn!</p>
+                <div class="timer" id="timer">
+                    <div class="timer-card"><div class="timer-number" id="days">28</div><div>Ngày</div></div>
+                    <div class="timer-card"><div class="timer-number" id="hours">00</div><div>Giờ</div></div>
+                    <div class="timer-card"><div class="timer-number" id="minutes">00</div><div>Phút</div></div>
+                    <div class="timer-card"><div class="timer-number" id="seconds">00</div><div>Giây</div></div>
+                </div>
+                <div class="floating-icon">❤️ <i class="fas fa-heart"></i> ❤️</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Địa điểm & sự kiện chi tiết -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Chuẩn bị lễ cưới</h2>
+            <div class="info-grid">
+                <div class="venue-card" data-aos="fade-right"><i class="fas fa-church fa-2x" style="color:#b87c5a; margin-bottom:1rem; display:inline-block;"></i><h3>Lễ thành hôn</h3><p><strong>...</strong><br>.....<br>15:30 - 17:00</p><button class="btn-outline" onclick="window.open('https://maps.app.goo.gl/4E64mXSbZVzMZ6DQ8','_blank')"><i class="fas fa-location-dot"></i> Chỉ đường</button></div>
+                <div class="venue-card" data-aos="fade-up"><i class="fas fa-champagne-glasses fa-2x" style="color:#b87c5a; margin-bottom:1rem;"></i><h3>Tiệc cưới</h3><p><strong>...</strong><br>....<br>18:00 - 22:00</p><button class="btn-outline" onclick="window.open('https://maps.app.goo.gl/rMNN7DTW2K4mQk5W8','_blank')"><i class="fas fa-map-marker-alt"></i> Xem bản đồ</button></div>
+                <div class="venue-card" data-aos="fade-left"><i class="fas fa-music fa-2x" style="color:#b87c5a; margin-bottom:1rem;"></i><h3>Mã QR check-in</h3><p>Quét mã tại cửa để nhận ảnh cưới kỷ niệm và quà lưu niệm độc quyền. Mã sẽ gửi qua email khi bạn RSVP.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bộ sưu tập ảnh – gallery siêu dài với nhiều ảnh -->
+    <section style="background: #fff7f0;">
+        <div class="container">
+            <h2 class="section-title">Khoảnh khắc ngọt ngào</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" data-aos="fade-up"><img src="https://picsum.photos/id/20/600/700" alt="ảnh cưới 1" style="width:100%;height:100%;object-fit:cover;"></div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="80"><img src="https://picsum.photos/id/42/600/700" alt="ảnh cưới 2" style="width:100%;height:100%;object-fit:cover;"></div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="160"><img src="https://picsum.photos/id/132/600/700" alt="ảnh cưới 3" style="width:100%;height:100%;object-fit:cover;"></div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="240"><img src="https://picsum.photos/id/145/600/700" alt="ảnh cưới 4" style="width:100%;height:100%;object-fit:cover;"></div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="320"><img src="https://picsum.photos/id/173/600/700" alt="ảnh cưới 5" style="width:100%;height:100%;object-fit:cover;"></div>
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="400"><img src="https://picsum.photos/id/168/600/700" alt="ảnh cưới 6" style="width:100%;height:100%;object-fit:cover;"></div>
+            </div>
+            <p style="text-align:center; margin-top:28px;"><i class="fas fa-camera-retro"></i> Hãy ghi lại những khoảnh khắc và gửi về cho chúng tôi qua hashtag <strong style="color:#b57c4a;">#TrungTrangVows</strong></p>
+        </div>
+    </section>
+
+    <!-- Playlist tình yêu - điểm nhấn mới lạ không thể bỏ qua -->
+    <section>
+        <div class="container">
+            <div class="playlist-area" data-aos="zoom-in">
+                <i class="fas fa-headphones fa-3x" style="color:#b8895f; margin-bottom:12px; display:inline-block;"></i>
+                <h3 style="font-size: 2rem;">Giai điệu trái tim</h3>
+                <p>Những bài hát Duy Trung & Thu Trang yêu thích – lãng mạn cho buổi tiệc của bạn</p>
+                <div style="display: flex; justify-content: center; gap: 20px; margin: 25px 0; flex-wrap:wrap;">
+                    <span><i class="fab fa-spotify"></i> Lời yêu thương - Hà Anh Tuấn</span>
+                    <span><i class="fas fa-music"></i> Perfect - Ed Sheeran</span>
+                    <span><i class="fas fa-music"></i> Hơn cả yêu - Đức Phúc</span>
+                </div>
+                <button class="btn-outline" style="background:#c2a071; color:white; border:none;" onclick="alert('Chúc mừng bạn đã đến với Playlist của chúng tôi! ❤️')"><i class="fab fa-spotify"></i> Nghe trên Spotify</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lời nhắn từ cô dâu chú rể (section độc đáo) -->
+    <section style="background: #fef4ea;">
+        <div class="container">
+            <div class="story-long" style="flex-direction: row-reverse;" data-aos="fade-left">
+                <div class="story-text">
+                    <h2 class="section-title" style="text-align: left;">Lời tri ân</h2>
+                    <p>Gửi đến ông bà, cha mẹ, và những người thân yêu – những người đã đồng hành, chở che và tiếp thêm sức mạnh để chúng con trưởng thành. Cảm ơn bố mẹ đã sinh thành và dạy dỗ, cảm ơn bạn bè đã luôn bên cạnh mỗi lúc vui buồn.</p>
+                    <p>Đặc biệt, cảm ơn nhau – Duy Trung và Thu Trang – vì đã kiên nhẫn và yêu thương không điều kiện. Hôn lễ này không chỉ là lời hứa giữa hai chúng con, mà còn là sự kết nối của tất cả tình thân. Mong rằng sự hiện diện của các bạn sẽ là món quà vô giá.</p>
+                    <p><i>“Hạnh phúc lớn nhất là được sống trong tình yêu thương của gia đình và bạn bè.”</i></p>
+                </div>
+                <div class="story-photo" style="flex:0.8;"><img src="https://picsum.photos/id/64/600/700" alt="cảm ơn" style="width:100%; border-radius: 28px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP xác nhận nâng cao, không gian riêng tư -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Xác nhận tham dự</h2>
+            <div class="rsvp-modern" data-aos="flip-left">
+                <form id="rsvpLongForm">
+                    <input type="text" class="input-field" id="fullName" placeholder="Họ và tên *" required>
+                    <input type="email" class="input-field" id="emailAddr" placeholder="Email nhận thiệp điện tử">
+                    <select id="attendingStatus" class="input-field">
+                        <option value="yes">🌟 Chắc chắn tham dự 🌟</option>
+                        <option value="no">💔 Rất tiếc không thể tham dự</option>
+                        <option value="maybe">✨ Có thể sẽ đến (sẽ báo lại sau)</option>
+                    </select>
+                    <textarea rows="2" class="input-field" id="wishes" placeholder="Lời chúc tốt đẹp dành cho cô dâu chú rể..."></textarea>
+                    <button type="submit" class="btn-gold">GỬI LỜI XÁC NHẬN <i class="fas fa-feather-alt"></i></button>
+                    <div id="rsvpFeedback" style="margin-top: 18px; text-align: center; font-size:0.9rem;"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lời nhắn từ khách mời (tương tác) -->
+    <section style="background: #fef4ea;">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">Những lời chúc từ bạn bè</h2>
+            <div id="guestMessages" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
+                <div class="venue-card" style="background:white; width:260px;"><i class="fas fa-comment-dots"></i><p><strong></p></div>
+                <div class="venue-card" style="background:white; width:260px;"><i class="fas fa-comment-dots"></i><p><strong></p></div>
+                <div class="venue-card" style="background:white; width:260px;"><i class="fas fa-comment-dots"></i><p><strong></p></div>
+            </div>
+            <button class="btn-outline" style="margin-top: 20px;" onclick="addCustomMessage()"><i class="fas fa-plus-circle"></i> Gửi lời chúc công khai</button>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <p>Duy Trung & Thu Trang — Chân thành cảm ơn bạn đã dành thời gian ghé thăm thiệp cưới điện tử của chúng tôi.</p>
+    <p style="margin-top: 12px;"><i class="fas fa-camera"></i> Đừng quên lưu giữ khoảnh khắc với #TrungTrangVows</p>
+    <p style="font-size: 0.7rem; margin-top: 25px;">Made with <i class="fas fa-heart" style="color:#c2a071;"></i> by Duy Trung & Thu Trang — Thiệp cưới đẳng cấp, câu chuyện riêng có một không hai.</p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 900, once: true, offset: 100 });
+    // countdown chính xác
+    function updateWeddingCountdown() {
+    // ⚠️ Tháng trong JS tính từ 0 → 11
+    // 11 = December (tháng 12)
+    const target = new Date("2026-05-10T17:30:00");
+    const now = new Date();
+
+    const diff = target.getTime() - now.getTime();
+
+    if (diff <= 0) {
+        document.getElementById('days').innerText = '00';
+        document.getElementById('hours').innerText = '00';
+        document.getElementById('minutes').innerText = '00';
+        document.getElementById('seconds').innerText = '00';
+        return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('days').innerText = String(days).padStart(2, '0');
+    document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+    document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+}
+
+// chạy ngay
+updateWeddingCountdown();
+
+// chạy mỗi giây
+setInterval(updateWeddingCountdown, 1000);
+    
+    // RSVP form lưu local và feedback
+    const rsvpForm = document.getElementById('rsvpLongForm');
+    rsvpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('fullName').value.trim();
+        if(!name) { alert('Vui lòng nhập họ tên'); return; }
+        const attending = document.getElementById('attendingStatus').value;
+        let msg = attending === 'yes' ? `🎉 Cảm ơn ${name}, bạn đã xác nhận tham dự! Chúng tôi rất vui mừng.` : (attending === 'no' ? `💌 Cảm ơn ${name}, dù bạn không thể đến, tình cảm vẫn trọn vẹn!` : `✨ ${name} ơi, chúng tôi sẽ cập nhật thông tin chi tiết sớm!`);
+        document.getElementById('rsvpFeedback').innerHTML = msg + ' ❤️';
+        document.getElementById('rsvpFeedback').style.color = '#7b5a42';
+        setTimeout(() => document.getElementById('rsvpFeedback').innerHTML = '', 3500);
+        rsvpForm.reset();
+    });
+    
+    // Thêm lời chúc công khai
+    window.addCustomMessage = function() {
+        let userMsg = prompt("Viết lời chúc của bạn tới cô dâu chú rể (sẽ hiển thị trên web):");
+        if(userMsg && userMsg.trim() !== "") {
+            let container = document.getElementById('guestMessages');
+            let newCard = document.createElement('div');
+            newCard.className = 'venue-card';
+            newCard.style.background = 'white';
+            newCard.style.width = '260px';
+            newCard.innerHTML = `<i class="fas fa-comment-dots"></i><p><strong>Khách mời</strong><br>${userMsg.substring(0, 100)} ✨</p>`;
+            container.appendChild(newCard);
+            alert("Cảm ơn lời chúc tốt đẹp của bạn!");
+        } else { alert("Hãy viết một lời chúc ngọt ngào nhé!"); }
+    };
+    // gallery click xem ảnh
+    const galleryImgs = document.querySelectorAll('.gallery-item');
+    galleryImgs.forEach((item, idx) => {
+        item.addEventListener('click', () => alert(`📸 Ảnh kỷ niệm số ${idx+1} – Khoảnh khắc tuyệt vời của Duy Trung & Thu Trang`));
+    });
+</script>
+</body>
+</html>
