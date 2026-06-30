@@ -1,372 +1,923 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Hiếu &amp; Huyền — Đếm ngày</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --cream:#FBF3EC;
-    --rose:#C44B5E;
-    --rose-deep:#9C2F45;
-    --gold:#CFA15E;
-    --plum:#352236;
-    --plum-soft:#5B4759;
-    --line:rgba(53,34,54,0.12);
-  }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Hiếu &amp; Huyền — Đếm ngày</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+        :root {
+            --cream: #FBF3EC;
+            --rose: #C44B5E;
+            --rose-deep: #9C2F45;
+            --gold: #CFA15E;
+            --gold-light: #E8D5B0;
+            --plum: #352236;
+            --plum-soft: #5B4759;
+            --line: rgba(53, 34, 54, 0.12);
+            --shadow: 0 25px 50px -12px rgba(156, 47, 69, 0.25);
+            --card-bg: rgba(255, 255, 255, 0.75);
+        }
 
-  html,body{
-    margin:0; padding:0;
-    min-height:100vh;
-    background:
-      radial-gradient(circle at 18% 12%, rgba(207,161,94,0.16), transparent 55%),
-      radial-gradient(circle at 85% 85%, rgba(196,75,94,0.14), transparent 55%),
-      var(--cream);
-    color:var(--plum);
-    font-family:'Be Vietnam Pro', sans-serif;
-    overflow-x:hidden;
-  }
+        html,
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(207, 161, 94, 0.20), transparent 55%),
+                radial-gradient(circle at 80% 90%, rgba(196, 75, 94, 0.18), transparent 55%),
+                var(--cream);
+            color: var(--plum);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+        }
 
-  .wrap{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    padding:48px 20px 64px;
-  }
+        /* Floating particles */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-  /* signature: intertwined initials */
-  .monogram{
-    position:relative;
-    width:120px; height:120px;
-    margin-bottom:18px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .monogram svg{ width:100%; height:100%; }
-  .monogram .heart-pulse{
-    animation:beat 2.4s ease-in-out infinite;
-    transform-origin:center;
-  }
-  @keyframes beat{
-    0%,100%{ transform:scale(1); }
-    18%{ transform:scale(1.12); }
-    32%{ transform:scale(0.98); }
-    45%{ transform:scale(1.08); }
-    60%{ transform:scale(1); }
-  }
+        /* Click ripple effect */
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(207, 161, 94, 0.4), rgba(196, 75, 94, 0.2));
+            transform: scale(0);
+            animation: rippleAnim 1.2s ease-out forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+        @keyframes rippleAnim {
+            to {
+                transform: scale(6);
+                opacity: 0;
+            }
+        }
 
-  .eyebrow{
-    font-size:12px;
-    letter-spacing:0.32em;
-    text-transform:uppercase;
-    color:var(--rose-deep);
-    font-weight:600;
-    margin-bottom:6px;
-  }
+        /* Click heart burst */
+        .heart-burst {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 30px;
+            animation: heartBurst 1.5s ease-out forwards;
+        }
+        @keyframes heartBurst {
+            0% {
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1.8) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
-  h1.names{
-    font-family:'Playfair Display', serif;
-    font-style:italic;
-    font-weight:600;
-    font-size:clamp(34px, 9vw, 52px);
-    margin:0 0 6px;
-    text-align:center;
-    color:var(--plum);
-    letter-spacing:0.01em;
-  }
-  h1.names .amp{
-    color:var(--rose);
-    font-style:normal;
-    padding:0 6px;
-  }
+        /* Floating stickers */
+        .sticker {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            font-size: 40px;
+            animation: floatSticker 8s ease-in-out infinite;
+            opacity: 0.15;
+        }
+        @keyframes floatSticker {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-30px) rotate(8deg) scale(1.05);
+            }
+            75% {
+                transform: translateY(30px) rotate(-8deg) scale(0.95);
+            }
+        }
 
-  .target-date{
-    font-size:14px;
-    color:var(--plum-soft);
-    margin-bottom:36px;
-    text-align:center;
-  }
-  .target-date b{ color:var(--rose-deep); font-weight:600; }
+        .wrap {
+            max-width: 560px;
+            width: 100%;
+            padding: 40px 24px 56px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
 
-  /* countdown */
-  .countdown{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    gap:10px;
-    width:100%;
-    max-width:420px;
-    margin-bottom:14px;
-  }
-  .cd-cell{
-    background:rgba(255,255,255,0.55);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:14px 4px 12px;
-    text-align:center;
-    backdrop-filter:blur(6px);
-  }
-  .cd-num{
-    font-family:'Playfair Display', serif;
-    font-weight:600;
-    font-size:clamp(26px, 7vw, 36px);
-    color:var(--rose-deep);
-    line-height:1;
-    font-variant-numeric:tabular-nums;
-  }
-  .cd-label{
-    margin-top:6px;
-    font-size:10.5px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--plum-soft);
-  }
+        /* ——— Monogram ——— */
+        .monogram {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .monogram svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 12px rgba(156, 47, 69, 0.15));
+        }
+        .monogram .heart-pulse {
+            animation: beat 2.8s ease-in-out infinite;
+            transform-origin: center;
+        }
+        @keyframes beat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            16% {
+                transform: scale(1.14);
+            }
+            30% {
+                transform: scale(0.96);
+            }
+            44% {
+                transform: scale(1.10);
+            }
+            60% {
+                transform: scale(1);
+            }
+        }
 
-  .progress-line{
-    width:100%;
-    max-width:420px;
-    height:3px;
-    border-radius:3px;
-    background:rgba(53,34,54,0.08);
-    overflow:hidden;
-    margin-bottom:40px;
-  }
-  .progress-fill{
-    height:100%;
-    background:linear-gradient(90deg, var(--gold), var(--rose));
-    width:0%;
-    transition:width 1s linear;
-  }
+        /* Glow ring */
+        .glow-ring {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(207, 161, 94, 0.15), transparent 70%);
+            animation: pulseGlow 3s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
 
-  /* daily caption card */
-  .card{
-    position:relative;
-    width:100%;
-    max-width:440px;
-    background:#fff;
-    border-radius:22px;
-    padding:30px 26px 26px;
-    box-shadow:0 18px 40px -18px rgba(156,47,69,0.28), 0 2px 8px rgba(53,34,54,0.06);
-    border:1px solid var(--line);
-  }
-  .card::before{
-    content:"";
-    position:absolute;
-    top:-1px; left:24px; right:24px;
-    height:1px;
-    background:linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .seal{
-    width:34px; height:34px;
-    border-radius:50%;
-    background:linear-gradient(160deg, var(--rose), var(--rose-deep));
-    display:flex; align-items:center; justify-content:center;
-    margin:0 auto 16px;
-    box-shadow:0 4px 10px rgba(156,47,69,0.35);
-  }
-  .seal svg{ width:16px; height:16px; }
+        /* ——— Eyebrow & Title ——— */
+        .eyebrow {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+            letter-spacing: 0.08em;
+            color: var(--rose-deep);
+            font-weight: 600;
+            margin-bottom: 4px;
+            background: rgba(196, 75, 94, 0.08);
+            padding: 4px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+            animation: fadeSlideDown 0.8s ease-out;
+        }
 
-  .day-tag{
-    text-align:center;
-    font-size:11px;
-    letter-spacing:0.2em;
-    text-transform:uppercase;
-    color:var(--gold);
-    font-weight:600;
-    margin-bottom:10px;
-  }
+        h1.names {
+            font-family: 'Great Vibes', cursive;
+            font-weight: 400;
+            font-size: clamp(44px, 12vw, 64px);
+            margin: 0 0 4px;
+            text-align: center;
+            letter-spacing: 0.04em;
+            background: linear-gradient(135deg, var(--plum) 40%, var(--rose-deep) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeSlideDown 0.8s ease-out 0.1s both;
+            text-shadow: none;
+        }
+        h1.names .amp {
+            font-family: 'Playfair Display', serif;
+            font-style: normal;
+            padding: 0 8px;
+            background: linear-gradient(135deg, var(--rose), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 0.8em;
+        }
 
-  .caption{
-    font-family:'Playfair Display', serif;
-    font-style:italic;
-    font-weight:500;
-    font-size:clamp(18px, 4.6vw, 21px);
-    line-height:1.55;
-    text-align:center;
-    color:var(--plum);
-    margin:0;
-  }
+        .target-date {
+            font-size: 14px;
+            color: var(--plum-soft);
+            margin-bottom: 32px;
+            text-align: center;
+            font-weight: 400;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(4px);
+            padding: 6px 18px;
+            border-radius: 40px;
+            border: 1px solid var(--line);
+            animation: fadeSlideDown 0.8s ease-out 0.2s both;
+        }
+        .target-date b {
+            color: var(--rose-deep);
+            font-weight: 600;
+        }
 
-  .signoff{
-    text-align:center;
-    margin-top:18px;
-    font-size:12.5px;
-    color:var(--plum-soft);
-  }
-  .signoff span{ color:var(--rose-deep); font-weight:600; }
+        /* ——— Countdown ——— */
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 18px;
+            animation: fadeSlideDown 0.8s ease-out 0.3s both;
+        }
+        .cd-cell {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 18px 6px 14px;
+            text-align: center;
+            box-shadow: 0 8px 24px -8px rgba(53, 34, 54, 0.10);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .cd-cell::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(207, 161, 94, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .cd-cell:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 32px -8px rgba(156, 47, 69, 0.20);
+        }
+        .cd-cell:hover::before {
+            opacity: 1;
+        }
+        .cd-num {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: clamp(28px, 8vw, 40px);
+            color: var(--rose-deep);
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+        .cd-cell:hover .cd-num {
+            color: var(--gold);
+        }
+        .cd-label {
+            margin-top: 6px;
+            font-size: 10.5px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--plum-soft);
+            font-weight: 500;
+        }
 
-  footer{
-    margin-top:36px;
-    font-size:11px;
-    letter-spacing:0.08em;
-    color:rgba(53,34,54,0.38);
-    text-align:center;
-  }
+        /* ——— Progress ——— */
+        .progress-line {
+            width: 100%;
+            max-width: 420px;
+            height: 4px;
+            border-radius: 6px;
+            background: rgba(53, 34, 54, 0.08);
+            overflow: hidden;
+            margin-bottom: 36px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+            animation: fadeSlideDown 0.8s ease-out 0.4s both;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--rose), var(--rose-deep));
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+            border-radius: 6px;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--rose);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(196, 75, 94, 0.6);
+            animation: shimmerDot 2s ease-in-out infinite;
+        }
+        @keyframes shimmerDot {
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
 
-  .done-state h1.names{ margin-bottom:14px; }
-  .done-msg{
-    font-family:'Playfair Display', serif;
-    font-style:italic;
-    font-size:clamp(20px,5vw,26px);
-    text-align:center;
-    color:var(--rose-deep);
-    margin-bottom:30px;
-  }
+        /* ——— Card ——— */
+        .card {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 34px 28px 30px;
+            box-shadow: var(--shadow), 0 2px 8px rgba(53, 34, 54, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            animation: fadeSlideUp 0.8s ease-out 0.5s both;
+        }
+        .card:hover {
+            box-shadow: 0 30px 60px -12px rgba(156, 47, 69, 0.30);
+            transform: translateY(-2px);
+        }
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--rose), transparent);
+            border-radius: 4px;
+        }
+        .card::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 40px;
+            right: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(207, 161, 94, 0.3), transparent);
+        }
+        .seal {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--rose), var(--rose-deep));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            box-shadow: 0 6px 14px rgba(156, 47, 69, 0.35);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .seal:hover {
+            transform: scale(1.1) rotate(8deg);
+            box-shadow: 0 8px 24px rgba(156, 47, 69, 0.45);
+        }
+        .seal:active {
+            transform: scale(0.95);
+        }
+        .seal svg {
+            width: 18px;
+            height: 18px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
 
-  @media (prefers-reduced-motion: reduce){
-    .heart-pulse{ animation:none; }
-    .progress-fill{ transition:none; }
-  }
-</style>
+        .day-tag {
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 12px;
+            background: rgba(207, 161, 94, 0.10);
+            padding: 4px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.3s ease;
+        }
+        .day-tag:hover {
+            background: rgba(207, 161, 94, 0.20);
+            transform: scale(1.02);
+        }
+
+        .caption {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(19px, 5vw, 23px);
+            line-height: 1.6;
+            text-align: center;
+            color: var(--plum);
+            margin: 0;
+            padding: 0 4px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        .caption.fade {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .signoff {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--plum-soft);
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            opacity: 0.8;
+            font-family: 'Dancing Script', cursive;
+            font-size: 16px;
+        }
+        .signoff span {
+            color: var(--rose-deep);
+            font-weight: 600;
+        }
+
+        /* ——— Done State ——— */
+        .done-state h1.names {
+            margin-bottom: 12px;
+        }
+        .done-msg {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(28px, 7vw, 38px);
+            text-align: center;
+            margin-bottom: 28px;
+            background: linear-gradient(135deg, var(--rose), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: celebrate 1.5s ease-in-out infinite;
+        }
+        @keyframes celebrate {
+            0%,
+            100% {
+                transform: scale(1) rotate(-1deg);
+            }
+            50% {
+                transform: scale(1.05) rotate(1deg);
+            }
+        }
+
+        /* ——— Footer ——— */
+        footer {
+            margin-top: 32px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            color: rgba(53, 34, 54, 0.35);
+            text-align: center;
+            font-weight: 300;
+            border-top: 1px solid var(--line);
+            padding-top: 24px;
+            width: 100%;
+            max-width: 420px;
+            animation: fadeSlideUp 0.8s ease-out 0.6s both;
+            font-family: 'Dancing Script', cursive;
+            font-size: 14px;
+        }
+
+        /* ——— Animations ——— */
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ——— Responsive ——— */
+        @media (max-width: 480px) {
+            .wrap {
+                padding: 28px 16px 40px;
+            }
+            .card {
+                padding: 26px 18px 24px;
+            }
+            .countdown {
+                gap: 8px;
+            }
+            .cd-cell {
+                padding: 14px 4px 12px;
+                border-radius: 18px;
+            }
+            .caption {
+                min-height: 70px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .heart-pulse,
+            .glow-ring,
+            .seal:hover,
+            .cd-cell:hover,
+            .progress-fill::after,
+            .sticker {
+                animation: none !important;
+            }
+            .progress-fill {
+                transition: none;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="wrap">
 
-  <div class="monogram">
-    <svg viewBox="0 0 120 120" fill="none">
-      <circle cx="60" cy="60" r="58" stroke="#CFA15E" stroke-width="1" opacity="0.35"/>
-      <g class="heart-pulse">
-        <path d="M60 88
-                 C 30 66, 16 46, 24 30
-                 C 30 18, 48 16, 60 32
-                 C 72 16, 90 18, 96 30
-                 C 104 46, 90 66, 60 88 Z"
-              fill="#C44B5E" opacity="0.12"/>
-      </g>
-      <text x="40" y="70" font-family="Playfair Display, serif" font-size="34" font-style="italic" font-weight="600" fill="#9C2F45" text-anchor="middle">H</text>
-      <text x="80" y="70" font-family="Playfair Display, serif" font-size="34" font-style="italic" font-weight="600" fill="#CFA15E" text-anchor="middle">H</text>
-    </svg>
-  </div>
+    <!-- Particles Canvas -->
+    <canvas id="particles-canvas"></canvas>
 
-  <div class="eyebrow">Hành trình yêu thương</div>
-  <h1 class="names">Hiếu <span class="amp">&amp;</span> Huyền</h1>
-  <div class="target-date">Đếm ngược đến <b>23:00, 10/07/2026</b></div>
+    <!-- Floating Stickers -->
+    <div class="sticker" style="top:5%;left:3%;font-size:50px;">🌸</div>
+    <div class="sticker" style="top:15%;right:5%;font-size:35px;animation-delay:2s;">💖</div>
+    <div class="sticker" style="bottom:20%;left:2%;font-size:45px;animation-delay:4s;">✨</div>
+    <div class="sticker" style="bottom:10%;right:3%;font-size:40px;animation-delay:1s;">🌹</div>
+    <div class="sticker" style="top:45%;left:1%;font-size:30px;animation-delay:3s;">💕</div>
+    <div class="sticker" style="top:55%;right:1%;font-size:35px;animation-delay:5s;">🕊️</div>
+    <div class="sticker" style="top:5%;left:50%;font-size:28px;animation-delay:2.5s;">⭐</div>
+    <div class="sticker" style="bottom:30%;left:50%;font-size:32px;animation-delay:3.5s;">💫</div>
 
-  <div id="liveBlock">
-    <div class="countdown">
-      <div class="cd-cell"><div class="cd-num" id="dd">00</div><div class="cd-label">Ngày</div></div>
-      <div class="cd-cell"><div class="cd-num" id="hh">00</div><div class="cd-label">Giờ</div></div>
-      <div class="cd-cell"><div class="cd-num" id="mm">00</div><div class="cd-label">Phút</div></div>
-      <div class="cd-cell"><div class="cd-num" id="ss">00</div><div class="cd-label">Giây</div></div>
+    <div class="wrap">
+
+        <!-- Monogram -->
+        <div class="monogram">
+            <div class="glow-ring"></div>
+            <svg viewBox="0 0 130 130" fill="none">
+                <circle cx="65" cy="65" r="62" stroke="#CFA15E" stroke-width="1.2" opacity="0.3" />
+                <circle cx="65" cy="65" r="56" stroke="#C44B5E" stroke-width="0.8" opacity="0.10" />
+                <g class="heart-pulse">
+                    <path d="M65 94
+                             C 30 68, 14 46, 24 28
+                             C 32 14, 52 12, 65 30
+                             C 78 12, 98 14, 106 28
+                             C 116 46, 100 68, 65 94 Z"
+                          fill="#C44B5E" opacity="0.10" />
+                </g>
+                <text x="42" y="76" font-family="'Great Vibes', cursive" font-size="42" font-weight="400" fill="#9C2F45" text-anchor="middle" opacity="0.9">H</text>
+                <text x="88" y="76" font-family="'Great Vibes', cursive" font-size="42" font-weight="400" fill="#CFA15E" text-anchor="middle" opacity="0.9">H</text>
+                <circle cx="65" cy="65" r="2" fill="#CFA15E" opacity="0.2" />
+            </svg>
+        </div>
+
+        <div class="eyebrow">✨ Hành trình yêu thương ✨</div>
+        <h1 class="names">Hiếu <span class="amp">&amp;</span> Huyền</h1>
+        <div class="target-date">💕 Đếm ngược đến <b>23:00, 10/07/2026</b> 💕</div>
+
+        <!-- Countdown -->
+        <div id="liveBlock">
+            <div class="countdown">
+                <div class="cd-cell"><div class="cd-num" id="dd">00</div><div class="cd-label">Ngày</div></div>
+                <div class="cd-cell"><div class="cd-num" id="hh">00</div><div class="cd-label">Giờ</div></div>
+                <div class="cd-cell"><div class="cd-num" id="mm">00</div><div class="cd-label">Phút</div></div>
+                <div class="cd-cell"><div class="cd-num" id="ss">00</div><div class="cd-label">Giây</div></div>
+            </div>
+            <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+
+        <div id="doneBlock" style="display:none;" class="done-state">
+            <div class="done-msg">💍 Khoảnh khắc đã đến rồi 💍</div>
+        </div>
+
+        <!-- Card -->
+        <div class="card">
+            <div class="seal" id="sealBtn">
+                <svg viewBox="0 0 24 24" fill="#fff">
+                    <path d="M12 21s-7.5-4.7-10-9.3C0.3 8.1 2 4.5 5.6 4c2-0.3 3.8 0.7 4.9 2.3 1.1-1.6 2.9-2.6 4.9-2.3 3.6 0.5 5.3 4.1 3.6 7.7C19.5 16.3 12 21 12 21z"/>
+                </svg>
+            </div>
+            <div class="day-tag" id="dayTag">Ngày yêu thương</div>
+            <p class="caption" id="captionText">Đang tải lời nhắn hôm nay…</p>
+            <div class="signoff">— với tất cả yêu thương, <span>H &amp; H</span></div>
+        </div>
+
+        <footer>✨ được giữ gìn mỗi ngày, cho đến và sau ngày 10.07.2026 ✨</footer>
     </div>
-    <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
-  </div>
 
-  <div id="doneBlock" style="display:none;" class="done-state">
-    <div class="done-msg">Khoảnh khắc đã đến rồi 💍</div>
-  </div>
+    <script>
+        (function() {
+            // ===== PARTICLES =====
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animId;
 
-  <div class="card">
-    <div class="seal">
-      <svg viewBox="0 0 24 24" fill="#fff">
-        <path d="M12 21s-7.5-4.7-10-9.3C0.3 8.1 2 4.5 5.6 4c2-0.3 3.8 0.7 4.9 2.3 1.1-1.6 2.9-2.6 4.9-2.3 3.6 0.5 5.3 4.1 3.6 7.7C19.5 16.3 12 21 12 21z"/>
-      </svg>
-    </div>
-    <div class="day-tag" id="dayTag">Ngày yêu thương</div>
-    <p class="caption" id="captionText">Đang tải lời nhắn hôm nay…</p>
-    <div class="signoff">— với tất cả yêu thương, <span>H &amp; H</span></div>
-  </div>
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
 
-  <footer>được giữ gìn mỗi ngày, cho đến và sau ngày 10.07.2026</footer>
-</div>
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedX = (Math.random() - 0.5) * 0.8;
+                    this.speedY = (Math.random() - 0.5) * 0.8;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                    this.color = ['#C44B5E', '#CFA15E', '#9C2F45', '#E8D5B0'][Math.floor(Math.random() * 4)];
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+                }
+            }
 
-<script>
-(function(){
-  // Target: 23:00:00, 10 July 2026, local time
-  var target = new Date(2026, 6, 10, 23, 0, 0);
-  // Reference start point for progress bar (30 days before target, adjustable)
-  var start = new Date(target.getTime() - 1000*60*60*24*60); // 60 days window for progress visual
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < 60; i++) {
+                    particles.push(new Particle());
+                }
+            }
+            initParticles();
 
-  var captions = [
-    "Mỗi ngày trôi qua là một ngày Huyền khiến trái tim Hiếu chắc chắn hơn về chữ \"mãi mãi\".",
-    "Yêu Huyền không cần lý do, chỉ cần một cái nắm tay là Hiếu biết mình đang ở đúng nơi cần ở.",
-    "Có những điều không cần nói ra, như cách Hiếu vẫn luôn chọn Huyền, mỗi sáng thức dậy.",
-    "Huyền là lý do khiến những ngày bình thường nhất cũng trở thành kỷ niệm đáng nhớ.",
-    "Tình yêu của Hiếu và Huyền không ồn ào, chỉ lặng lẽ lớn lên theo từng ngày bên nhau.",
-    "Dù xa hay gần, trái tim Hiếu vẫn luôn hướng về một người duy nhất — Huyền.",
-    "Có Huyền, những điều giản dị nhất cũng hoá thành hạnh phúc.",
-    "Hiếu tin rằng định mệnh đã sắp đặt để hai người gặp nhau, đúng người, đúng thời điểm.",
-    "Mỗi tin nhắn, mỗi cuộc gọi, đều là một mảnh ghép nhỏ cho câu chuyện tình của Hiếu và Huyền.",
-    "Huyền không cần hoàn hảo, chỉ cần là Huyền — vậy là đủ để Hiếu yêu trọn vẹn.",
-    "Ngày càng gần hơn đến cột mốc đặc biệt, lòng Hiếu càng thêm chắc chắn về Huyền.",
-    "Có một người luôn khiến Hiếu muốn trở thành phiên bản tốt hơn mỗi ngày — đó là Huyền.",
-    "Yêu thương không cần phải lớn lao, chỉ cần đều đặn như cách Hiếu vẫn nghĩ về Huyền mỗi ngày.",
-    "Huyền là bến đỗ bình yên giữa những bộn bề của Hiếu.",
-    "Một ngày không nói chuyện với Huyền là một ngày Hiếu thấy thiếu thiếu điều gì đó.",
-    "Tình yêu này không vội vàng, chỉ chậm rãi và bền bỉ như chính hai con người tạo nên nó.",
-    "Hiếu mong mỗi ngày trôi qua, khoảng cách đến hạnh phúc trọn vẹn lại ngắn thêm một chút.",
-    "Có Huyền bên cạnh, mọi kế hoạch tương lai của Hiếu đều trở nên rõ ràng hơn.",
-    "Huyền là người duy nhất khiến Hiếu vừa yên tâm, vừa háo hức về ngày mai.",
-    "Không phải ngẫu nhiên mà hai người đến với nhau, đó là một hành trình đáng để trân trọng.",
-    "Hiếu chọn Huyền hôm qua, hôm nay, và sẽ chọn lại vào ngày mai nữa.",
-    "Tình yêu lớn lên không phải nhờ những điều to tát, mà từ những lần Hiếu và Huyền ở bên nhau.",
-    "Huyền khiến Hiếu tin vào một tình yêu chân thành, không toan tính, không vội vã.",
-    "Đếm từng ngày không phải vì sốt ruột, mà vì biết điều phía trước thật sự xứng đáng để chờ.",
-    "Hiếu luôn nhớ Huyền theo những cách rất riêng — lúc làm việc, lúc nghỉ ngơi, lúc mơ về tương lai.",
-    "Sự bình yên Hiếu cảm nhận được khi nghĩ về Huyền là điều không gì có thể thay thế.",
-    "Mỗi ngày gần hơn cột mốc 10/7, là mỗi ngày Hiếu thêm trân trọng hành trình đã đi qua cùng Huyền.",
-    "Huyền không chỉ là người yêu, mà còn là người bạn đồng hành đáng tin cậy nhất của Hiếu.",
-    "Có những tình yêu được xây bằng sự kiên nhẫn và chân thành — tình yêu của Hiếu và Huyền là một trong số đó.",
-    "Hiếu tin chắc rằng, dù ngày 10/7 có đến hay chưa, tình cảm dành cho Huyền vẫn sẽ luôn vẹn nguyên."
-  ];
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 150) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#C44B5E';
+                            ctx.globalAlpha = 0.06 * (1 - dist / 150);
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                            ctx.globalAlpha = 1;
+                        }
+                    }
+                }
+                animId = requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
 
-  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+            // ===== CLICK EFFECTS =====
+            const hearts = ['❤️', '💕', '💖', '💗', '💘', '💝', '✨', '🌸', '🌹', '💫', '⭐', '🕊️'];
 
-  function dayIndexSinceEpoch(date){
-    // local-day based index so it changes consistently at midnight local time
-    var d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    return Math.floor(d.getTime() / 86400000);
-  }
+            document.addEventListener('click', function(e) {
+                // Ripple
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                const size = 60 + Math.random() * 80;
+                ripple.style.width = size + 'px';
+                ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - size / 2) + 'px';
+                ripple.style.top = (e.clientY - size / 2) + 'px';
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 1200);
 
-  function renderCaption(){
-    var now = new Date();
-    var idx = ((dayIndexSinceEpoch(now) % captions.length) + captions.length) % captions.length;
-    document.getElementById('captionText').textContent = captions[idx];
-    var dayNum = Math.max(0, Math.ceil((target - now) / 86400000));
-    document.getElementById('dayTag').textContent =
-      now >= target ? 'Đã đến ngày đặc biệt' : 'Còn ' + dayNum + ' ngày nữa — Lời nhắn hôm nay';
-  }
+                // Heart burst (multiple)
+                const count = 4 + Math.floor(Math.random() * 4);
+                for (let i = 0; i < count; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-burst';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+                    const distance = 80 + Math.random() * 120;
+                    heart.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                    heart.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                    heart.style.left = (e.clientX - 15) + 'px';
+                    heart.style.top = (e.clientY - 15) + 'px';
+                    heart.style.fontSize = (20 + Math.random() * 25) + 'px';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 1500);
+                }
 
-  function tick(){
-    var now = new Date();
-    var diff = target - now;
+                // Sparkle particles
+                for (let i = 0; i < 6; i++) {
+                    const spark = document.createElement('div');
+                    spark.style.cssText = `
+                                position: fixed;
+                                pointer-events: none;
+                                z-index: 999;
+                                width: 4px;
+                                height: 4px;
+                                background: ${['#CFA15E', '#C44B5E', '#FFD700', '#FF6B8A'][Math.floor(Math.random() * 4)]};
+                                border-radius: 50%;
+                                left: ${e.clientX + (Math.random() - 0.5) * 30}px;
+                                top: ${e.clientY + (Math.random() - 0.5) * 30}px;
+                                animation: sparkleAnim ${0.6 + Math.random() * 0.4}s ease-out forwards;
+                            `;
+                    document.body.appendChild(spark);
+                    setTimeout(() => spark.remove(), 1200);
+                }
+            });
 
-    if(diff <= 0){
-      document.getElementById('liveBlock').style.display = 'none';
-      document.getElementById('doneBlock').style.display = 'block';
-      renderCaption();
-      return;
-    }
+            // Add sparkle animation
+            const style = document.createElement('style');
+            style.textContent = `
+                        @keyframes sparkleAnim {
+                            0% { transform: translate(0,0) scale(1); opacity: 1; }
+                            100% { transform: translate(${Math.random() > 0.5 ? '' : '-'}${30 + Math.random() * 60}px, ${Math.random() > 0.5 ? '' : '-'}${30 + Math.random() * 60}px) scale(0); opacity: 0; }
+                        }
+                    `;
+            document.head.appendChild(style);
 
-    var totalSeconds = Math.floor(diff / 1000);
-    var days = Math.floor(totalSeconds / 86400);
-    var hours = Math.floor((totalSeconds % 86400) / 3600);
-    var mins = Math.floor((totalSeconds % 3600) / 60);
-    var secs = totalSeconds % 60;
+            // ===== COUNTDOWN =====
+            var target = new Date(2026, 6, 10, 23, 0, 0);
+            var start = new Date(target.getTime() - 1000 * 60 * 60 * 24 * 60);
 
-    document.getElementById('dd').textContent = pad(days);
-    document.getElementById('hh').textContent = pad(hours);
-    document.getElementById('mm').textContent = pad(mins);
-    document.getElementById('ss').textContent = pad(secs);
+            var captions = [
+                "Mỗi ngày trôi qua là một ngày Huyền khiến trái tim Hiếu chắc chắn hơn về chữ \"mãi mãi\".",
+                "Yêu Huyền không cần lý do, chỉ cần một cái nắm tay là Hiếu biết mình đang ở đúng nơi cần ở.",
+                "Có những điều không cần nói ra, như cách Hiếu vẫn luôn chọn Huyền, mỗi sáng thức dậy.",
+                "Huyền là lý do khiến những ngày bình thường nhất cũng trở thành kỷ niệm đáng nhớ.",
+                "Tình yêu của Hiếu và Huyền không ồn ào, chỉ lặng lẽ lớn lên theo từng ngày bên nhau.",
+                "Dù xa hay gần, trái tim Hiếu vẫn luôn hướng về một người duy nhất — Huyền.",
+                "Có Huyền, những điều giản dị nhất cũng hoá thành hạnh phúc.",
+                "Hiếu tin rằng định mệnh đã sắp đặt để hai người gặp nhau, đúng người, đúng thời điểm.",
+                "Mỗi tin nhắn, mỗi cuộc gọi, đều là một mảnh ghép nhỏ cho câu chuyện tình của Hiếu và Huyền.",
+                "Huyền không cần hoàn hảo, chỉ cần là Huyền — vậy là đủ để Hiếu yêu trọn vẹn.",
+                "Ngày càng gần hơn đến cột mốc đặc biệt, lòng Hiếu càng thêm chắc chắn về Huyền.",
+                "Có một người luôn khiến Hiếu muốn trở thành phiên bản tốt hơn mỗi ngày — đó là Huyền.",
+                "Yêu thương không cần phải lớn lao, chỉ cần đều đặn như cách Hiếu vẫn nghĩ về Huyền mỗi ngày.",
+                "Huyền là bến đỗ bình yên giữa những bộn bề của Hiếu.",
+                "Một ngày không nói chuyện với Huyền là một ngày Hiếu thấy thiếu thiếu điều gì đó.",
+                "Tình yêu này không vội vàng, chỉ chậm rãi và bền bỉ như chính hai con người tạo nên nó.",
+                "Hiếu mong mỗi ngày trôi qua, khoảng cách đến hạnh phúc trọn vẹn lại ngắn thêm một chút.",
+                "Có Huyền bên cạnh, mọi kế hoạch tương lai của Hiếu đều trở nên rõ ràng hơn.",
+                "Huyền là người duy nhất khiến Hiếu vừa yên tâm, vừa háo hức về ngày mai.",
+                "Không phải ngẫu nhiên mà hai người đến với nhau, đó là một hành trình đáng để trân trọng.",
+                "Hiếu chọn Huyền hôm qua, hôm nay, và sẽ chọn lại vào ngày mai nữa.",
+                "Tình yêu lớn lên không phải nhờ những điều to tát, mà từ những lần Hiếu và Huyền ở bên nhau.",
+                "Huyền khiến Hiếu tin vào một tình yêu chân thành, không toan tính, không vội vã.",
+                "Đếm từng ngày không phải vì sốt ruột, mà vì biết điều phía trước thật sự xứng đáng để chờ.",
+                "Hiếu luôn nhớ Huyền theo những cách rất riêng — lúc làm việc, lúc nghỉ ngơi, lúc mơ về tương lai.",
+                "Sự bình yên Hiếu cảm nhận được khi nghĩ về Huyền là điều không gì có thể thay thế.",
+                "Mỗi ngày gần hơn cột mốc 10/7, là mỗi ngày Hiếu thêm trân trọng hành trình đã đi qua cùng Huyền.",
+                "Huyền không chỉ là người yêu, mà còn là người bạn đồng hành đáng tin cậy nhất của Hiếu.",
+                "Có những tình yêu được xây bằng sự kiên nhẫn và chân thành — tình yêu của Hiếu và Huyền là một trong số đó.",
+                "Hiếu tin chắc rằng, dù ngày 10/7 có đến hay chưa, tình cảm dành cho Huyền vẫn sẽ luôn vẹn nguyên."
+            ];
 
-    var total = target - start;
-    var elapsed = now - start;
-    var pct = Math.min(100, Math.max(0, (elapsed / total) * 100));
-    document.getElementById('progressFill').style.width = pct + '%';
-  }
+            function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
-  renderCaption();
-  tick();
-  setInterval(tick, 1000);
+            function dayIndexSinceEpoch(date) {
+                var d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                return Math.floor(d.getTime() / 86400000);
+            }
 
-  // re-check caption at local midnight rollovers without full reload
-  setInterval(renderCaption, 60 * 1000);
-})();
-</script>
+            let captionIndex = 0;
+
+            function renderCaption(animate = true) {
+                var now = new Date();
+                var idx = ((dayIndexSinceEpoch(now) % captions.length) + captions.length) % captions.length;
+                var el = document.getElementById('captionText');
+                if (animate && idx !== captionIndex) {
+                    el.classList.add('fade');
+                    setTimeout(() => {
+                        el.textContent = captions[idx];
+                        el.classList.remove('fade');
+                    }, 300);
+                } else {
+                    el.textContent = captions[idx];
+                }
+                captionIndex = idx;
+
+                var dayNum = Math.max(0, Math.ceil((target - now) / 86400000));
+                document.getElementById('dayTag').textContent =
+                    now >= target ? '💕 Đã đến ngày đặc biệt 💕' : 'Còn ' + dayNum + ' ngày nữa — Lời nhắn hôm nay';
+            }
+
+            function tick() {
+                var now = new Date();
+                var diff = target - now;
+
+                if (diff <= 0) {
+                    document.getElementById('liveBlock').style.display = 'none';
+                    document.getElementById('doneBlock').style.display = 'block';
+                    renderCaption(false);
+                    return;
+                }
+
+                var totalSeconds = Math.floor(diff / 1000);
+                var days = Math.floor(totalSeconds / 86400);
+                var hours = Math.floor((totalSeconds % 86400) / 3600);
+                var mins = Math.floor((totalSeconds % 3600) / 60);
+                var secs = totalSeconds % 60;
+
+                document.getElementById('dd').textContent = pad(days);
+                document.getElementById('hh').textContent = pad(hours);
+                document.getElementById('mm').textContent = pad(mins);
+                document.getElementById('ss').textContent = pad(secs);
+
+                var total = target - start;
+                var elapsed = now - start;
+                var pct = Math.min(100, Math.max(0, (elapsed / total) * 100));
+                document.getElementById('progressFill').style.width = pct + '%';
+            }
+
+            // ===== SEAL CLICK =====
+            document.getElementById('sealBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                renderCaption(true);
+                this.style.transform = 'scale(0.9) rotate(10deg)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+
+                // Mini burst around seal
+                const rect = this.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                for (let i = 0; i < 6; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-burst';
+                    heart.textContent = ['💕', '✨', '🌸', '💖'][Math.floor(Math.random() * 4)];
+                    const angle = (Math.PI * 2 * i) / 6;
+                    const distance = 40 + Math.random() * 30;
+                    heart.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                    heart.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                    heart.style.left = (cx - 15) + 'px';
+                    heart.style.top = (cy - 15) + 'px';
+                    heart.style.fontSize = (16 + Math.random() * 14) + 'px';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 1500);
+                }
+            });
+
+            // ===== INIT =====
+            renderCaption(false);
+            tick();
+            setInterval(tick, 1000);
+            setInterval(() => renderCaption(true), 60000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    tick();
+                    renderCaption(true);
+                }
+            });
+
+        })();
+    </script>
 </body>
 </html>
