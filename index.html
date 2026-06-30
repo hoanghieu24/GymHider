@@ -1,544 +1,372 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Duy Trung ❤️ Thu Trang | Thiệp cưới sang trọng - Tình yêu màu đỏ</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background-color: #fff9f5;
-            font-family: 'Montserrat', sans-serif;
-            color: #2d2a27;
-            overflow-x: hidden;
-        }
-        h1, h2, h3, .script-font {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        /* Hero - đỏ chủ đạo, sang trọng */
-        .hero {
-            height: 100vh;
-            min-height: 680px;
-            background: linear-gradient(135deg, #5a1e1a 0%, #8b2c24 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.08"><path fill="none" stroke="%23ffd89c" stroke-width="1.5" d="M100 200 L900 200 M200 300 L800 300 M100 500 L900 500 M150 700 L850 700"/><circle cx="300" cy="400" r="2" fill="%23ffd89c"/><circle cx="600" cy="650" r="3" fill="%23ffd89c"/><path d="M400 850 L450 800 L500 860 L550 810" stroke="%23ffd89c" fill="none"/></svg>');
-            background-repeat: repeat;
-            background-size: 55px;
-            pointer-events: none;
-        }
-        .hero-overlay-red {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 70% 20%, rgba(210,80,60,0.2) 0%, rgba(0,0,0,0.3) 100%);
-        }
-        .hero-content {
-            position: relative;
-            z-index: 15;
-            animation: riseGlow 1.3s ease-out;
-            padding: 0 16px;
-        }
-        .hero-sub {
-            font-size: 0.75rem;
-            letter-spacing: 6px;
-            color: #ffdfb8;
-            font-weight: 300;
-            margin-bottom: 0.8rem;
-        }
-        .hero-names {
-            font-size: clamp(2.6rem, 11vw, 5.2rem);
-            color: #fff5e8;
-            text-shadow: 0 4px 18px rgba(0,0,0,0.3);
-            margin: 0.3rem 0;
-            line-height: 1.2;
-        }
-        .hero-date {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(12px);
-            display: inline-block;
-            padding: 0.6rem 1.6rem;
-            border-radius: 60px;
-            font-weight: 400;
-            border: 1px solid rgba(230, 170, 100, 0.7);
-            color: #ffefdb;
-            font-size: 0.85rem;
-            margin-top: 1.5rem;
-            letter-spacing: 1px;
-        }
-        .scroll-down {
-            position: absolute;
-            bottom: 22px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.8rem;
-            color: #ffddb0;
-            animation: bounceSoft 2s infinite;
-            cursor: pointer;
-            z-index: 20;
-        }
-        section {
-            padding: 70px 0;
-            position: relative;
-        }
-        .section-title {
-            font-size: 2.4rem;
-            text-align: center;
-            margin-bottom: 1.6rem;
-            color: #7a2a22;
-            position: relative;
-        }
-        .section-title:after {
-            content: "❤️";
-            display: block;
-            font-size: 1.8rem;
-            color: #c04030;
-            margin-top: 0.5rem;
-            letter-spacing: 4px;
-        }
-        .story-long {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 32px;
-            align-items: center;
-        }
-        .story-text {
-            flex: 1;
-            font-size: 1rem;
-            line-height: 1.65;
-        }
-        .story-text p {
-            margin-bottom: 1.2rem;
-        }
-        .story-photo {
-            flex: 0.9;
-            border-radius: 32px;
-            overflow: hidden;
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.2);
-        }
-        .milestones {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-        }
-        .milestone-card {
-            background: white;
-            padding: 28px 16px;
-            border-radius: 32px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-            transition: 0.25s;
-            border: 1px solid #f3ddd2;
-        }
-        .milestone-card:hover { transform: translateY(-6px); border-color: #c06048; }
-        .milestone-year { font-size: 1.9rem; font-weight: 700; color: #b3513a; font-family: 'Playfair Display';}
-        .countdown-wrap {
-            background: linear-gradient(125deg, #fff3ed, #fffbf7);
-            border-radius: 48px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 15px 30px -8px rgba(0,0,0,0.05);
-            border: 1px solid #f7dbce;
-        }
-        .timer {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin: 25px 0;
-        }
-        .timer-card {
-            background: white;
-            width: 85px;
-            padding: 14px 0;
-            border-radius: 28px;
-            transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-        .timer-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #b1422c;
-        }
-        .info-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            margin-top: 20px;
-        }
-        .venue-card {
-            flex: 1;
-            background: #fffbf7;
-            border-radius: 40px;
-            padding: 1.6rem;
-            text-align: center;
-            border: 1px solid #f3dbce;
-            transition: 0.2s;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid #b8553e;
-            padding: 8px 20px;
-            border-radius: 40px;
-            display: inline-block;
-            margin-top: 18px;
-            font-weight: 500;
-            transition: 0.2s;
-            cursor: pointer;
-            color: #b1422c;
-            text-decoration: none;
-            font-size: 0.85rem;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-top: 32px;
-        }
-        .gallery-item {
-            border-radius: 28px;
-            overflow: hidden;
-            aspect-ratio: 1 / 1.1;
-            background: #eeded2;
-            cursor: pointer;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-        }
-        .rsvp-modern {
-            background: #fffaf5;
-            max-width: 680px;
-            margin: 0 auto;
-            padding: 36px 28px;
-            border-radius: 52px;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.06);
-            border: 1px solid #f4d9cd;
-        }
-        .input-field {
-            width: 100%;
-            padding: 14px 20px;
-            border-radius: 60px;
-            border: 1px solid #f0cebe;
-            margin-bottom: 18px;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-        .btn-gold {
-            background: #8e3025;
-            color: #fff3e6;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 60px;
-            font-weight: 600;
-            transition: 0.2s;
-            font-size: 1rem;
-        }
-        .playlist-area {
-            background: #fff3ed;
-            border-radius: 48px;
-            padding: 32px 20px;
-            text-align: center;
-            border: 1px solid #f1cfbf;
-        }
-        .footer {
-            background: #3f201c;
-            color: #e7cfbc;
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 0.8rem;
-        }
-        @keyframes riseGlow {
-            0% { opacity: 0; transform: translateY(30px); filter: blur(4px);}
-            100% { opacity: 1; transform: translateY(0); filter: blur(0);}
-        }
-        @keyframes bounceSoft {
-            0%,100%{ transform: translateX(-50%) translateY(0);}
-            50%{ transform: translateX(-50%) translateY(8px);}
-        }
-        /* Mobile tối ưu */
-        @media (max-width: 640px) {
-            .container { padding: 0 18px; }
-            section { padding: 50px 0; }
-            .section-title { font-size: 2rem; }
-            .timer-card { width: 70px; padding: 10px 0; }
-            .timer-number { font-size: 1.5rem; }
-            .story-long { gap: 24px; flex-direction: column; }
-            .story-text { order: 2; }
-            .story-photo { order: 1; width: 100%; max-width: 340px; margin: 0 auto; }
-            .milestone-card { padding: 20px 12px; }
-            .venue-card { padding: 1.2rem; }
-            .hero-date { font-size: 0.7rem; padding: 0.5rem 1.2rem; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .rsvp-modern { padding: 28px 18px; }
-            .btn-outline, .btn-gold { font-size: 0.85rem; }
-        }
-        .floating-icon {
-            font-size: 1.5rem;
-            color: #c85c43;
-            margin: 0 4px;
-        }
-        .highlight-red {
-            color: #b1422c;
-            font-weight: 600;
-        }
-        button, .btn-outline, .btn-gold, .scroll-down {
-            cursor: pointer;
-        }
-        img {
-            max-width: 100%;
-            display: block;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Hiếu &amp; Huyền — Đếm ngày</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF3EC;
+    --rose:#C44B5E;
+    --rose-deep:#9C2F45;
+    --gold:#CFA15E;
+    --plum:#352236;
+    --plum-soft:#5B4759;
+    --line:rgba(53,34,54,0.12);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+
+  html,body{
+    margin:0; padding:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 18% 12%, rgba(207,161,94,0.16), transparent 55%),
+      radial-gradient(circle at 85% 85%, rgba(196,75,94,0.14), transparent 55%),
+      var(--cream);
+    color:var(--plum);
+    font-family:'Be Vietnam Pro', sans-serif;
+    overflow-x:hidden;
+  }
+
+  .wrap{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:48px 20px 64px;
+  }
+
+  /* signature: intertwined initials */
+  .monogram{
+    position:relative;
+    width:120px; height:120px;
+    margin-bottom:18px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .monogram svg{ width:100%; height:100%; }
+  .monogram .heart-pulse{
+    animation:beat 2.4s ease-in-out infinite;
+    transform-origin:center;
+  }
+  @keyframes beat{
+    0%,100%{ transform:scale(1); }
+    18%{ transform:scale(1.12); }
+    32%{ transform:scale(0.98); }
+    45%{ transform:scale(1.08); }
+    60%{ transform:scale(1); }
+  }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+
+  h1.names{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:600;
+    font-size:clamp(34px, 9vw, 52px);
+    margin:0 0 6px;
+    text-align:center;
+    color:var(--plum);
+    letter-spacing:0.01em;
+  }
+  h1.names .amp{
+    color:var(--rose);
+    font-style:normal;
+    padding:0 6px;
+  }
+
+  .target-date{
+    font-size:14px;
+    color:var(--plum-soft);
+    margin-bottom:36px;
+    text-align:center;
+  }
+  .target-date b{ color:var(--rose-deep); font-weight:600; }
+
+  /* countdown */
+  .countdown{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+    width:100%;
+    max-width:420px;
+    margin-bottom:14px;
+  }
+  .cd-cell{
+    background:rgba(255,255,255,0.55);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px 4px 12px;
+    text-align:center;
+    backdrop-filter:blur(6px);
+  }
+  .cd-num{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:clamp(26px, 7vw, 36px);
+    color:var(--rose-deep);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .cd-label{
+    margin-top:6px;
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--plum-soft);
+  }
+
+  .progress-line{
+    width:100%;
+    max-width:420px;
+    height:3px;
+    border-radius:3px;
+    background:rgba(53,34,54,0.08);
+    overflow:hidden;
+    margin-bottom:40px;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--gold), var(--rose));
+    width:0%;
+    transition:width 1s linear;
+  }
+
+  /* daily caption card */
+  .card{
+    position:relative;
+    width:100%;
+    max-width:440px;
+    background:#fff;
+    border-radius:22px;
+    padding:30px 26px 26px;
+    box-shadow:0 18px 40px -18px rgba(156,47,69,0.28), 0 2px 8px rgba(53,34,54,0.06);
+    border:1px solid var(--line);
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:-1px; left:24px; right:24px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .seal{
+    width:34px; height:34px;
+    border-radius:50%;
+    background:linear-gradient(160deg, var(--rose), var(--rose-deep));
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 16px;
+    box-shadow:0 4px 10px rgba(156,47,69,0.35);
+  }
+  .seal svg{ width:16px; height:16px; }
+
+  .day-tag{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:10px;
+  }
+
+  .caption{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(18px, 4.6vw, 21px);
+    line-height:1.55;
+    text-align:center;
+    color:var(--plum);
+    margin:0;
+  }
+
+  .signoff{
+    text-align:center;
+    margin-top:18px;
+    font-size:12.5px;
+    color:var(--plum-soft);
+  }
+  .signoff span{ color:var(--rose-deep); font-weight:600; }
+
+  footer{
+    margin-top:36px;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:rgba(53,34,54,0.38);
+    text-align:center;
+  }
+
+  .done-state h1.names{ margin-bottom:14px; }
+  .done-msg{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-size:clamp(20px,5vw,26px);
+    text-align:center;
+    color:var(--rose-deep);
+    margin-bottom:30px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .heart-pulse{ animation:none; }
+    .progress-fill{ transition:none; }
+  }
+</style>
 </head>
 <body>
+<div class="wrap">
 
-<div class="hero">
-    <div class="hero-overlay-red"></div>
-    <div class="hero-content">
-        <div class="hero-sub">SAVE THE DATE</div>
-        <h1 class="hero-names">Duy Trung & Thu Trang</h1>
-        <div class="hero-date">⸻ 10 · 05 · 2026 — Hà Nội ⸻</div>
+  <div class="monogram">
+    <svg viewBox="0 0 120 120" fill="none">
+      <circle cx="60" cy="60" r="58" stroke="#CFA15E" stroke-width="1" opacity="0.35"/>
+      <g class="heart-pulse">
+        <path d="M60 88
+                 C 30 66, 16 46, 24 30
+                 C 30 18, 48 16, 60 32
+                 C 72 16, 90 18, 96 30
+                 C 104 46, 90 66, 60 88 Z"
+              fill="#C44B5E" opacity="0.12"/>
+      </g>
+      <text x="40" y="70" font-family="Playfair Display, serif" font-size="34" font-style="italic" font-weight="600" fill="#9C2F45" text-anchor="middle">H</text>
+      <text x="80" y="70" font-family="Playfair Display, serif" font-size="34" font-style="italic" font-weight="600" fill="#CFA15E" text-anchor="middle">H</text>
+    </svg>
+  </div>
+
+  <div class="eyebrow">Hành trình yêu thương</div>
+  <h1 class="names">Hiếu <span class="amp">&amp;</span> Huyền</h1>
+  <div class="target-date">Đếm ngược đến <b>23:00, 10/07/2026</b></div>
+
+  <div id="liveBlock">
+    <div class="countdown">
+      <div class="cd-cell"><div class="cd-num" id="dd">00</div><div class="cd-label">Ngày</div></div>
+      <div class="cd-cell"><div class="cd-num" id="hh">00</div><div class="cd-label">Giờ</div></div>
+      <div class="cd-cell"><div class="cd-num" id="mm">00</div><div class="cd-label">Phút</div></div>
+      <div class="cd-cell"><div class="cd-num" id="ss">00</div><div class="cd-label">Giây</div></div>
     </div>
-    <div class="scroll-down" onclick="document.getElementById('loveStory').scrollIntoView({behavior:'smooth'})">
-        <i class="fas fa-chevron-down"></i>
+    <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div id="doneBlock" style="display:none;" class="done-state">
+    <div class="done-msg">Khoảnh khắc đã đến rồi 💍</div>
+  </div>
+
+  <div class="card">
+    <div class="seal">
+      <svg viewBox="0 0 24 24" fill="#fff">
+        <path d="M12 21s-7.5-4.7-10-9.3C0.3 8.1 2 4.5 5.6 4c2-0.3 3.8 0.7 4.9 2.3 1.1-1.6 2.9-2.6 4.9-2.3 3.6 0.5 5.3 4.1 3.6 7.7C19.5 16.3 12 21 12 21z"/>
+      </svg>
     </div>
+    <div class="day-tag" id="dayTag">Ngày yêu thương</div>
+    <p class="caption" id="captionText">Đang tải lời nhắn hôm nay…</p>
+    <div class="signoff">— với tất cả yêu thương, <span>H &amp; H</span></div>
+  </div>
+
+  <footer>được giữ gìn mỗi ngày, cho đến và sau ngày 10.07.2026</footer>
 </div>
 
-<main>
-    <!-- Câu chuyện tình yêu đỏ -->
-    <section id="loveStory">
-        <div class="container">
-            <div class="story-long" data-aos="fade-up">
-                <div class="story-text">
-                    <h2 class="section-title" style="text-align: left;">Chuyện tình<br>mang sắc đỏ</h2>
-                    <p>Duy Trung và Thu Trang – hai mảnh ghép tưởng chừng xa lạ lại tìm thấy nhau giữa Hà Nội nhộn nhịp. Không phải định mệnh sắp đặt sẵn, mà là những lần vô tình gặp gỡ đầy duyên số: cùng một quán cafe, cùng một bản nhạc, cùng nụ cười làm đối phương bối rối. Từ những cuộc trò chuyện nửa đêm, họ nhận ra đối phương chính là bến bờ bình yên.</p>
-                    <p>Duy Trung – chàng kiến trúc sư đam mê du lịch, và Thu Trang – cô gái thiết kế với tâm hồn bay bổng. Họ cùng nhau xây dựng ước mơ, cùng nhau vượt qua thử thách. Trái tim họ đã chọn nhau từ rất lâu, và giờ đây, trước sự chứng kiến của những người thân yêu nhất, họ sẽ chính thức về chung một nhà.</p>
-                    <p><i class="fas fa-heart" style="color:#c04030;"></i> <i>“Anh không cần một tình yêu hoàn hảo, anh chỉ cần em – người đồng hành trọn đời.”</i> — Duy Trung.</p>
-                </div>
-                <div class="story-photo" data-aos="fade-left">
-                    <img src="https://picsum.photos/id/104/700/800" alt="Duy Trung & Thu Trang" style="width:100%;height:auto;">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Cột mốc tình yêu đỏ -->
-    <section style="background: #fffaf5;">
-        <div class="container">
-            <h2 class="section-title">Dấu ấn đỏ son</h2>
-            <div class="milestones">
-            <div class="milestone-card" data-aos="zoom-in" data-aos-delay="300"><div class="milestone-year">2026</div><i class="fas fa-ring" style="color:#c85c43; font-size: 1.8rem; margin:12px 0; display:block;"></i><p>Đám cưới cổ tích · Lời thề trước gia đình</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Countdown đỏ -->
-    <section>
-        <div class="container">
-            <div class="countdown-wrap" data-aos="flip-up">
-                <h2 class="section-title" style="margin-bottom:0;">Ngày trọng đại</h2>
-                <p style="font-size:1rem;">Chúng tôi nóng lòng chờ đón bạn!</p>
-                <div class="timer" id="timer">
-                    <div class="timer-card"><div class="timer-number" id="days">00</div><div>Ngày</div></div>
-                    <div class="timer-card"><div class="timer-number" id="hours">00</div><div>Giờ</div></div>
-                    <div class="timer-card"><div class="timer-number" id="minutes">00</div><div>Phút</div></div>
-                    <div class="timer-card"><div class="timer-number" id="seconds">00</div><div>Giây</div></div>
-                </div>
-                <div class="floating-icon"><i class="fas fa-heart"></i> <i class="fas fa-heart"></i> <i class="fas fa-heart"></i></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Địa điểm sự kiện -->
-    <section>
-        <div class="container">
-            <h2 class="section-title">Lễ cưới & Tiệc mừng</h2>
-            <div class="info-grid">
-                <div class="venue-card" data-aos="fade-right"><i class="fas fa-church fa-2x" style="color:#b1422c; margin-bottom:1rem;"></i><h3>Lễ thành hôn</h3><p><strong>.....</strong><br>...........<br>15:30 - 17:00</p><button class="btn-outline" onclick="window.open('https://maps.app.goo.gl/4E64mXSbZVzMZ6DQ8','_blank')"><i class="fas fa-location-dot"></i> Chỉ đường</button></div>
-                <div class="venue-card" data-aos="fade-up"><i class="fas fa-champagne-glasses fa-2x" style="color:#b1422c; margin-bottom:1rem;"></i><h3>Tiệc cưới</h3><p><strong>.........</strong><br>...........<br>18:00 - 22:00</p><button class="btn-outline" onclick="window.open('https://maps.app.goo.gl/rMNN7DTW2K4mQk5W8','_blank')"><i class="fas fa-map-marker-alt"></i> Xem bản đồ</button></div>
-                <div class="venue-card" data-aos="fade-left"><i class="fas fa-qrcode fa-2x" style="color:#b1422c; margin-bottom:1rem;"></i><h3>Mã QR check-in</h3><p>Quét mã tại cửa để nhận ảnh cưới kỷ niệm và quà lưu niệm độc quyền.</p></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery ảnh cưới tông đỏ -->
-    <section style="background: #fff7f2;">
-        <div class="container">
-            <h2 class="section-title">Khoảnh khắc đỏ</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item" data-aos="fade-up"><img src="https://picsum.photos/id/20/600/700" alt="kỉ niệm" style="width:100%;height:100%;object-fit:cover;"></div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="80"><img src="https://picsum.photos/id/42/600/700" alt="ảnh cưới" style="width:100%;height:100%;object-fit:cover;"></div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="160"><img src="https://picsum.photos/id/132/600/700" alt="ảnh đôi" style="width:100%;height:100%;object-fit:cover;"></div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="240"><img src="https://picsum.photos/id/145/600/700" alt="hạnh phúc" style="width:100%;height:100%;object-fit:cover;"></div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="320"><img src="https://picsum.photos/id/173/600/700" alt="tình yêu" style="width:100%;height:100%;object-fit:cover;"></div>
-                <div class="gallery-item" data-aos="fade-up" data-aos-delay="400"><img src="https://picsum.photos/id/168/600/700" alt="lãng mạn" style="width:100%;height:100%;object-fit:cover;"></div>
-            </div>
-            <p style="text-align:center; margin-top:24px;"><i class="fas fa-camera"></i> Hashtag: <strong style="color:#b1422c;">#TrungTrangWedding</strong></p>
-        </div>
-    </section>
-
-    <!-- Playlist tình yêu -->
-    <section>
-        <div class="container">
-            <div class="playlist-area" data-aos="zoom-in">
-                <i class="fas fa-headphones fa-3x" style="color:#b1422c; margin-bottom:10px; display:inline-block;"></i>
-                <h3 style="font-size: 1.8rem;">Giai điệu trái tim</h3>
-                <p>Những bài hát Duy Trung & Thu Trang dành tặng nhau</p>
-                <div style="display: flex; justify-content: center; gap: 16px; margin: 20px 0; flex-wrap:wrap;">
-                    <span><i class="fab fa-spotify"></i> Lạ Lùng - Vũ.</span>
-                    <span><i class="fas fa-music"></i> Perfect - Ed Sheeran</span>
-                    <span><i class="fas fa-music"></i> Hơn cả yêu - Đức Phúc</span>
-                </div>
-                <button class="btn-outline" style="background:#b1422c; color:white; border:none;" onclick="alert('Chúc mừng bạn đã đến với Playlist tình yêu của chúng tôi! 💖')"><i class="fab fa-spotify"></i> Nghe trên Spotify</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lời tri ân -->
-    <section style="background: #fef6f0;">
-        <div class="container">
-            <div class="story-long" style="flex-direction: row-reverse;" data-aos="fade-left">
-                <div class="story-text">
-                    <h2 class="section-title" style="text-align: left;">Lời tri ân</h2>
-                    <p>Gửi đến ông bà, cha mẹ, và những người thân yêu – cảm ơn vì tất cả sự yêu thương, chở che, dạy dỗ để chúng con trưởng thành như ngày hôm nay. Cảm ơn bạn bè đã luôn đồng hành, sẻ chia những niềm vui nỗi buồn.</p>
-                    <p>Chúng con – Duy Trung và Thu Trang – hứa sẽ luôn nâng niu, trân trọng và yêu thương nhau trọn đời. Sự hiện diện của các bạn trong ngày trọng đại này là món quà vô giá nhất.</p>
-                    <p><i>“Tình yêu không chỉ là nhìn về phía nhau, mà còn cùng nhau nhìn về một hướng.”</i></p>
-                </div>
-                <div class="story-photo" style="flex:0.8;"><img src="https://picsum.photos/id/64/600/700" alt="cảm ơn" style="width:100%; border-radius: 28px;"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- RSVP chính thức tông đỏ -->
-    <section>
-        <div class="container">
-            <h2 class="section-title">Xác nhận tham dự</h2>
-            <div class="rsvp-modern" data-aos="flip-left">
-                <form id="rsvpLongForm">
-                    <input type="text" class="input-field" id="fullName" placeholder="Họ và tên *" required>
-                    <input type="email" class="input-field" id="emailAddr" placeholder="Email nhận thiệp điện tử">
-                    <select id="attendingStatus" class="input-field">
-                        <option value="yes">🥂 Chắc chắn tham dự 🥂</option>
-                        <option value="no">💔 Rất tiếc không thể tham dự</option>
-                        <option value="maybe">✨ Có thể sẽ đến (sẽ báo lại sau)</option>
-                    </select>
-                    <textarea rows="2" class="input-field" id="wishes" placeholder="Lời chúc tốt đẹp dành cho cô dâu chú rể..."></textarea>
-                    <button type="submit" class="btn-gold">GỬI LỜI XÁC NHẬN <i class="fas fa-heart"></i></button>
-                    <div id="rsvpFeedback" style="margin-top: 18px; text-align: center; font-size:0.85rem;"></div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lời chúc từ khách mời -->
-    <section style="background: #fff7f2;">
-        <div class="container" style="text-align: center;">
-            <h2 class="section-title">Lời chúc ngọt ngào</h2>
-            <div id="guestMessages" style="display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; margin-top: 20px;">
-                <div class="venue-card" style="background:white; width:240px;"><i class="fas fa-comment-dots" style="color:#b1422c;"></i><p><strong>Cô dâu chú rể</strong><br>Chúc tình yêu bền lâu! ❤️</p></div>
-                <div class="venue-card" style="background:white; width:240px;"><i class="fas fa-comment-dots" style="color:#b1422c;"></i><p><strong>Gia đình</strong><br>Hạnh phúc mãi mãi về sau!</p></div>
-            </div>
-            <button class="btn-outline" style="margin-top: 20px; background:#b1422c; color:white; border:none;" onclick="addCustomMessage()"><i class="fas fa-plus-circle"></i> Gửi lời chúc công khai</button>
-        </div>
-    </section>
-</main>
-
-<footer class="footer">
-    <p>Duy Trung & Thu Trang — Trân trọng cảm ơn sự hiện diện của bạn trong ngày trọng đại.</p>
-    <p style="margin-top: 8px;"><i class="fas fa-camera"></i> #TrungTrangWedding | Lưu giữ khoảnh khắc vàng</p>
-    <p style="font-size: 0.65rem; margin-top: 18px;">Made with <i class="fas fa-heart" style="color:#e69c7c;"></i> — Thiệp cưới đỏ sang trọng, câu chuyện tình yêu độc bản.</p>
-</footer>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init({ duration: 800, once: true, offset: 70 });
+(function(){
+  // Target: 23:00:00, 10 July 2026, local time
+  var target = new Date(2026, 6, 10, 23, 0, 0);
+  // Reference start point for progress bar (30 days before target, adjustable)
+  var start = new Date(target.getTime() - 1000*60*60*24*60); // 60 days window for progress visual
 
-    // Countdown đến ngày 10/05/2026 17:30
-    function updateWeddingCountdown() {
-        const target = new Date("2026-05-10T17:30:00+07:00");
-        const now = new Date();
-        const diff = target - now;
-        if (diff <= 0) {
-            document.getElementById('days').innerText = '00';
-            document.getElementById('hours').innerText = '00';
-            document.getElementById('minutes').innerText = '00';
-            document.getElementById('seconds').innerText = '00';
-            return;
-        }
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (86400000)) / 3600000);
-        const minutes = Math.floor((diff % 3600000) / 60000);
-        const seconds = Math.floor((diff % 60000) / 1000);
-        document.getElementById('days').innerText = String(days).padStart(2,'0');
-        document.getElementById('hours').innerText = String(hours).padStart(2,'0');
-        document.getElementById('minutes').innerText = String(minutes).padStart(2,'0');
-        document.getElementById('seconds').innerText = String(seconds).padStart(2,'0');
+  var captions = [
+    "Mỗi ngày trôi qua là một ngày Huyền khiến trái tim Hiếu chắc chắn hơn về chữ \"mãi mãi\".",
+    "Yêu Huyền không cần lý do, chỉ cần một cái nắm tay là Hiếu biết mình đang ở đúng nơi cần ở.",
+    "Có những điều không cần nói ra, như cách Hiếu vẫn luôn chọn Huyền, mỗi sáng thức dậy.",
+    "Huyền là lý do khiến những ngày bình thường nhất cũng trở thành kỷ niệm đáng nhớ.",
+    "Tình yêu của Hiếu và Huyền không ồn ào, chỉ lặng lẽ lớn lên theo từng ngày bên nhau.",
+    "Dù xa hay gần, trái tim Hiếu vẫn luôn hướng về một người duy nhất — Huyền.",
+    "Có Huyền, những điều giản dị nhất cũng hoá thành hạnh phúc.",
+    "Hiếu tin rằng định mệnh đã sắp đặt để hai người gặp nhau, đúng người, đúng thời điểm.",
+    "Mỗi tin nhắn, mỗi cuộc gọi, đều là một mảnh ghép nhỏ cho câu chuyện tình của Hiếu và Huyền.",
+    "Huyền không cần hoàn hảo, chỉ cần là Huyền — vậy là đủ để Hiếu yêu trọn vẹn.",
+    "Ngày càng gần hơn đến cột mốc đặc biệt, lòng Hiếu càng thêm chắc chắn về Huyền.",
+    "Có một người luôn khiến Hiếu muốn trở thành phiên bản tốt hơn mỗi ngày — đó là Huyền.",
+    "Yêu thương không cần phải lớn lao, chỉ cần đều đặn như cách Hiếu vẫn nghĩ về Huyền mỗi ngày.",
+    "Huyền là bến đỗ bình yên giữa những bộn bề của Hiếu.",
+    "Một ngày không nói chuyện với Huyền là một ngày Hiếu thấy thiếu thiếu điều gì đó.",
+    "Tình yêu này không vội vàng, chỉ chậm rãi và bền bỉ như chính hai con người tạo nên nó.",
+    "Hiếu mong mỗi ngày trôi qua, khoảng cách đến hạnh phúc trọn vẹn lại ngắn thêm một chút.",
+    "Có Huyền bên cạnh, mọi kế hoạch tương lai của Hiếu đều trở nên rõ ràng hơn.",
+    "Huyền là người duy nhất khiến Hiếu vừa yên tâm, vừa háo hức về ngày mai.",
+    "Không phải ngẫu nhiên mà hai người đến với nhau, đó là một hành trình đáng để trân trọng.",
+    "Hiếu chọn Huyền hôm qua, hôm nay, và sẽ chọn lại vào ngày mai nữa.",
+    "Tình yêu lớn lên không phải nhờ những điều to tát, mà từ những lần Hiếu và Huyền ở bên nhau.",
+    "Huyền khiến Hiếu tin vào một tình yêu chân thành, không toan tính, không vội vã.",
+    "Đếm từng ngày không phải vì sốt ruột, mà vì biết điều phía trước thật sự xứng đáng để chờ.",
+    "Hiếu luôn nhớ Huyền theo những cách rất riêng — lúc làm việc, lúc nghỉ ngơi, lúc mơ về tương lai.",
+    "Sự bình yên Hiếu cảm nhận được khi nghĩ về Huyền là điều không gì có thể thay thế.",
+    "Mỗi ngày gần hơn cột mốc 10/7, là mỗi ngày Hiếu thêm trân trọng hành trình đã đi qua cùng Huyền.",
+    "Huyền không chỉ là người yêu, mà còn là người bạn đồng hành đáng tin cậy nhất của Hiếu.",
+    "Có những tình yêu được xây bằng sự kiên nhẫn và chân thành — tình yêu của Hiếu và Huyền là một trong số đó.",
+    "Hiếu tin chắc rằng, dù ngày 10/7 có đến hay chưa, tình cảm dành cho Huyền vẫn sẽ luôn vẹn nguyên."
+  ];
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function dayIndexSinceEpoch(date){
+    // local-day based index so it changes consistently at midnight local time
+    var d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return Math.floor(d.getTime() / 86400000);
+  }
+
+  function renderCaption(){
+    var now = new Date();
+    var idx = ((dayIndexSinceEpoch(now) % captions.length) + captions.length) % captions.length;
+    document.getElementById('captionText').textContent = captions[idx];
+    var dayNum = Math.max(0, Math.ceil((target - now) / 86400000));
+    document.getElementById('dayTag').textContent =
+      now >= target ? 'Đã đến ngày đặc biệt' : 'Còn ' + dayNum + ' ngày nữa — Lời nhắn hôm nay';
+  }
+
+  function tick(){
+    var now = new Date();
+    var diff = target - now;
+
+    if(diff <= 0){
+      document.getElementById('liveBlock').style.display = 'none';
+      document.getElementById('doneBlock').style.display = 'block';
+      renderCaption();
+      return;
     }
-    updateWeddingCountdown();
-    setInterval(updateWeddingCountdown, 1000);
 
-    // RSVP Form
-    const rsvpForm = document.getElementById('rsvpLongForm');
-    rsvpForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('fullName').value.trim();
-        if(!name) { alert('Vui lòng nhập họ tên để xác nhận'); return; }
-        const attending = document.getElementById('attendingStatus').value;
-        let msg = attending === 'yes' ? `🎉 Cảm ơn ${name}, bạn đã xác nhận tham dự! Chúng tôi rất vui.` : (attending === 'no' ? `💌 ${name} ơi, rất tiếc, tình cảm vẫn trọn vẹn!` : `✨ ${name}, chúng tôi sẽ cập nhật sau nhé!`);
-        document.getElementById('rsvpFeedback').innerHTML = msg + ' ❤️';
-        document.getElementById('rsvpFeedback').style.color = '#b1422c';
-        setTimeout(() => document.getElementById('rsvpFeedback').innerHTML = '', 3500);
-        rsvpForm.reset();
-    });
+    var totalSeconds = Math.floor(diff / 1000);
+    var days = Math.floor(totalSeconds / 86400);
+    var hours = Math.floor((totalSeconds % 86400) / 3600);
+    var mins = Math.floor((totalSeconds % 3600) / 60);
+    var secs = totalSeconds % 60;
 
-    // Gửi lời chúc công khai
-    window.addCustomMessage = function() {
-        let userMsg = prompt("Viết lời chúc tới Duy Trung & Thu Trang (sẽ hiển thị trên web):");
-        if(userMsg && userMsg.trim() !== "") {
-            let container = document.getElementById('guestMessages');
-            let newCard = document.createElement('div');
-            newCard.className = 'venue-card';
-            newCard.style.background = 'white';
-            newCard.style.width = '240px';
-            newCard.innerHTML = `<i class="fas fa-comment-dots" style="color:#b1422c;"></i><p><strong>Khách mời</strong><br>${userMsg.substring(0, 110)} ✨</p>`;
-            container.appendChild(newCard);
-            alert("Cảm ơn lời chúc tốt đẹp của bạn!");
-        } else { alert("Hãy viết một lời chúc ngọt ngào!"); }
-    };
+    document.getElementById('dd').textContent = pad(days);
+    document.getElementById('hh').textContent = pad(hours);
+    document.getElementById('mm').textContent = pad(mins);
+    document.getElementById('ss').textContent = pad(secs);
 
-    const galleryImgs = document.querySelectorAll('.gallery-item');
-    galleryImgs.forEach((item, idx) => {
-        item.addEventListener('click', () => alert(`📸 Ảnh kỷ niệm ${idx+1} – Khoảnh khắc tình yêu của Duy Trung & Thu Trang`));
-    });
+    var total = target - start;
+    var elapsed = now - start;
+    var pct = Math.min(100, Math.max(0, (elapsed / total) * 100));
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  renderCaption();
+  tick();
+  setInterval(tick, 1000);
+
+  // re-check caption at local midnight rollovers without full reload
+  setInterval(renderCaption, 60 * 1000);
+})();
 </script>
 </body>
 </html>
