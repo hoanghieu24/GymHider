@@ -39,32 +39,22 @@
             user-select: none;
         }
 
-        #particles-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
-        }
+        #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 
         .ripple {
             position: fixed; border-radius: 50%;
             background: radial-gradient(circle, rgba(207, 161, 94, 0.4), rgba(196, 75, 94, 0.2));
-            transform: scale(0); animation: rippleAnim 1.2s ease-out forwards;
-            pointer-events: none; z-index: 999;
+            transform: scale(0); animation: rippleAnim 1.2s ease-out forwards; pointer-events: none; z-index: 999;
         }
         @keyframes rippleAnim { to { transform: scale(6); opacity: 0; } }
 
-        .heart-burst {
-            position: fixed; pointer-events: none; z-index: 1000; font-size: 30px;
-            animation: heartBurst 1.5s ease-out forwards;
-        }
+        .heart-burst { position: fixed; pointer-events: none; z-index: 1000; font-size: 30px; animation: heartBurst 1.5s ease-out forwards; }
         @keyframes heartBurst {
             0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
             100% { transform: translate(var(--tx), var(--ty)) scale(1.8) rotate(360deg); opacity: 0; }
         }
 
-        .sticker {
-            position: fixed; pointer-events: none; z-index: 100; font-size: 40px;
-            animation: floatSticker 8s ease-in-out infinite; opacity: 0.15;
-        }
+        .sticker { position: fixed; pointer-events: none; z-index: 100; font-size: 40px; animation: floatSticker 8s ease-in-out infinite; opacity: 0.15; }
         @keyframes floatSticker {
             0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
             25% { transform: translateY(-30px) rotate(8deg) scale(1.05); }
@@ -93,10 +83,7 @@
             background: radial-gradient(circle, rgba(207, 161, 94, 0.15), transparent 70%);
             animation: pulseGlow 3s ease-in-out infinite; z-index: -1;
         }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } }
 
         .eyebrow {
             font-family: 'Dancing Script', cursive; font-size: 18px; letter-spacing: 0.08em;
@@ -115,8 +102,7 @@
         h1.names .amp {
             font-family: 'Playfair Display', serif; font-style: normal; padding: 0 8px;
             background: linear-gradient(135deg, var(--rose), var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            font-size: 0.8em;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 0.8em;
         }
 
         .target-date {
@@ -132,17 +118,17 @@
             backdrop-filter: blur(8px); border: 2px solid rgba(207, 161, 94, 0.3);
             box-shadow: 0 8px 24px -8px rgba(53, 34, 54, 0.10); overflow: hidden;
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-            position: relative;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative; cursor: pointer;
         }
         .photo-frame:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 32px -8px rgba(156, 47, 69, 0.20); border-color: var(--rose); }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .photo-frame .placeholder { font-family: 'Dancing Script', cursive; font-size: 14px; color: var(--plum-soft); text-align: center; padding: 10px; opacity: 0.6; line-height: 1.6; }
+        .photo-frame.drag-over { border-color: var(--gold) !important; box-shadow: 0 0 0 4px rgba(207,161,94,0.25); transform: scale(1.02); }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s ease; }
         .photo-frame .label {
             position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
             background: rgba(53, 34, 54, 0.7); backdrop-filter: blur(4px); color: #fff; font-size: 10px;
             padding: 3px 14px; border-radius: 20px; letter-spacing: 0.08em; font-weight: 500;
-            white-space: nowrap; opacity: 0; transition: opacity 0.3s ease;
+            white-space: nowrap; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
         }
         .photo-frame:hover .label { opacity: 1; }
         .photo-frame-left { border-color: rgba(196, 75, 94, 0.4); }
@@ -154,16 +140,20 @@
             position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%;
             background: rgba(53, 34, 54, 0.65); backdrop-filter: blur(4px); border: none; color: #fff;
             font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; z-index: 2;
+            opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; z-index: 3;
         }
         .photo-frame:hover .photo-upload-btn { opacity: 1; }
-        .photo-upload-btn:hover { transform: scale(1.1); background: var(--rose); }
+        .photo-upload-btn:hover { transform: scale(1.15); background: var(--rose); }
         .photo-frame input[type="file"] { display: none; }
-        .upload-spinner {
-            position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
-            background: rgba(53, 34, 54, 0.35); color: #fff; font-size: 12px; font-family: 'Dancing Script', cursive; font-size: 16px;
+
+        .upload-overlay {
+            position: absolute; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 8px;
+            background: rgba(53, 34, 54, 0.45); backdrop-filter: blur(2px); z-index: 2;
         }
-        .upload-spinner.active { display: flex; }
+        .upload-overlay.active { display: flex; }
+        .spin-ring { width: 30px; height: 30px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .upload-overlay span { color: #fff; font-family: 'Dancing Script', cursive; font-size: 15px; }
 
         .countdown { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; max-width: 420px; margin-bottom: 18px; animation: fadeSlideDown 0.8s ease-out 0.3s both; }
         .cd-cell {
@@ -233,17 +223,20 @@
         }
         @keyframes celebrate { 0%, 100% { transform: scale(1) rotate(-1deg); } 50% { transform: scale(1.05) rotate(1deg); } }
 
-        /* ——— Message board ——— */
         .msg-card {
             position: relative; width: 100%; max-width: 440px; background: var(--card-bg); backdrop-filter: blur(12px);
             border-radius: 28px; padding: 26px 24px 24px; margin-top: 20px;
             box-shadow: var(--shadow), 0 2px 8px rgba(53, 34, 54, 0.04); border: 1px solid rgba(255, 255, 255, 0.7);
             animation: fadeSlideUp 0.8s ease-out 0.55s both;
         }
-        .msg-title {
-            font-family: 'Playfair Display', serif; font-weight: 600; font-size: 17px; text-align: center;
-            color: var(--rose-deep); margin-bottom: 14px; letter-spacing: 0.01em;
+        .msg-title { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 17px; text-align: center; color: var(--rose-deep); margin-bottom: 14px; letter-spacing: 0.01em; }
+
+        .config-banner {
+            display: none; background: rgba(207,161,94,0.16); border: 1px dashed var(--gold); border-radius: 14px;
+            padding: 10px 12px; font-size: 11.5px; line-height: 1.6; color: var(--plum-soft); margin-bottom: 14px;
         }
+        .config-banner.show { display: block; }
+
         .sender-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
         .sender-btn {
             flex: 1; padding: 9px 6px; border-radius: 40px; border: 1.5px solid var(--line);
@@ -257,13 +250,13 @@
             font-size: 14px; resize: none; background: rgba(255,255,255,0.6); color: var(--plum); min-height: 44px; max-height: 100px;
         }
         .msg-input:focus { outline: none; border-color: var(--rose); background: rgba(255,255,255,0.9); }
+        .msg-input:disabled, .msg-send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
         .msg-send-btn {
             border: none; border-radius: 16px; padding: 0 18px; background: linear-gradient(135deg, var(--rose), var(--rose-deep));
             color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .msg-send-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(156,47,69,0.35); }
-        .msg-send-btn:active { transform: translateY(0); }
-        .msg-send-btn:disabled { opacity: 0.5; cursor: default; transform: none; box-shadow: none; }
+        .msg-send-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(156,47,69,0.35); }
+        .msg-send-btn:active:not(:disabled) { transform: translateY(0); }
         .msg-list { display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
         .msg-list::-webkit-scrollbar { width: 5px; }
         .msg-list::-webkit-scrollbar-thumb { background: rgba(196,75,94,0.25); border-radius: 10px; }
@@ -274,23 +267,19 @@
         .msg-text { font-size: 14px; line-height: 1.5; color: var(--plum); word-break: break-word; }
         .msg-empty { text-align: center; font-size: 13px; color: var(--plum-soft); opacity: 0.7; padding: 12px 0; font-family: 'Dancing Script', cursive; font-size: 15px; }
 
-        .settings-toggle {
-            font-size: 10px; text-align: center; color: var(--plum-soft); opacity: 0.5; margin-top: 10px; cursor: pointer;
-            letter-spacing: 0.05em; user-select: none;
-        }
-        .settings-panel {
-            display: none; margin-top: 10px; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.5);
-            border: 1px dashed var(--line);
-        }
+        .settings-toggle { font-size: 10px; text-align: center; color: var(--plum-soft); opacity: 0.5; margin-top: 10px; cursor: pointer; letter-spacing: 0.05em; user-select: none; }
+        .settings-panel { display: none; margin-top: 10px; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.5); border: 1px dashed var(--line); }
         .settings-panel.open { display: block; }
-        .settings-panel input {
-            width: 100%; margin-bottom: 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line);
-            font-size: 12px; background: rgba(255,255,255,0.8);
-        }
-        .settings-panel button {
-            width: 100%; padding: 8px; border-radius: 10px; border: none; background: var(--plum); color: #fff; font-size: 12px; cursor: pointer;
-        }
+        .settings-panel input { width: 100%; margin-bottom: 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); font-size: 12px; background: rgba(255,255,255,0.8); }
+        .settings-panel button { width: 100%; padding: 8px; border-radius: 10px; border: none; background: var(--plum); color: #fff; font-size: 12px; cursor: pointer; }
         .settings-note { font-size: 10.5px; color: var(--plum-soft); line-height: 1.5; margin-bottom: 8px; opacity: 0.8; }
+
+        .lightbox {
+            position: fixed; inset: 0; background: rgba(20,10,15,0.88); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; z-index: 3000; padding: 30px; cursor: zoom-out;
+        }
+        .lightbox.open { display: flex; animation: fadeSlideUp 0.25s ease-out; }
+        .lightbox img { max-width: 92%; max-height: 88%; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
 
         footer {
             margin-top: 32px; font-size: 11px; letter-spacing: 0.12em; color: rgba(53, 34, 54, 0.35); text-align: center;
@@ -331,6 +320,8 @@
     <div class="sticker" style="top:5%;left:50%;font-size:28px;animation-delay:2.5s;">⭐</div>
     <div class="sticker" style="bottom:30%;left:50%;font-size:32px;animation-delay:3.5s;">💫</div>
 
+    <div class="lightbox" id="lightbox"><img id="lightboxImg" src="" alt="" /></div>
+
     <div class="wrap">
 
         <div class="monogram">
@@ -354,16 +345,16 @@
         <div class="photo-frames">
             <div class="photo-frame photo-frame-left" id="frameLeft">
                 <img id="imgLeft" src="https://res.cloudinary.com/ojt2hxxi/image/upload/v1783667637/86c8fa2f-c198-4d9b-a90a-4e965702d59a_sidzgb.jpg" alt="Hiếu & Huyền" />
+                <div class="upload-overlay" id="overlayLeft"><div class="spin-ring"></div><span>Đang tải…</span></div>
                 <button class="photo-upload-btn" id="uploadBtnLeft" title="Đổi ảnh">✎</button>
                 <input type="file" id="fileLeft" accept="image/*" />
-                <div class="upload-spinner" id="spinnerLeft">Đang tải…</div>
                 <span class="label">💕 Hiếu &amp; Huyền</span>
             </div>
             <div class="photo-frame photo-frame-right" id="frameRight">
                 <img id="imgRight" src="https://res.cloudinary.com/ojt2hxxi/image/upload/v1783667840/t%E1%BA%A3i_xu%E1%BB%91ng_jc7odz.jpg" alt="Hiếu & Huyền" />
+                <div class="upload-overlay" id="overlayRight"><div class="spin-ring"></div><span>Đang tải…</span></div>
                 <button class="photo-upload-btn" id="uploadBtnRight" title="Đổi ảnh">✎</button>
                 <input type="file" id="fileRight" accept="image/*" />
-                <div class="upload-spinner" id="spinnerRight">Đang tải…</div>
                 <span class="label">💖 Yêu thương</span>
             </div>
         </div>
@@ -393,9 +384,11 @@
             <div class="signoff">— với tất cả yêu thương, <span>H &amp; H</span></div>
         </div>
 
-        <!-- Message board dùng chung giữa 2 người -->
         <div class="msg-card">
             <div class="msg-title">💌 Nhắn gửi cho nhau</div>
+            <div class="config-banner" id="configBanner">
+                ⚠️ Chưa kết nối Firebase nên nhắn tin &amp; ảnh <b>chưa đồng bộ</b> giữa 2 người. Mở file, dán <code>firebaseConfig</code> vào phần <code>FIREBASE_CONFIG</code> đầu script rồi deploy lại nhé.
+            </div>
             <div class="sender-toggle">
                 <button class="sender-btn active" data-sender="Hiếu" id="btnHieu">Hiếu</button>
                 <button class="sender-btn" data-sender="Huyền" id="btnHuyen">Huyền</button>
@@ -409,8 +402,8 @@
             </div>
             <div class="settings-toggle" id="settingsToggle">⚙ cài đặt ảnh (chỉ cần 1 lần)</div>
             <div class="settings-panel" id="settingsPanel">
-                <div class="settings-note">Nhập Cloudinary Cloud name và Unsigned upload preset của bạn (tạo trong Cloudinary Console → Settings → Upload → Add upload preset, để Signing Mode = Unsigned). Chỉ cần nhập 1 lần, cả hai người sẽ dùng chung.</div>
-                <input type="text" id="cfgCloudName" placeholder="Cloud name (vd: ojt2hxxi)" />
+                <div class="settings-note">Nhập Cloudinary Cloud name và Unsigned upload preset (tạo trong Cloudinary Console → Settings → Upload → Add upload preset, để Signing Mode = Unsigned). Chỉ cần nhập 1 lần, cả hai người sẽ dùng chung.</div>
+                <input type="text" id="cfgCloudName" placeholder="Cloud name (vd: dzdldby9a)" />
                 <input type="text" id="cfgUploadPreset" placeholder="Upload preset (unsigned)" />
                 <button id="cfgSaveBtn">Lưu cài đặt</button>
             </div>
@@ -419,7 +412,24 @@
         <footer>✨ được giữ gìn mỗi ngày, cho đến và sau ngày 11.07.2026 ✨</footer>
     </div>
 
+    <!-- Firebase (Realtime Database) — cần để nhắn tin & ảnh đồng bộ giữa 2 thiết bị khi host ngoài Claude -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
     <script>
+        // ============================================================
+        // DÁN firebaseConfig CỦA BẠN VÀO ĐÂY (lấy ở Bước 3 hướng dẫn)
+        // ============================================================
+        const FIREBASE_CONFIG = {
+            apiKey: "AIzaSyCRuWvgLEHE6P_ANOFuiNntblu7BFPih4A",
+            authDomain: "demgiohieuhuyen.firebaseapp.com",
+            databaseURL: "https://demgiohieuhuyen-default-rtdb.firebaseio.com",
+            projectId: "demgiohieuhuyen",
+            storageBucket: "demgiohieuhuyen.firebasestorage.app",
+            messagingSenderId: "1025545272666",
+            appId: "1:1025545272666:web:d111ef3b7cf5045951c763"
+        };
+
         (function() {
             // ===== PARTICLES =====
             const canvas = document.getElementById('particles-canvas');
@@ -478,12 +488,12 @@
             }
             animateParticles();
 
-            // ===== CLICK EFFECTS (skip when clicking interactive controls) =====
+            // ===== CLICK EFFECTS (skip interactive controls) =====
             const hearts = ['❤️', '💕', '💖', '💗', '💘', '💝', '✨', '🌸', '🌹', '💫', '⭐', '🕊️'];
-            const interactiveTags = ['BUTTON', 'INPUT', 'TEXTAREA', 'A'];
+            const interactiveTags = ['BUTTON', 'INPUT', 'TEXTAREA', 'A', 'IMG'];
 
             document.addEventListener('click', function(e) {
-                if (interactiveTags.includes(e.target.tagName) || e.target.closest('.msg-card')) return;
+                if (interactiveTags.includes(e.target.tagName) || e.target.closest('.msg-card') || e.target.closest('.lightbox')) return;
 
                 const ripple = document.createElement('div');
                 ripple.className = 'ripple';
@@ -624,11 +634,32 @@
             tick();
             setInterval(tick, 1000);
             setInterval(() => renderCaption(true), 60000);
-            document.addEventListener('visibilitychange', () => {
-                if (!document.hidden) { tick(); renderCaption(true); loadMessages(); loadPhotos(); }
-            });
+            document.addEventListener('visibilitychange', () => { if (!document.hidden) { tick(); renderCaption(true); } });
 
-            // ===== SHARED MESSAGE BOARD (window.storage, shared=true) =====
+            // ===== LIGHTBOX (click ảnh để xem to) =====
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('open'); }
+            lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+            document.getElementById('imgLeft').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(e.target.src); });
+            document.getElementById('imgRight').addEventListener('click', (e) => { e.stopPropagation(); openLightbox(e.target.src); });
+
+            // ============================================================
+            // FIREBASE — nguồn dữ liệu dùng chung giữa Hiếu & Huyền
+            // ============================================================
+            const FIREBASE_CONFIGURED = FIREBASE_CONFIG.apiKey.indexOf('DÁN_') === -1;
+            let db = null;
+            if (FIREBASE_CONFIGURED) {
+                try {
+                    firebase.initializeApp(FIREBASE_CONFIG);
+                    db = firebase.database();
+                } catch (e) { console.error('Firebase init error', e); db = null; }
+            }
+            if (!db) {
+                document.getElementById('configBanner').classList.add('show');
+            }
+
+            // ===== MESSAGE BOARD (realtime) =====
             let currentSender = 'Hiếu';
             const btnHieu = document.getElementById('btnHieu');
             const btnHuyen = document.getElementById('btnHuyen');
@@ -661,44 +692,35 @@
                     return;
                 }
                 const sorted = [...list].sort((a, b) => b.ts - a.ts);
-                msgList.innerHTML = sorted.map(m => `
-                    <div class="msg-item ${m.sender === 'Hiếu' ? 'hieu' : 'huyen'}">
-                        <div class="msg-meta">${m.sender} · ${timeAgo(m.ts)}</div>
+                msgList.innerHTML = sorted.map(() => `
+                    <div class="msg-item">
+                        <div class="msg-meta"></div>
                         <div class="msg-text"></div>
                     </div>
                 `).join('');
-                // set text safely to avoid HTML injection
                 const items = msgList.querySelectorAll('.msg-item');
                 sorted.forEach((m, i) => {
+                    items[i].classList.add(m.sender === 'Hiếu' ? 'hieu' : 'huyen');
+                    items[i].querySelector('.msg-meta').textContent = m.sender + ' · ' + timeAgo(m.ts);
                     items[i].querySelector('.msg-text').textContent = m.text;
                 });
             }
 
-            async function loadMessages() {
-                try {
-                    const res = await window.storage.get('messages', true);
-                    const list = res && res.value ? JSON.parse(res.value) : [];
-                    renderMessages(list);
-                } catch (err) {
-                    renderMessages([]);
-                }
+            if (db) {
+                db.ref('messages').on('value', (snap) => {
+                    const val = snap.val() || {};
+                    renderMessages(Object.values(val));
+                }, (err) => console.error('messages listener error', err));
             }
 
             async function sendMessage() {
                 const text = msgInput.value.trim();
                 if (!text) return;
+                if (!db) { alert('Chưa kết nối Firebase — xem hướng dẫn cấu hình trong file nhé 💌'); return; }
                 msgSendBtn.disabled = true;
                 try {
-                    let list = [];
-                    try {
-                        const res = await window.storage.get('messages', true);
-                        list = res && res.value ? JSON.parse(res.value) : [];
-                    } catch (e) { list = []; }
-                    list.push({ sender: currentSender, text, ts: Date.now() });
-                    if (list.length > 200) list = list.slice(list.length - 200);
-                    await window.storage.set('messages', JSON.stringify(list), true);
+                    await db.ref('messages').push({ sender: currentSender, text, ts: Date.now() });
                     msgInput.value = '';
-                    renderMessages(list);
                 } catch (err) {
                     alert('Không gửi được, thử lại nhé 💔');
                 } finally {
@@ -709,41 +731,49 @@
             msgInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
             });
+            if (!db) { msgInput.disabled = true; msgSendBtn.disabled = true; }
 
-            loadMessages();
-            setInterval(loadMessages, 6000);
-
-            // ===== SHARED PHOTOS via Cloudinary unsigned upload =====
+            // ===== CLOUDINARY CONFIG (dùng chung, lưu trên Firebase) =====
             const settingsToggle = document.getElementById('settingsToggle');
             const settingsPanel = document.getElementById('settingsPanel');
+            const cfgCloudNameInput = document.getElementById('cfgCloudName');
+            const cfgUploadPresetInput = document.getElementById('cfgUploadPreset');
             settingsToggle.addEventListener('click', () => settingsPanel.classList.toggle('open'));
 
-            async function loadCloudinaryConfig() {
-                try {
-                    const res = await window.storage.get('cloudinary-config', true);
-                    return res && res.value ? JSON.parse(res.value) : null;
-                } catch (e) { return null; }
-            }
-            async function saveCloudinaryConfig(cfg) {
-                await window.storage.set('cloudinary-config', JSON.stringify(cfg), true);
+            let cloudinaryConfig = null;
+            if (db) {
+                db.ref('cloudinaryConfig').on('value', (snap) => {
+                    cloudinaryConfig = snap.val() || null;
+                    if (cloudinaryConfig) {
+                        cfgCloudNameInput.value = cloudinaryConfig.cloudName || '';
+                        cfgUploadPresetInput.value = cloudinaryConfig.uploadPreset || '';
+                    }
+                });
             }
 
             document.getElementById('cfgSaveBtn').addEventListener('click', async () => {
-                const cloudName = document.getElementById('cfgCloudName').value.trim();
-                const uploadPreset = document.getElementById('cfgUploadPreset').value.trim();
+                const cloudName = cfgCloudNameInput.value.trim();
+                const uploadPreset = cfgUploadPresetInput.value.trim();
                 if (!cloudName || !uploadPreset) { alert('Điền đủ Cloud name và Upload preset nhé'); return; }
-                await saveCloudinaryConfig({ cloudName, uploadPreset });
-                alert('Đã lưu cài đặt ảnh 💾');
-                settingsPanel.classList.remove('open');
+                if (!db) { alert('Chưa kết nối Firebase — xem hướng dẫn cấu hình trong file nhé'); return; }
+                try {
+                    await db.ref('cloudinaryConfig').set({ cloudName, uploadPreset });
+                    alert('Đã lưu cài đặt ảnh 💾');
+                    settingsPanel.classList.remove('open');
+                } catch (e) {
+                    alert('Lưu cài đặt thất bại, thử lại nhé 💔');
+                }
             });
 
-            async function loadPhotos() {
-                try {
-                    const res = await window.storage.get('photos', true);
-                    const photos = res && res.value ? JSON.parse(res.value) : {};
-                    if (photos.left) document.getElementById('imgLeft').src = photos.left;
-                    if (photos.right) document.getElementById('imgRight').src = photos.right;
-                } catch (e) { /* no photos saved yet */ }
+            // ===== PHOTOS (realtime + local preview + drag&drop) =====
+            let currentPhotoUrls = {};
+            if (db) {
+                db.ref('photos').on('value', (snap) => {
+                    const val = snap.val() || {};
+                    currentPhotoUrls = val;
+                    if (val.left) document.getElementById('imgLeft').src = val.left;
+                    if (val.right) document.getElementById('imgRight').src = val.right;
+                });
             }
 
             async function uploadToCloudinary(file, cfg) {
@@ -757,45 +787,66 @@
                 return data.secure_url;
             }
 
-            function wireUpload(side, fileInputId, btnId, imgId, spinnerId) {
+            function handleFile(side, file, imgEl, overlayEl) {
+                if (!file || !file.type.startsWith('image/')) return;
+                if (!cloudinaryConfig) {
+                    alert('Cần cài đặt Cloudinary trước — bấm "⚙ cài đặt ảnh" bên dưới ô nhắn tin.');
+                    return;
+                }
+                if (!db) {
+                    alert('Chưa kết nối Firebase — xem hướng dẫn cấu hình trong file nhé 💌');
+                    return;
+                }
+                // xem trước ngay lập tức trong lúc tải lên
+                const previewUrl = URL.createObjectURL(file);
+                imgEl.src = previewUrl;
+                overlayEl.classList.add('active');
+
+                uploadToCloudinary(file, cloudinaryConfig)
+                    .then((secureUrl) => {
+                        imgEl.src = secureUrl;
+                        return db.ref('photos').update({ [side]: secureUrl });
+                    })
+                    .catch(() => {
+                        alert('Tải ảnh lên thất bại, kiểm tra lại Cloud name / Upload preset nhé 💔');
+                        if (currentPhotoUrls[side]) imgEl.src = currentPhotoUrls[side];
+                    })
+                    .finally(() => {
+                        overlayEl.classList.remove('active');
+                        URL.revokeObjectURL(previewUrl);
+                    });
+            }
+
+            function wireUpload(side, fileInputId, btnId, imgId, overlayId, frameId) {
                 const fileInput = document.getElementById(fileInputId);
                 const btn = document.getElementById(btnId);
                 const img = document.getElementById(imgId);
-                const spinner = document.getElementById(spinnerId);
+                const overlay = document.getElementById(overlayId);
+                const frame = document.getElementById(frameId);
+
                 btn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
                 fileInput.addEventListener('click', (e) => e.stopPropagation());
-                fileInput.addEventListener('change', async () => {
-                    const file = fileInput.files[0];
-                    if (!file) return;
-                    const cfg = await loadCloudinaryConfig();
-                    if (!cfg) {
-                        alert('Cần cài đặt Cloudinary trước — bấm "⚙ cài đặt ảnh" bên dưới ô nhắn tin.');
-                        return;
-                    }
-                    spinner.classList.add('active');
-                    try {
-                        const secureUrl = await uploadToCloudinary(file, cfg);
-                        img.src = secureUrl;
-                        let photos = {};
-                        try {
-                            const res = await window.storage.get('photos', true);
-                            photos = res && res.value ? JSON.parse(res.value) : {};
-                        } catch (e) { photos = {}; }
-                        photos[side] = secureUrl;
-                        await window.storage.set('photos', JSON.stringify(photos), true);
-                    } catch (err) {
-                        alert('Tải ảnh lên thất bại, kiểm tra lại cấu hình Cloudinary nhé 💔');
-                    } finally {
-                        spinner.classList.remove('active');
-                        fileInput.value = '';
-                    }
+                fileInput.addEventListener('change', () => {
+                    handleFile(side, fileInput.files[0], img, overlay);
+                    fileInput.value = '';
+                });
+
+                // drag & drop
+                ['dragover', 'dragenter'].forEach(evt => frame.addEventListener(evt, (e) => {
+                    e.preventDefault(); e.stopPropagation(); frame.classList.add('drag-over');
+                }));
+                ['dragleave', 'dragend'].forEach(evt => frame.addEventListener(evt, (e) => {
+                    e.preventDefault(); e.stopPropagation(); frame.classList.remove('drag-over');
+                }));
+                frame.addEventListener('drop', (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    frame.classList.remove('drag-over');
+                    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+                    handleFile(side, file, img, overlay);
                 });
             }
-            wireUpload('left', 'fileLeft', 'uploadBtnLeft', 'imgLeft', 'spinnerLeft');
-            wireUpload('right', 'fileRight', 'uploadBtnRight', 'imgRight', 'spinnerRight');
-
-            loadPhotos();
-            setInterval(loadPhotos, 8000);
+            wireUpload('left', 'fileLeft', 'uploadBtnLeft', 'imgLeft', 'overlayLeft', 'frameLeft');
+            wireUpload('right', 'fileRight', 'uploadBtnRight', 'imgRight', 'overlayRight', 'frameRight');
 
         })();
     </script>
