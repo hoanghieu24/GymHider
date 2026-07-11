@@ -775,8 +775,8 @@
                 document.getElementById('configBanner').classList.add('show');
             }
 
-            // ===== CHAT: sender identity =====
-            let currentSender = 'Hiếu';
+            // ===== CHAT: sender identity (lưu cố định bằng localStorage) =====
+            let currentSender = localStorage.getItem('hh_sender') || 'Hiếu';
             let lastMessages = [];
             const btnHieu = document.getElementById('btnHieu');
             const btnHuyen = document.getElementById('btnHuyen');
@@ -784,10 +784,15 @@
             const msgSendBtn = document.getElementById('msgSendBtn');
             const msgList = document.getElementById('msgList');
 
+            // đặt trạng thái active đúng ngay khi tải trang, theo giá trị đã lưu
+            btnHieu.classList.toggle('active', currentSender === 'Hiếu');
+            btnHuyen.classList.toggle('active', currentSender === 'Huyền');
+
             btnHieu.addEventListener('click', () => setSender('Hiếu'));
             btnHuyen.addEventListener('click', () => setSender('Huyền'));
             function setSender(name) {
                 currentSender = name;
+                localStorage.setItem('hh_sender', name);
                 btnHieu.classList.toggle('active', name === 'Hiếu');
                 btnHuyen.classList.toggle('active', name === 'Huyền');
                 renderMessages(lastMessages); // đổi người → đổi bên trái/phải ngay
