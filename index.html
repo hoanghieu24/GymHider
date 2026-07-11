@@ -244,7 +244,25 @@
             font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.25s ease;
         }
         .sender-btn.active { background: linear-gradient(135deg, var(--rose), var(--rose-deep)); color: #fff; border-color: transparent; box-shadow: 0 4px 12px rgba(156,47,69,0.3); }
-        .msg-input-row { display: flex; gap: 8px; margin-bottom: 16px; }
+
+        /* ===== Reply preview (khi đang trả lời 1 tin) ===== */
+        .reply-preview {
+            display: none; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 10px;
+            border-radius: 12px; background: rgba(207, 161, 94, 0.12); border-left: 3px solid var(--gold);
+            animation: fadeSlideUp 0.25s ease-out;
+        }
+        .reply-preview.show { display: flex; }
+        .reply-preview .rp-body { flex: 1; min-width: 0; }
+        .reply-preview .rp-name { font-size: 10.5px; font-weight: 700; color: var(--rose-deep); letter-spacing: 0.03em; text-transform: uppercase; }
+        .reply-preview .rp-text { font-size: 12.5px; color: var(--plum-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .reply-preview .rp-close {
+            flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: none; cursor: pointer;
+            background: rgba(53, 34, 54, 0.10); color: var(--plum-soft); font-size: 13px; line-height: 1;
+            display: flex; align-items: center; justify-content: center; transition: background 0.2s ease;
+        }
+        .reply-preview .rp-close:hover { background: rgba(196, 75, 94, 0.25); color: var(--rose-deep); }
+
+        .msg-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
         .msg-input {
             flex: 1; border: 1.5px solid var(--line); border-radius: 16px; padding: 10px 14px; font-family: 'Be Vietnam Pro', sans-serif;
             font-size: 14px; resize: none; background: rgba(255,255,255,0.6); color: var(--plum); min-height: 44px; max-height: 100px;
@@ -257,14 +275,68 @@
         }
         .msg-send-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(156,47,69,0.35); }
         .msg-send-btn:active:not(:disabled) { transform: translateY(0); }
-        .msg-list { display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
+
+        .msg-list { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; padding: 2px 4px 2px 2px; margin-top: 6px; }
         .msg-list::-webkit-scrollbar { width: 5px; }
         .msg-list::-webkit-scrollbar-thumb { background: rgba(196,75,94,0.25); border-radius: 10px; }
-        .msg-item { display: flex; flex-direction: column; padding: 10px 14px; border-radius: 16px; max-width: 82%; animation: fadeSlideUp 0.35s ease-out; }
+
+        .msg-item { display: flex; flex-direction: column; padding: 10px 12px; border-radius: 16px; max-width: 86%; animation: fadeSlideUp 0.35s ease-out; position: relative; }
         .msg-item.hieu { align-self: flex-start; background: rgba(207,161,94,0.14); border-bottom-left-radius: 4px; }
         .msg-item.huyen { align-self: flex-end; background: rgba(196,75,94,0.12); border-bottom-right-radius: 4px; }
         .msg-meta { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; margin-bottom: 3px; color: var(--rose-deep); }
         .msg-text { font-size: 14px; line-height: 1.5; color: var(--plum); word-break: break-word; }
+
+        /* Trích dẫn tin gốc bên trong 1 tin trả lời */
+        .msg-quote {
+            display: block; margin-bottom: 6px; padding: 5px 8px; border-radius: 8px; cursor: pointer;
+            background: rgba(255, 255, 255, 0.45); border-left: 2.5px solid var(--gold); transition: background 0.2s ease;
+        }
+        .msg-quote:hover { background: rgba(255, 255, 255, 0.7); }
+        .msg-quote .mq-name { font-size: 9.5px; font-weight: 700; color: var(--rose-deep); text-transform: uppercase; letter-spacing: 0.03em; display: block; }
+        .msg-quote .mq-text { font-size: 12px; color: var(--plum-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+
+        /* Thanh hành động dưới mỗi tin: giờ gửi, nút trả lời, nút thả cảm xúc */
+        .msg-actions { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+        .msg-time { font-size: 10px; color: var(--plum-soft); opacity: 0.65; }
+        .msg-reply-btn {
+            border: none; background: none; cursor: pointer; font-size: 10.5px; font-weight: 600;
+            color: var(--plum-soft); opacity: 0.75; padding: 2px 6px; border-radius: 8px; transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 3px;
+        }
+        .msg-reply-btn:hover { opacity: 1; background: rgba(53, 34, 54, 0.08); color: var(--rose-deep); }
+
+        /* Popover chọn emoji */
+        .react-wrap { position: relative; margin-left: auto; }
+        .react-trigger {
+            border: none; background: none; cursor: pointer; font-size: 13px; padding: 2px 6px; border-radius: 8px;
+            opacity: 0.7; transition: all 0.2s ease;
+        }
+        .react-trigger:hover { opacity: 1; background: rgba(53, 34, 54, 0.08); transform: scale(1.1); }
+        .react-popover {
+            display: none; position: absolute; bottom: 100%; right: 0; margin-bottom: 6px; background: #fff;
+            border-radius: 20px; padding: 6px 8px; box-shadow: 0 8px 24px -6px rgba(53,34,54,0.25);
+            border: 1px solid var(--line); gap: 2px; z-index: 20; white-space: nowrap;
+        }
+        .react-popover.open { display: flex; animation: popIn 0.18s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.7) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .react-emoji-btn {
+            border: none; background: none; cursor: pointer; font-size: 18px; padding: 4px 5px; border-radius: 50%;
+            transition: transform 0.15s ease, background 0.15s ease; line-height: 1;
+        }
+        .react-emoji-btn:hover { transform: scale(1.3); background: rgba(207,161,94,0.18); }
+
+        /* Chip cảm xúc đã thả, hiển thị dưới mỗi tin */
+        .msg-reactions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+        .reaction-chip {
+            display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(53,34,54,0.12);
+            background: rgba(255,255,255,0.55); border-radius: 40px; padding: 2px 8px; font-size: 12px;
+            cursor: pointer; transition: all 0.18s ease; line-height: 1.4;
+        }
+        .reaction-chip:hover { transform: translateY(-1px); box-shadow: 0 3px 8px -2px rgba(53,34,54,0.15); }
+        .reaction-chip.mine { background: rgba(196,75,94,0.16); border-color: rgba(196,75,94,0.4); }
+        .reaction-chip .rc-count { font-size: 10.5px; font-weight: 700; color: var(--plum-soft); }
+        .reaction-chip.mine .rc-count { color: var(--rose-deep); }
+
         .msg-empty { text-align: center; font-size: 13px; color: var(--plum-soft); opacity: 0.7; padding: 12px 0; font-family: 'Dancing Script', cursive; font-size: 15px; }
 
         .settings-toggle { font-size: 10px; text-align: center; color: var(--plum-soft); opacity: 0.5; margin-top: 10px; cursor: pointer; letter-spacing: 0.05em; user-select: none; }
@@ -299,6 +371,7 @@
             .photo-frames { gap: 12px; }
             .photo-frame { border-radius: 14px; }
             .photo-frame .label { font-size: 8px; padding: 2px 10px; }
+            .msg-item { max-width: 92%; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -393,6 +466,15 @@
                 <button class="sender-btn active" data-sender="Hiếu" id="btnHieu">Hiếu</button>
                 <button class="sender-btn" data-sender="Huyền" id="btnHuyen">Huyền</button>
             </div>
+
+            <div class="reply-preview" id="replyPreview">
+                <div class="rp-body">
+                    <div class="rp-name" id="rpName"></div>
+                    <div class="rp-text" id="rpText"></div>
+                </div>
+                <button class="rp-close" id="rpClose" title="Huỷ trả lời">✕</button>
+            </div>
+
             <div class="msg-input-row">
                 <textarea class="msg-input" id="msgInput" placeholder="Viết gì đó cho người ấy…" maxlength="500"></textarea>
                 <button class="msg-send-btn" id="msgSendBtn">Gửi</button>
@@ -429,6 +511,9 @@
             messagingSenderId: "1025545272666",
             appId: "1:1025545272666:web:d111ef3b7cf5045951c763"
         };
+
+        // Danh sách emoji có thể thả cho mỗi tin nhắn
+        const REACTION_EMOJIS = ['❤️', '😍', '😂', '😮', '😢', '👍'];
 
         (function() {
             // ===== PARTICLES =====
@@ -659,13 +744,23 @@
                 document.getElementById('configBanner').classList.add('show');
             }
 
-            // ===== MESSAGE BOARD (realtime) =====
+            // ============================================================
+            // MESSAGE BOARD — nhắn tin, trả lời (reply) & thả cảm xúc (reactions)
+            // ============================================================
             let currentSender = 'Hiếu';
+            let messagesCache = {};      // { msgId: {sender, text, ts, replyTo?, reactions?} }
+            let replyingTo = null;       // id của tin đang được trả lời, hoặc null
+            let openReactPopoverId = null;
+
             const btnHieu = document.getElementById('btnHieu');
             const btnHuyen = document.getElementById('btnHuyen');
             const msgInput = document.getElementById('msgInput');
             const msgSendBtn = document.getElementById('msgSendBtn');
             const msgList = document.getElementById('msgList');
+            const replyPreview = document.getElementById('replyPreview');
+            const rpName = document.getElementById('rpName');
+            const rpText = document.getElementById('rpText');
+            const rpClose = document.getElementById('rpClose');
 
             btnHieu.addEventListener('click', () => setSender('Hiếu'));
             btnHuyen.addEventListener('click', () => setSender('Huyền'));
@@ -686,30 +781,170 @@
                 return d + ' ngày trước';
             }
 
-            function renderMessages(list) {
-                if (!list || list.length === 0) {
+            function escapeHtml(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ---- Reply preview (thanh "đang trả lời ..." phía trên ô nhập) ----
+            function startReply(msgId) {
+                const m = messagesCache[msgId];
+                if (!m) return;
+                replyingTo = msgId;
+                rpName.textContent = 'Đang trả lời ' + m.sender;
+                rpText.textContent = m.text;
+                replyPreview.classList.add('show');
+                msgInput.focus();
+            }
+            function cancelReply() {
+                replyingTo = null;
+                replyPreview.classList.remove('show');
+            }
+            rpClose.addEventListener('click', cancelReply);
+
+            // Cuộn tới & làm nổi bật tin gốc khi bấm vào phần trích dẫn
+            function scrollToMessage(msgId) {
+                const el = msgList.querySelector('[data-msg-id="' + CSS.escape(msgId) + '"]');
+                if (!el) return;
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.style.transition = 'box-shadow 0.3s ease';
+                el.style.boxShadow = '0 0 0 2px var(--gold)';
+                setTimeout(() => { el.style.boxShadow = ''; }, 900);
+            }
+
+            // ---- Reactions (thả cảm xúc) ----
+            function closeAllPopovers() {
+                msgList.querySelectorAll('.react-popover.open').forEach(p => p.classList.remove('open'));
+                openReactPopoverId = null;
+            }
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.react-wrap')) closeAllPopovers();
+            });
+
+            async function toggleReaction(msgId, emoji) {
+                if (!db) { alert('Chưa kết nối Firebase — xem hướng dẫn cấu hình trong file nhé 💌'); return; }
+                const path = 'messages/' + msgId + '/reactions/' + emoji + '/' + currentSender;
+                const ref = db.ref(path);
+                try {
+                    const snap = await ref.once('value');
+                    if (snap.exists()) {
+                        await ref.remove();
+                    } else {
+                        await ref.set(true);
+                    }
+                } catch (err) {
+                    console.error('reaction error', err);
+                }
+            }
+
+            function renderReactionChips(msgId, reactions) {
+                if (!reactions) return '';
+                const chips = [];
+                for (const emoji of Object.keys(reactions)) {
+                    const senders = Object.keys(reactions[emoji] || {});
+                    if (senders.length === 0) continue;
+                    const mine = senders.includes(currentSender);
+                    chips.push(
+                        '<button class="reaction-chip' + (mine ? ' mine' : '') + '" data-react-emoji="' + escapeHtml(emoji) + '" data-react-msg="' + escapeHtml(msgId) + '" title="' + escapeHtml(senders.join(', ')) + '">' +
+                            '<span>' + emoji + '</span><span class="rc-count">' + senders.length + '</span>' +
+                        '</button>'
+                    );
+                }
+                return chips.join('');
+            }
+
+            function renderMessages(dict) {
+                messagesCache = dict || {};
+                const list = Object.keys(messagesCache).map(id => Object.assign({ id }, messagesCache[id]));
+
+                if (list.length === 0) {
                     msgList.innerHTML = '<div class="msg-empty">Chưa có lời nhắn nào — hãy là người đầu tiên 💕</div>';
                     return;
                 }
-                const sorted = [...list].sort((a, b) => b.ts - a.ts);
-                msgList.innerHTML = sorted.map(() => `
-                    <div class="msg-item">
-                        <div class="msg-meta"></div>
-                        <div class="msg-text"></div>
-                    </div>
-                `).join('');
-                const items = msgList.querySelectorAll('.msg-item');
-                sorted.forEach((m, i) => {
-                    items[i].classList.add(m.sender === 'Hiếu' ? 'hieu' : 'huyen');
-                    items[i].querySelector('.msg-meta').textContent = m.sender + ' · ' + timeAgo(m.ts);
-                    items[i].querySelector('.msg-text').textContent = m.text;
-                });
+
+                const sorted = list.sort((a, b) => a.ts - b.ts);
+
+                msgList.innerHTML = sorted.map(m => {
+                    const sideClass = m.sender === 'Hiếu' ? 'hieu' : 'huyen';
+                    const original = m.replyTo ? messagesCache[m.replyTo] : null;
+                    const quoteHtml = original
+                        ? '<div class="msg-quote" data-quote-jump="' + escapeHtml(m.replyTo) + '">' +
+                            '<span class="mq-name">' + escapeHtml(original.sender) + '</span>' +
+                            '<span class="mq-text">' + escapeHtml(original.text) + '</span>' +
+                          '</div>'
+                        : (m.replyTo ? '<div class="msg-quote"><span class="mq-name">Tin gốc</span><span class="mq-text">đã bị xoá</span></div>' : '');
+                    const reactionsHtml = renderReactionChips(m.id, m.reactions);
+                    const emojiButtons = REACTION_EMOJIS.map(em =>
+                        '<button class="react-emoji-btn" data-pick-emoji="' + escapeHtml(em) + '" data-pick-msg="' + escapeHtml(m.id) + '">' + em + '</button>'
+                    ).join('');
+
+                    return (
+                        '<div class="msg-item ' + sideClass + '" data-msg-id="' + escapeHtml(m.id) + '">' +
+                            quoteHtml +
+                            '<div class="msg-meta">' + escapeHtml(m.sender) + '</div>' +
+                            '<div class="msg-text">' + escapeHtml(m.text) + '</div>' +
+                            (reactionsHtml ? '<div class="msg-reactions">' + reactionsHtml + '</div>' : '') +
+                            '<div class="msg-actions">' +
+                                '<span class="msg-time">' + timeAgo(m.ts) + '</span>' +
+                                '<button class="msg-reply-btn" data-reply-msg="' + escapeHtml(m.id) + '">↩ Trả lời</button>' +
+                                '<div class="react-wrap">' +
+                                    '<button class="react-trigger" data-open-react="' + escapeHtml(m.id) + '">😊+</button>' +
+                                    '<div class="react-popover' + (openReactPopoverId === m.id ? ' open' : '') + '" data-popover-for="' + escapeHtml(m.id) + '">' + emojiButtons + '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>'
+                    );
+                }).join('');
+
+                // Cuộn xuống tin mới nhất
+                msgList.scrollTop = msgList.scrollHeight;
             }
+
+            // Uỷ quyền sự kiện cho toàn bộ danh sách tin nhắn (vì tin được render lại liên tục)
+            msgList.addEventListener('click', (e) => {
+                const replyBtn = e.target.closest('[data-reply-msg]');
+                if (replyBtn) { startReply(replyBtn.getAttribute('data-reply-msg')); return; }
+
+                const jumpEl = e.target.closest('[data-quote-jump]');
+                if (jumpEl) { scrollToMessage(jumpEl.getAttribute('data-quote-jump')); return; }
+
+                const openReactBtn = e.target.closest('[data-open-react]');
+                if (openReactBtn) {
+                    e.stopPropagation();
+                    const id = openReactBtn.getAttribute('data-open-react');
+                    const wasOpen = openReactPopoverId === id;
+                    closeAllPopovers();
+                    if (!wasOpen) {
+                        openReactPopoverId = id;
+                        const pop = msgList.querySelector('.react-popover[data-popover-for="' + CSS.escape(id) + '"]');
+                        if (pop) pop.classList.add('open');
+                    }
+                    return;
+                }
+
+                const pickEmojiBtn = e.target.closest('[data-pick-emoji]');
+                if (pickEmojiBtn) {
+                    e.stopPropagation();
+                    const emoji = pickEmojiBtn.getAttribute('data-pick-emoji');
+                    const id = pickEmojiBtn.getAttribute('data-pick-msg');
+                    closeAllPopovers();
+                    toggleReaction(id, emoji);
+                    return;
+                }
+
+                const chip = e.target.closest('[data-react-emoji]');
+                if (chip) {
+                    const emoji = chip.getAttribute('data-react-emoji');
+                    const id = chip.getAttribute('data-react-msg');
+                    toggleReaction(id, emoji);
+                    return;
+                }
+            });
 
             if (db) {
                 db.ref('messages').on('value', (snap) => {
-                    const val = snap.val() || {};
-                    renderMessages(Object.values(val));
+                    renderMessages(snap.val() || {});
                 }, (err) => console.error('messages listener error', err));
             }
 
@@ -719,8 +954,11 @@
                 if (!db) { alert('Chưa kết nối Firebase — xem hướng dẫn cấu hình trong file nhé 💌'); return; }
                 msgSendBtn.disabled = true;
                 try {
-                    await db.ref('messages').push({ sender: currentSender, text, ts: Date.now() });
+                    const payload = { sender: currentSender, text, ts: Date.now() };
+                    if (replyingTo && messagesCache[replyingTo]) payload.replyTo = replyingTo;
+                    await db.ref('messages').push(payload);
                     msgInput.value = '';
+                    cancelReply();
                 } catch (err) {
                     alert('Không gửi được, thử lại nhé 💔');
                 } finally {
@@ -732,6 +970,16 @@
                 if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
             });
             if (!db) { msgInput.disabled = true; msgSendBtn.disabled = true; }
+
+            // Cập nhật lại chữ "x phút trước" mỗi phút mà không cần load lại toàn bộ danh sách
+            setInterval(() => {
+                msgList.querySelectorAll('[data-msg-id]').forEach(el => {
+                    const id = el.getAttribute('data-msg-id');
+                    const m = messagesCache[id];
+                    const timeEl = el.querySelector('.msg-time');
+                    if (m && timeEl) timeEl.textContent = timeAgo(m.ts);
+                });
+            }, 30000);
 
             // ===== CLOUDINARY CONFIG (dùng chung, lưu trên Firebase) =====
             const settingsToggle = document.getElementById('settingsToggle');
