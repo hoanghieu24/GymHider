@@ -429,6 +429,59 @@ html,body{
 .send-fab:disabled{ opacity:.4; cursor:not-allowed; box-shadow:none; }
 .send-fab svg{ width:16px; height:16px; transform:translateX(-1px); }
 
+/* Mode toggle (desktop / phone view) */
+.view-toggle{
+  display:flex; gap:4px; padding:4px; margin-left:auto; flex-shrink:0;
+  background:rgba(0,0,0,.28); border:1px solid var(--line-soft); border-radius:30px;
+}
+.view-toggle button{
+  border:none; background:transparent; color:var(--muted); cursor:pointer;
+  width:34px; height:30px; border-radius:24px; font-size:14px;
+  display:flex; align-items:center; justify-content:center; transition:all .2s ease;
+}
+.view-toggle button:hover{ color:var(--text); }
+.view-toggle button.active{
+  color:var(--bg0); background:linear-gradient(120deg,var(--gold),#F2D9AC);
+  box-shadow:0 3px 10px rgba(232,196,138,.3);
+}
+.chat-top .typing-note{ margin-left:0 !important; }
+.chat-top-right{ display:flex; align-items:center; gap:12px; margin-left:auto; min-width:0; }
+
+/* Phone mode: compact, phone-like frame centered */
+.chat-shell.phone{
+  max-width:400px; margin-left:auto; margin-right:auto;
+  height:calc(100dvh - 150px); max-height:760px;
+  border-radius:38px; border:1px solid var(--line);
+  box-shadow:0 0 0 8px rgba(255,255,255,.035), 0 0 0 9px var(--line-soft), var(--shadow);
+  position:relative;
+}
+.chat-shell.phone::before{
+  content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  width:86px; height:6px; border-radius:6px; background:rgba(255,255,255,.14); z-index:5;
+}
+.chat-shell.phone .chat-top{ padding:24px 16px 12px; }
+.chat-shell.phone .chat-top-title{ font-size:16px; }
+.chat-shell.phone .chat-top-sub{ font-size:10.5px; }
+.chat-shell.phone .avatar-pair{ width:46px; height:34px; }
+.chat-shell.phone .avatar-pair .a{ width:32px; height:32px; font-size:12px; }
+.chat-shell.phone .avatar-pair .a2{ left:14px; }
+.chat-shell.phone .typing-note{ font-size:10.5px; }
+.chat-shell.phone .chat-scroll{ padding:12px 12px 8px; }
+.chat-shell.phone .m-col{ max-width:80%; }
+.chat-shell.phone .bubble{ font-size:12.5px; padding:8px 12px; border-radius:17px; }
+.chat-shell.phone .bubble img{ max-width:180px; }
+.chat-shell.phone .m-avatar{ width:26px; height:26px; font-size:11px; }
+.chat-shell.phone .b-time{ font-size:8.5px; }
+.chat-shell.phone .day-sep span{ font-size:9.5px; padding:3px 11px; }
+.chat-shell.phone .quote span{ max-width:170px; font-size:10.5px; }
+.chat-shell.phone .r-pill{ font-size:10.5px; padding:1px 8px; }
+.chat-shell.phone .tool-btn{ width:23px; height:23px; font-size:11px; }
+.chat-shell.phone .chat-input{ padding:10px 12px 14px; gap:8px; }
+.chat-shell.phone .round-btn,.chat-shell.phone .send-fab{ width:37px; height:37px; }
+.chat-shell.phone .msg-input{ font-size:13px; min-height:38px; padding:9px 42px 9px 15px; }
+.chat-shell.phone .reply-bar{ margin:0 12px; font-size:11px; }
+.chat-shell.phone .emo-panel{ width:238px; }
+
 /* ============ TAB 3: Gallery ============ */
 .gal-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin:34px 0 22px; flex-wrap:wrap; }
 .gal-title{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600; font-size:34px; }
@@ -671,7 +724,13 @@ footer{
           <div class="chat-top-title">Không gian của hai người</div>
           <div class="chat-top-sub"><span class="dot-online"></span> luôn kết nối · riêng tư</div>
         </div>
-        <div class="typing-note" id="typingNote" style="margin-left:auto;"></div>
+        <div class="chat-top-right">
+          <div class="typing-note" id="typingNote"></div>
+          <div class="view-toggle" title="Đổi kích thước khung chat">
+            <button type="button" id="viewDesktop" class="active" title="Khung rộng (máy tính)">🖥</button>
+            <button type="button" id="viewPhone" title="Khung nhỏ (điện thoại)">📱</button>
+          </div>
+        </div>
       </div>
 
       <div class="chat-scroll" id="msgList">
@@ -823,6 +882,21 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     if (btn.dataset.tab === 'chat') scrollChatToEnd();
   });
 });
+
+// ===== Chat view mode: desktop / phone =====
+const chatShell = document.querySelector('.chat-shell');
+const viewDesktopBtn = $('viewDesktop'), viewPhoneBtn = $('viewPhone');
+function setChatView(mode){
+  const phone = mode === 'phone';
+  chatShell.classList.toggle('phone', phone);
+  viewDesktopBtn.classList.toggle('active', !phone);
+  viewPhoneBtn.classList.toggle('active', phone);
+  localStorage.setItem('hh_chat_view', phone ? 'phone' : 'desktop');
+  scrollChatToEnd();
+}
+viewDesktopBtn.addEventListener('click', () => setChatView('desktop'));
+viewPhoneBtn.addEventListener('click', () => setChatView('phone'));
+if (localStorage.getItem('hh_chat_view') === 'phone') setChatView('phone');
 
 // ===== Lightbox =====
 const lightbox = $('lightbox'), lightboxImg = $('lightboxImg');
