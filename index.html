@@ -2,6 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8" />
+<meta name="theme-color" content="#120B1A" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Hiếu &amp; Huyền — Đếm ngày yêu thương</title>
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dzdldby9a/image/upload/v1783762136/ChatGPT_Image_16_28_46_11_thg_7_2026_ykltjr.png">
@@ -1001,6 +1002,148 @@ footer{
   .m-col{ max-width:80%; }
   .duo{ gap:12px; }
 }
+
+/* ============================================================
+   FINAL POLISH — chuẩn hiển thị mobile & desktop, không vỡ
+   ============================================================ */
+button, .bs-cell, .caro-cell, .pcard, .tab-btn, .sender-chip, .stk-grid button, .emo-grid button{ touch-action:manipulation; }
+img{ max-width:100%; }
+.chat-top-title{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.game-actions .btn-mini{ white-space:nowrap; }
+.emo-panel{ width:min(300px, calc(100vw - 64px)); }
+.compose-emoji-panel{ max-width:calc(100vw - 64px); }
+
+/* Desktop rộng: cho nội dung thở */
+@media (min-width: 1200px){
+  .app{ max-width:1180px; }
+}
+
+/* Tablet / desktop hẹp */
+@media (max-width: 1024px){
+  .app{ padding:22px 18px 50px; }
+}
+@media (max-width: 900px) and (min-width: 641px){
+  .brand .names{ display:none; }
+  .topbar{ gap:12px; }
+  .tab-btn{ padding:10px 14px; font-size:12.5px; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px){
+  .app{ padding:12px 12px 40px; }
+  .topbar{ flex-wrap:wrap; gap:10px; padding:10px 12px; border-radius:22px; top:8px; }
+  .brand .mono{ width:38px; height:38px; font-size:16px; }
+  .brand .names{ display:block; font-size:16px; }
+  .sender-switch{ margin-left:auto; }
+  .sender-chip{ padding:6px 12px; font-size:11px; }
+  .tabs{ order:3; width:100%; gap:4px; margin-left:0; }
+  .tab-btn{ flex:1; justify-content:center; padding:9px 2px; font-size:11px; gap:4px; }
+  .tab-btn .ico{ font-size:13px; }
+
+  .hero{ padding:26px 0 6px; }
+  .hero h1{ font-size:clamp(32px,9vw,44px); }
+  .hero .eyebrow{ font-size:16px; padding:4px 16px; }
+  .target-chip{ font-size:12px; flex-wrap:wrap; justify-content:center; text-align:center; }
+  .count-stage{ grid-template-columns:1fr; gap:22px; margin:26px 0 14px; }
+  .ring-wrap{ max-width:300px; }
+  .ring-days{ font-size:clamp(54px,19vw,80px); }
+  .ring-days-label{ font-size:10px; letter-spacing:.3em; }
+  .hms{ gap:8px; margin-bottom:18px; }
+  .hms-cell{ padding:16px 4px 12px; border-radius:16px; }
+  .daily-card{ padding:20px 18px 18px; }
+  .daily-text{ font-size:17px; min-height:60px; line-height:1.55; }
+  .duo{ gap:10px; margin-top:18px; }
+  .duo-frame{ border-radius:16px; }
+  .duo-frame .cap{ font-size:14px; left:12px; bottom:10px; }
+
+  /* Chat */
+  .chat-shell{ height:calc(100dvh - 248px); min-height:430px; margin-top:16px; border-radius:22px; }
+  .chat-shell.phone{ max-width:100%; border-radius:22px; box-shadow:var(--shadow); height:calc(100dvh - 248px); }
+  .chat-shell.phone::before{ display:none; }
+  .chat-top{ padding:12px 12px; gap:9px; }
+  .chat-top .view-toggle{ display:none; } /* trên điện thoại thật không cần khung giả lập */
+  .chat-top-right{ gap:7px; }
+  .chat-top-title{ font-size:14px; }
+  .chat-top-sub{ font-size:10px; }
+  .typing-note{ font-size:10.5px; }
+  #themeBtn{ width:32px !important; height:32px !important; font-size:14px; }
+  .chat-scroll{ padding:12px 10px 8px; }
+  .m-col{ max-width:82%; }
+  .bubble{ font-size:13.5px; padding:9px 13px; }
+  .bubble .img-grid img{ max-width:130px; }
+  .bubble .img-grid.one img{ max-width:200px; }
+  .stk-emoji{ font-size:62px; }
+  .m-avatar{ width:28px; height:28px; font-size:11px; }
+  .chat-input{ padding:10px 10px 12px; gap:7px; }
+  .round-btn,.send-fab{ width:38px; height:38px; }
+  .msg-input{ font-size:16px; padding:9px 40px 9px 13px; min-height:40px; } /* 16px chống iOS tự zoom */
+  .audio-bub{ min-width:150px; }
+  .scroll-fab{ right:12px; bottom:86px; }
+  .reply-bar{ margin:0 10px; font-size:11px; }
+
+  /* Modals */
+  .modal{ padding:22px 18px; border-radius:20px; }
+  .modal h3{ font-size:21px; }
+  .modal input{ font-size:16px; }
+  .prev-item,.prev-add{ width:94px; height:94px; }
+  .modal-actions{ gap:8px; }
+
+  /* Games */
+  .games-menu{ grid-template-columns:1fr; gap:12px; margin-top:20px; }
+  .game-card{ padding:20px 18px; }
+  .game-card .gi{ font-size:42px; margin-bottom:10px; }
+  .game-card p{ min-height:0; }
+  .game-head{ gap:8px; margin-bottom:14px; }
+  .game-title{ font-size:21px; }
+  .back-btn{ padding:8px 14px; font-size:11.5px; }
+  .game-actions{ margin-left:0; width:100%; gap:6px; }
+  .game-actions .btn-mini{ flex:1 1 auto; padding:9px 8px; font-size:11.5px; }
+  .game-status{ font-size:12.5px; padding:10px 13px; gap:8px; }
+  .caro-board{ padding:4px; border-radius:12px; }
+  .bs-stage{ grid-template-columns:1fr; gap:18px; }
+  .bs-side h5{ font-size:10.5px; }
+  .bs-items{ gap:8px; }
+  .item-btn{ flex:1; justify-content:center; padding:10px 6px; font-size:11.5px; gap:6px; }
+  .dock-ship{ padding:7px 10px; }
+  .dock-ship .seg{ width:12px; height:12px; }
+  .bs-place-hint{ font-size:11.5px; }
+  .fleet-chip{ font-size:10px; padding:3px 9px; }
+  .tl-zone{ padding:14px 8px; border-radius:18px; }
+  .tl-table{ min-height:92px; padding:10px 4px; }
+  .tl-table-empty{ font-size:15px; }
+  .money-bar{ gap:8px; margin-bottom:12px; }
+  .money-chip{ font-size:11.5px; padding:6px 13px; }
+  .tl-controls .btn-mini{ flex:1; }
+  .pcard{ width:44px; height:64px; margin-left:-21px; padding:4px 5px; }
+  .pcard .rk{ font-size:12.5px; } .pcard .st{ font-size:11.5px; }
+  .pcard .big{ font-size:17px; bottom:4px; right:4px; }
+  .pcard.static{ width:40px; height:58px; margin-left:-17px; }
+  .pcard.sel{ transform:translateY(-12px); }
+
+  /* Album */
+  .gal-head{ margin:22px 0 14px; }
+  .gal-title{ font-size:25px; }
+  .gal-title small{ font-size:11px; }
+  .btn-gold{ padding:11px 18px; font-size:12.5px; }
+  .gal-grid{ columns:2; column-gap:8px; }
+  .gal-item{ margin-bottom:8px; border-radius:12px; }
+
+  footer{ margin-top:34px; font-size:13px; }
+}
+
+/* Điện thoại rất nhỏ */
+@media (max-width: 380px){
+  .tab-btn{ font-size:10px; gap:3px; }
+  .pcard{ width:41px; height:59px; margin-left:-22px; }
+  .brand .names{ font-size:14.5px; }
+  .game-actions .btn-mini{ font-size:10.5px; padding:8px 5px; }
+}
+
+/* Màn hình thấp (điện thoại xoay ngang) */
+@media (max-height: 520px){
+  .chat-shell{ height:calc(100dvh - 140px); min-height:300px; }
+}
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
@@ -3130,7 +3273,7 @@ function renderBS(){
     bsStatus.innerHTML = '⚓ Xếp tàu — ' + nameOf(myKey()) + ' ' + (me.ready ? '✅' : '⏳') + ' · ' + nameOf(oppKey()) + ' ' + (opp.ready ? '✅' : '⏳');
     hint.innerHTML = me.ready
       ? 'Đã sẵn sàng! Đang chờ ' + nameOf(oppKey()) + ' xếp xong…'
-      : 'Chọn tàu bên trên → rê chuột lên <b>biển của bạn</b> để ngắm chỗ → bấm đặt. Bấm tàu đã đặt để nhấc lên xếp lại. Phím <b>R</b> hoặc nút 🔄 để xoay ngang/dọc, hoặc 🎲 xếp ngẫu nhiên cho nhanh.';
+      : 'Chọn tàu bên trên → rê chuột (hoặc chạm trên điện thoại) lên <b>biển của bạn</b> để đặt. Bấm tàu đã đặt để nhấc lên xếp lại. Phím <b>R</b> hoặc nút 🔄 để xoay ngang/dọc, hoặc 🎲 xếp ngẫu nhiên cho nhanh.';
   } else {
     bsStatus.classList.remove('win');
     const mine = st.turn === myKey();
