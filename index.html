@@ -622,6 +622,153 @@ html,body{
   font-family:'Dancing Script',cursive; font-size:20px;
 }
 
+/* ============ TAB GAMES ============ */
+.games-menu{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:34px; }
+.game-card{
+  background:var(--glass); border:1px solid var(--line-soft); border-radius:24px; padding:28px 24px;
+  backdrop-filter:blur(10px); box-shadow:var(--shadow); text-align:center; cursor:pointer;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1), border-color .3s ease;
+}
+.game-card:hover{ transform:translateY(-6px); border-color:var(--line); }
+.game-card .gi{ font-size:52px; display:block; margin-bottom:14px; filter:drop-shadow(0 8px 18px rgba(0,0,0,.4)); }
+.game-card h4{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600; font-size:23px; margin-bottom:8px; }
+.game-card p{ font-size:12.5px; color:var(--muted); line-height:1.6; min-height:40px; }
+.game-card .play{
+  display:inline-block; margin-top:14px; font-size:12px; font-weight:600; letter-spacing:.08em;
+  color:var(--gold); border:1px solid var(--line); border-radius:30px; padding:7px 20px;
+  transition:all .2s ease;
+}
+.game-card:hover .play{ background:var(--gold); color:var(--bg0); }
+
+.game-view{ display:none; margin-top:26px; animation:fadeUp .4s ease; }
+.game-view.active{ display:block; }
+.game-head{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:18px; }
+.back-btn{
+  border:1px solid var(--line-soft); background:var(--glass-strong); color:var(--muted);
+  border-radius:30px; padding:9px 18px; font-size:12.5px; cursor:pointer;
+  font-family:'Be Vietnam Pro',sans-serif; transition:all .2s ease; display:flex; align-items:center; gap:7px;
+}
+.back-btn:hover{ color:var(--text); border-color:var(--line); }
+.game-title{ font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600; font-size:27px; }
+.game-actions{ margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; }
+.btn-mini{
+  border:1px solid var(--line); background:var(--gold-soft); color:var(--gold);
+  border-radius:30px; padding:9px 18px; font-size:12.5px; font-weight:600; cursor:pointer;
+  font-family:'Be Vietnam Pro',sans-serif; transition:all .2s ease;
+}
+.btn-mini:hover:not(:disabled){ background:var(--gold); color:var(--bg0); }
+.btn-mini:disabled{ opacity:.45; cursor:not-allowed; }
+.btn-mini.rose{ border-color:rgba(199,74,108,.5); background:rgba(199,74,108,.14); color:var(--rose); }
+.btn-mini.rose:hover:not(:disabled){ background:var(--rose-deep); color:#fff; }
+
+.game-status{
+  display:flex; align-items:center; gap:10px; margin-bottom:16px; font-size:14px; color:var(--muted);
+  background:var(--glass); border:1px solid var(--line-soft); border-radius:16px; padding:12px 18px;
+}
+.game-status b{ color:var(--gold); }
+.turn-dot{ width:9px; height:9px; border-radius:50%; background:var(--rose); box-shadow:0 0 10px var(--rose); animation:pulseDot 1.2s ease-in-out infinite; flex-shrink:0; }
+@keyframes pulseDot{ 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.5);opacity:.55} }
+.game-status.win{ border-color:var(--gold); background:var(--gold-soft); color:var(--text); }
+
+/* Caro */
+.caro-wrap{ display:flex; justify-content:center; }
+.caro-board{
+  display:grid; grid-template-columns:repeat(15,minmax(0,1fr)); gap:0;
+  width:min(560px,100%); aspect-ratio:1; background:rgba(0,0,0,.28);
+  border:1px solid var(--line); border-radius:16px; overflow:hidden; padding:6px;
+}
+.caro-cell{
+  border:1px solid rgba(255,255,255,.05); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-weight:700; font-size:clamp(11px,2.2vw,19px); line-height:1;
+  transition:background .12s ease; user-select:none;
+}
+.caro-cell:hover{ background:var(--gold-soft); }
+.caro-cell.x{ color:var(--rose); text-shadow:0 0 12px rgba(240,126,158,.5); cursor:default; }
+.caro-cell.o{ color:var(--gold); text-shadow:0 0 12px rgba(232,196,138,.5); cursor:default; }
+.caro-cell.lastmv{ background:rgba(255,255,255,.08); }
+.caro-cell.winln{ background:rgba(232,196,138,.28); animation:pulseDot 1s ease-in-out infinite; }
+
+/* Battleship */
+.bs-stage{ display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start; }
+.bs-side h5{
+  font-family:'Be Vietnam Pro',sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:10px; text-align:center; font-weight:600;
+}
+.bs-side h5 b{ color:var(--gold); }
+.bs-grid{
+  display:grid; grid-template-columns:repeat(10,1fr); gap:2px;
+  background:rgba(10,20,40,.5); border:1px solid rgba(120,160,220,.25); border-radius:14px; padding:6px;
+  aspect-ratio:1;
+}
+.bs-cell{
+  border-radius:4px; background:rgba(90,140,220,.10); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(9px,1.6vw,15px); cursor:default; transition:background .12s ease; user-select:none; line-height:1;
+}
+.bs-cell.aim{ cursor:crosshair; }
+.bs-cell.aim:hover{ background:rgba(232,196,138,.3); }
+.bs-cell.ship{ background:rgba(120,170,255,.4); box-shadow:inset 0 0 0 1px rgba(160,200,255,.4); }
+.bs-cell.miss{ background:rgba(255,255,255,.06); color:rgba(255,255,255,.45); }
+.bs-cell.hit{ background:rgba(199,74,108,.5); }
+.bs-cell.sunk{ background:rgba(120,20,40,.75); }
+.fleet-bar{ display:flex; gap:7px; justify-content:center; margin-top:10px; flex-wrap:wrap; }
+.fleet-chip{
+  font-size:11px; padding:4px 12px; border-radius:20px; border:1px solid var(--line-soft);
+  background:rgba(0,0,0,.3); color:var(--muted);
+}
+.fleet-chip.dead{ text-decoration:line-through; opacity:.5; border-color:rgba(199,74,108,.5); color:var(--rose); }
+.bs-place-hint{ text-align:center; font-size:12.5px; color:var(--muted); margin-top:12px; line-height:1.6; }
+
+/* Tiến lên */
+.tl-zone{
+  background:radial-gradient(ellipse at center, rgba(20,60,40,.55), rgba(10,30,22,.75));
+  border:1px solid rgba(120,200,150,.2); border-radius:24px; padding:22px; box-shadow:var(--shadow);
+}
+.tl-opp{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.tl-opp .nm{ font-size:13px; color:var(--muted); }
+.tl-opp .nm b{ color:var(--gold); }
+.tl-backs{ display:flex; }
+.tl-back{
+  width:30px; height:44px; border-radius:6px; margin-left:-16px;
+  background:linear-gradient(135deg,#7A2140,#3A1030); border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 3px 8px rgba(0,0,0,.4);
+  background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.07) 0 4px, transparent 4px 8px);
+}
+.tl-back:first-child{ margin-left:0; }
+.tl-table{
+  min-height:110px; display:flex; align-items:center; justify-content:center; gap:0;
+  border:1.5px dashed rgba(255,255,255,.14); border-radius:18px; padding:14px; margin-bottom:8px; flex-wrap:wrap;
+}
+.tl-table-empty{ font-family:'Dancing Script',cursive; font-size:17px; color:rgba(255,255,255,.4); }
+.tl-table-who{ text-align:center; font-size:11.5px; color:var(--muted); margin-bottom:16px; }
+.tl-hand{ display:flex; justify-content:center; flex-wrap:wrap; padding:14px 4px 4px; min-height:104px; }
+.pcard{
+  width:58px; height:82px; border-radius:9px; background:#FBF6EE; margin-left:-24px; position:relative;
+  border:1px solid rgba(0,0,0,.25); box-shadow:0 4px 10px rgba(0,0,0,.35); cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease; flex-shrink:0;
+  display:flex; flex-direction:column; padding:5px 6px; user-select:none;
+}
+.pcard:first-child{ margin-left:0; }
+.pcard:hover{ transform:translateY(-7px); z-index:5; }
+.pcard.sel{ transform:translateY(-16px); box-shadow:0 10px 22px rgba(232,196,138,.45), 0 0 0 2px var(--gold); z-index:6; }
+.pcard.static{ cursor:default; margin-left:-20px; width:52px; height:74px; }
+.pcard.static:hover{ transform:none; }
+.pcard .rk{ font-weight:700; font-size:16px; line-height:1; font-family:'Be Vietnam Pro',sans-serif; }
+.pcard .st{ font-size:15px; line-height:1; }
+.pcard .big{ position:absolute; bottom:6px; right:7px; font-size:24px; line-height:1; }
+.pcard.red{ color:#C2233B; } .pcard.blk{ color:#1E2430; }
+.tl-controls{ display:flex; gap:10px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+.tl-msg{ text-align:center; font-size:12.5px; color:var(--rose); min-height:18px; margin-top:10px; }
+
+@media (max-width:940px){
+  .games-menu{ grid-template-columns:1fr; }
+  .bs-stage{ grid-template-columns:1fr; }
+}
+@media (max-width:640px){
+  .pcard{ width:46px; height:66px; margin-left:-22px; padding:4px 5px; }
+  .pcard .rk{ font-size:13px; } .pcard .st{ font-size:12px; } .pcard .big{ font-size:18px; bottom:4px; right:5px; }
+  .game-actions{ margin-left:0; width:100%; }
+}
+
 /* ============ Modals / lightbox / banners ============ */
 .overlay{
   position:fixed; inset:0; background:rgba(10,6,15,.75); backdrop-filter:blur(6px);
@@ -728,6 +875,7 @@ footer{
     <div class="tabs">
       <button class="tab-btn active" data-tab="home"><span class="ico">✦</span> Đếm ngược</button>
       <button class="tab-btn" data-tab="chat"><span class="ico">💌</span> Trò chuyện</button>
+      <button class="tab-btn" data-tab="games"><span class="ico">🎮</span> Trò chơi</button>
       <button class="tab-btn" data-tab="gallery"><span class="ico">📷</span> Album</button>
     </div>
     <div class="sender-switch">
@@ -866,6 +1014,100 @@ footer{
           <div class="big">💌</div>
           <div class="txt">Thả ảnh vào đây để gửi</div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TAB GAMES ===== -->
+  <section class="panel" id="panel-games">
+    <div id="gamesMenu">
+      <div class="hero" style="padding:40px 0 4px;">
+        <span class="eyebrow">🎮 Góc trò chơi của hai đứa 🎮</span>
+        <h1 style="font-size:clamp(36px,4.5vw,54px);">Thắng thì được nũng nịu</h1>
+        <div class="target-chip">Chơi online cùng nhau — mỗi người mở web trên máy mình là vào chung ván</div>
+      </div>
+      <div class="games-menu">
+        <div class="game-card" data-game="tl">
+          <span class="gi">🃏</span>
+          <h4>Tiến lên</h4>
+          <p>13 lá mỗi người — sảnh, đôi thông, tứ quý, chặt heo đủ cả. Ai hết bài trước thắng!</p>
+          <span class="play">Chơi ngay</span>
+        </div>
+        <div class="game-card" data-game="bs">
+          <span class="gi">🚢</span>
+          <h4>Bắn tàu</h4>
+          <p>Giấu hạm đội 5 tàu trên biển 10×10 rồi thay nhau nã pháo. Bắn trúng được bắn tiếp!</p>
+          <span class="play">Chơi ngay</span>
+        </div>
+        <div class="game-card" data-game="caro">
+          <span class="gi">⭕</span>
+          <h4>Cờ caro</h4>
+          <p>Bàn cờ 15×15 quốc dân — ai xếp được 5 quân liền nhau trước là thắng.</p>
+          <span class="play">Chơi ngay</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caro -->
+    <div class="game-view" id="view-caro">
+      <div class="game-head">
+        <button class="back-btn" data-back>← Trò chơi</button>
+        <div class="game-title">⭕ Cờ caro 15×15</div>
+        <div class="game-actions"><button class="btn-mini rose" id="caroNew">Ván mới</button></div>
+      </div>
+      <div class="game-status" id="caroStatus"></div>
+      <div class="caro-wrap"><div class="caro-board" id="caroBoard"></div></div>
+    </div>
+
+    <!-- Battleship -->
+    <div class="game-view" id="view-bs">
+      <div class="game-head">
+        <button class="back-btn" data-back>← Trò chơi</button>
+        <div class="game-title">🚢 Bắn tàu</div>
+        <div class="game-actions">
+          <button class="btn-mini" id="bsShuffle">🎲 Xáo lại tàu</button>
+          <button class="btn-mini" id="bsReady">⚓ Sẵn sàng</button>
+          <button class="btn-mini rose" id="bsNew">Ván mới</button>
+        </div>
+      </div>
+      <div class="game-status" id="bsStatus"></div>
+      <div class="bs-stage">
+        <div class="bs-side">
+          <h5 id="bsEnemyTitle">Biển của <b>đối phương</b> — bấm để bắn</h5>
+          <div class="bs-grid" id="bsEnemyGrid"></div>
+          <div class="fleet-bar" id="bsEnemyFleet"></div>
+        </div>
+        <div class="bs-side">
+          <h5>Biển của <b>bạn</b></h5>
+          <div class="bs-grid" id="bsMyGrid"></div>
+          <div class="fleet-bar" id="bsMyFleet"></div>
+        </div>
+      </div>
+      <div class="bs-place-hint" id="bsHint"></div>
+    </div>
+
+    <!-- Tiến lên -->
+    <div class="game-view" id="view-tl">
+      <div class="game-head">
+        <button class="back-btn" data-back>← Trò chơi</button>
+        <div class="game-title">🃏 Tiến lên</div>
+        <div class="game-actions"><button class="btn-mini rose" id="tlDeal">Chia bài mới</button></div>
+      </div>
+      <div class="game-status" id="tlStatus"></div>
+      <div class="tl-zone">
+        <div class="tl-opp">
+          <span class="nm">Bài của <b id="tlOppName">…</b>:</span>
+          <div class="tl-backs" id="tlOppBacks"></div>
+          <span class="nm" id="tlOppCount"></span>
+        </div>
+        <div class="tl-table" id="tlTable"><span class="tl-table-empty">Bàn trống — chờ chia bài 🃏</span></div>
+        <div class="tl-table-who" id="tlTableWho"></div>
+        <div class="tl-hand" id="tlHand"></div>
+        <div class="tl-controls">
+          <button class="btn-mini" id="tlPlay">🂡 Đánh bài</button>
+          <button class="btn-mini" id="tlPass">Bỏ lượt</button>
+        </div>
+        <div class="tl-msg" id="tlMsg"></div>
       </div>
     </div>
   </section>
@@ -1869,6 +2111,440 @@ galFileInput.addEventListener('change', async () => {
   galUploadBtn.classList.remove('uploading'); galUploadBtn.disabled = false;
   toast(ok ? 'Đã thêm ' + ok + ' ảnh vào album 📷' : 'Tải ảnh thất bại, thử lại nhé 💔');
 });
+
+// ============================================================
+// GAMES — 3 trò chơi realtime giữa Hiếu & Huyền qua Firebase
+// ============================================================
+const keyOf = (name) => name === 'Hiếu' ? 'hieu' : 'huyen';
+const nameOf = (key) => key === 'hieu' ? 'Hiếu' : 'Huyền';
+const myKey = () => keyOf(currentSender);
+const oppKey = () => myKey() === 'hieu' ? 'huyen' : 'hieu';
+
+// --- điều hướng menu game ---
+const gamesMenu = $('gamesMenu');
+function showGame(id){
+  document.querySelectorAll('.game-view').forEach(v => v.classList.remove('active'));
+  gamesMenu.style.display = id === 'menu' ? 'block' : 'none';
+  if (id !== 'menu') $('view-' + id).classList.add('active');
+}
+document.querySelectorAll('.game-card').forEach(c => c.addEventListener('click', () => {
+  if (!db){ toast('Cần Firebase để chơi cùng nhau 💌'); return; }
+  showGame(c.dataset.game);
+}));
+document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => showGame('menu')));
+
+// Khi đổi người (Hiếu/Huyền) → vẽ lại game theo góc nhìn mới
+function rerenderGames(){ renderCaro(); renderBS(); renderTL(); }
+btnHieu.addEventListener('click', rerenderGames);
+btnHuyen.addEventListener('click', rerenderGames);
+
+// ============================================================
+// GAME 1: CỜ CARO 15×15
+// ============================================================
+const CARO_N = 15;
+let caroState = null;
+const caroBoard = $('caroBoard'), caroStatus = $('caroStatus');
+const caroCells = [];
+for (let r = 0; r < CARO_N; r++) for (let c = 0; c < CARO_N; c++){
+  const cell = document.createElement('div');
+  cell.className = 'caro-cell';
+  cell.addEventListener('click', () => caroMove(r, c));
+  caroBoard.appendChild(cell);
+  caroCells.push(cell);
+}
+function caroFresh(starter){
+  return { board: {}, turn: starter || 'hieu', winner: null, winLine: null, last: null, starter: starter || 'hieu' };
+}
+$('caroNew').addEventListener('click', () => {
+  if (!db) return;
+  if (caroState && Object.keys(caroState.board || {}).length && !caroState.winner && !confirm('Ván đang chơi dở — chơi ván mới?')) return;
+  const nextStarter = caroState && caroState.starter ? (caroState.starter === 'hieu' ? 'huyen' : 'hieu') : 'hieu';
+  db.ref('games/caro').set(caroFresh(nextStarter));
+});
+function caroCheckWin(board, r, c, who){
+  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
+  for (const [dr, dc] of dirs){
+    const line = [[r, c]];
+    for (const s of [1, -1]){
+      let rr = r + dr * s, cc = c + dc * s;
+      while (rr >= 0 && rr < CARO_N && cc >= 0 && cc < CARO_N && board[rr + '_' + cc] === who){
+        line.push([rr, cc]); rr += dr * s; cc += dc * s;
+      }
+    }
+    if (line.length >= 5) return line;
+  }
+  return null;
+}
+function caroMove(r, c){
+  if (!db || !caroState || caroState.winner) return;
+  if (caroState.turn !== myKey()){ toast('Chưa tới lượt bạn nhé 😄'); return; }
+  const k = r + '_' + c;
+  if (caroState.board && caroState.board[k]) return;
+  const board = Object.assign({}, caroState.board, { [k]: myKey() });
+  const winLine = caroCheckWin(board, r, c, myKey());
+  const upd = {
+    ['board/' + k]: myKey(),
+    turn: oppKey(),
+    last: k
+  };
+  if (winLine){ upd.winner = myKey(); upd.winLine = winLine.map(p => p[0] + '_' + p[1]); }
+  else if (Object.keys(board).length >= CARO_N * CARO_N) upd.winner = 'draw';
+  db.ref('games/caro').update(upd);
+}
+function renderCaro(){
+  if (!caroState){ caroStatus.innerHTML = 'Bấm <b>Ván mới</b> để bắt đầu ⭕'; caroCells.forEach(c => { c.className = 'caro-cell'; c.textContent = ''; }); return; }
+  const st = caroState, board = st.board || {};
+  const winSet = new Set(st.winLine || []);
+  for (let r = 0; r < CARO_N; r++) for (let c = 0; c < CARO_N; c++){
+    const k = r + '_' + c, cell = caroCells[r * CARO_N + c], v = board[k];
+    cell.textContent = v ? (v === 'hieu' ? '✕' : '◯') : '';
+    cell.className = 'caro-cell' + (v ? (v === 'hieu' ? ' x' : ' o') : '') +
+      (st.last === k ? ' lastmv' : '') + (winSet.has(k) ? ' winln' : '');
+  }
+  if (st.winner === 'draw') caroStatus.innerHTML = '🤝 Hoà rồi — căng thật sự!';
+  else if (st.winner){
+    caroStatus.classList.add('win');
+    caroStatus.innerHTML = '🏆 <b>' + nameOf(st.winner) + '</b> thắng! ' + (st.winner === myKey() ? 'Đòi quà thôi 🎁' : 'Thua thì phải cưng người ta hơn nè 🥺');
+  } else {
+    caroStatus.classList.remove('win');
+    const mine = st.turn === myKey();
+    caroStatus.innerHTML = '<span class="turn-dot"></span> ' + (mine ? 'Lượt của <b>bạn</b> (' + (myKey() === 'hieu' ? '✕' : '◯') + ')' : 'Đang chờ <b>' + nameOf(st.turn) + '</b> đi…');
+  }
+  if (st.winner === 'draw' || !st.winner) caroStatus.classList.toggle('win', false);
+}
+if (db) db.ref('games/caro').on('value', s => { caroState = s.val(); renderCaro(); });
+
+// ============================================================
+// GAME 2: BẮN TÀU (BATTLESHIP)
+// ============================================================
+const BS_SIZES = [5, 4, 3, 3, 2];
+let bsState = null;
+let bsLocalShips = null; // hạm đội đang xếp (trước khi Sẵn sàng)
+const bsMyGrid = $('bsMyGrid'), bsEnemyGrid = $('bsEnemyGrid'), bsStatus = $('bsStatus');
+const bsMyCells = [], bsEnemyCells = [];
+for (let i = 0; i < 100; i++){
+  const a = document.createElement('div'); a.className = 'bs-cell';
+  a.addEventListener('click', () => bsShoot(i));
+  bsEnemyGrid.appendChild(a); bsEnemyCells.push(a);
+  const b = document.createElement('div'); b.className = 'bs-cell';
+  bsMyGrid.appendChild(b); bsMyCells.push(b);
+}
+function randomFleet(){
+  const grid = new Array(100).fill(false), ships = [];
+  for (const s of BS_SIZES){
+    for (let tries = 0; tries < 500; tries++){
+      const hor = Math.random() < .5;
+      const r = Math.floor(Math.random() * 10), c = Math.floor(Math.random() * 10);
+      if (hor && c + s > 10) continue;
+      if (!hor && r + s > 10) continue;
+      const cells = []; let ok = true;
+      for (let k = 0; k < s; k++){
+        const idx = hor ? r * 10 + c + k : (r + k) * 10 + c;
+        if (grid[idx]){ ok = false; break; }
+        cells.push(idx);
+      }
+      if (ok){ cells.forEach(i => grid[i] = true); ships.push(cells); break; }
+    }
+  }
+  return ships;
+}
+function bsFresh(){
+  return { phase: 'place', turn: 'hieu', winner: null, players: { hieu: { ready: false }, huyen: { ready: false } } };
+}
+$('bsNew').addEventListener('click', () => {
+  if (!db) return;
+  if (bsState && bsState.phase === 'battle' && !bsState.winner && !confirm('Ván đang chơi dở — chơi ván mới?')) return;
+  bsLocalShips = null;
+  db.ref('games/battleship').set(bsFresh());
+});
+$('bsShuffle').addEventListener('click', () => {
+  if (!bsState || bsState.phase !== 'place') return;
+  const me = (bsState.players || {})[myKey()] || {};
+  if (me.ready){ toast('Bạn đã sẵn sàng rồi, không xáo lại được nữa ⚓'); return; }
+  bsLocalShips = randomFleet();
+  renderBS();
+});
+$('bsReady').addEventListener('click', async () => {
+  if (!db || !bsState || bsState.phase !== 'place') return;
+  if (!bsLocalShips){ bsLocalShips = randomFleet(); }
+  const me = (bsState.players || {})[myKey()] || {};
+  if (me.ready) return;
+  await db.ref('games/battleship/players/' + myKey()).update({ ready: true, ships: bsLocalShips });
+  const opp = (bsState.players || {})[oppKey()] || {};
+  if (opp.ready){
+    await db.ref('games/battleship').update({ phase: 'battle', turn: Math.random() < .5 ? 'hieu' : 'huyen' });
+  }
+  toast('Hạm đội đã vào vị trí ⚓');
+});
+function shipsFlat(ships){ return (ships || []).reduce((a, s) => a.concat(s || []), []); }
+function bsShoot(idx){
+  if (!db || !bsState || bsState.phase !== 'battle' || bsState.winner) return;
+  if (bsState.turn !== myKey()){ toast('Chưa tới lượt bạn bắn 🎯'); return; }
+  const me = (bsState.players || {})[myKey()] || {};
+  const shots = me.shots || {};
+  if (shots[idx] === true || shots[idx] === false) return;
+  const enemy = (bsState.players || {})[oppKey()] || {};
+  const enemyCells = shipsFlat(enemy.ships);
+  const hit = enemyCells.includes(idx);
+  const upd = { ['players/' + myKey() + '/shots/' + idx]: hit };
+  const totalHits = Object.entries(shots).filter(([k, v]) => v).length + (hit ? 1 : 0);
+  if (hit && totalHits >= enemyCells.length) upd.winner = myKey();
+  if (!hit) upd.turn = oppKey();
+  db.ref('games/battleship').update(upd);
+}
+function renderFleetBar(el, ships, shots){
+  el.innerHTML = '';
+  (ships || []).forEach(cells => {
+    const dead = cells && cells.every(i => shots && shots[i]);
+    const chip = document.createElement('span');
+    chip.className = 'fleet-chip' + (dead ? ' dead' : '');
+    chip.textContent = '🚢 ' + (cells ? cells.length : 0) + ' ô';
+    el.appendChild(chip);
+  });
+}
+function renderBS(){
+  const hint = $('bsHint');
+  if (!bsState){
+    bsStatus.innerHTML = 'Bấm <b>Ván mới</b> để bắt đầu trận hải chiến 🚢';
+    bsMyCells.concat(bsEnemyCells).forEach(c => { c.className = 'bs-cell'; c.textContent = ''; });
+    hint.textContent = '';
+    $('bsShuffle').disabled = $('bsReady').disabled = true;
+    return;
+  }
+  const st = bsState;
+  const me = (st.players || {})[myKey()] || {};
+  const opp = (st.players || {})[oppKey()] || {};
+  const placing = st.phase === 'place';
+  $('bsShuffle').disabled = !placing || !!me.ready;
+  $('bsReady').disabled = !placing || !!me.ready;
+
+  // --- Biển của tôi ---
+  const myShips = placing ? (me.ready ? me.ships : (bsLocalShips || (bsLocalShips = randomFleet()))) : me.ships;
+  const myShipSet = new Set(shipsFlat(myShips));
+  const oppShots = opp.shots || {};
+  bsMyCells.forEach((cell, i) => {
+    let cls = 'bs-cell', txt = '';
+    if (myShipSet.has(i)) cls += ' ship';
+    if (oppShots[i] === true){ cls += ' hit'; txt = '💥'; }
+    else if (oppShots[i] === false){ cls += ' miss'; txt = '·'; }
+    cell.className = cls; cell.textContent = txt;
+  });
+  renderFleetBar($('bsMyFleet'), myShips, oppShots);
+
+  // --- Biển đối phương ---
+  const myShots = me.shots || {};
+  const enemyShips = opp.ships || [];
+  const sunkSet = new Set();
+  enemyShips.forEach(cells => { if (cells && cells.every(i => myShots[i])) cells.forEach(i => sunkSet.add(i)); });
+  const canAim = st.phase === 'battle' && !st.winner && st.turn === myKey();
+  bsEnemyCells.forEach((cell, i) => {
+    let cls = 'bs-cell', txt = '';
+    if (myShots[i] === true){ cls += sunkSet.has(i) ? ' sunk' : ' hit'; txt = '💥'; }
+    else if (myShots[i] === false){ cls += ' miss'; txt = '·'; }
+    else if (canAim) cls += ' aim';
+    cell.className = cls; cell.textContent = txt;
+  });
+  renderFleetBar($('bsEnemyFleet'), enemyShips.map(c => c || []), myShots);
+  $('bsEnemyTitle').innerHTML = 'Biển của <b>' + nameOf(oppKey()) + '</b>' + (canAim ? ' — bấm để bắn 🎯' : '');
+
+  // --- trạng thái ---
+  if (st.winner){
+    bsStatus.classList.add('win');
+    bsStatus.innerHTML = '🏆 <b>' + nameOf(st.winner) + '</b> đánh chìm toàn bộ hạm đội! ' + (st.winner === myKey() ? 'Đô đốc của lòng em 🫡' : 'Thua keo này ta bày keo khác 😤');
+    hint.textContent = '';
+  } else if (placing){
+    bsStatus.classList.remove('win');
+    const meR = me.ready ? '✅' : '⏳', opR = opp.ready ? '✅' : '⏳';
+    bsStatus.innerHTML = '⚓ Giai đoạn xếp tàu — ' + nameOf(myKey()) + ' ' + meR + ' · ' + nameOf(oppKey()) + ' ' + opR;
+    hint.textContent = me.ready
+      ? 'Đã sẵn sàng! Đang chờ ' + nameOf(oppKey()) + ' xếp xong…'
+      : 'Hạm đội (5·4·3·3·2 ô) được xếp ngẫu nhiên. Bấm 🎲 Xáo lại đến khi ưng, rồi ⚓ Sẵn sàng.';
+  } else {
+    bsStatus.classList.remove('win');
+    const mine = st.turn === myKey();
+    bsStatus.innerHTML = '<span class="turn-dot"></span> ' + (mine ? 'Lượt <b>bạn</b> bắn — trúng được bắn tiếp!' : 'Đang chờ <b>' + nameOf(st.turn) + '</b> bắn…');
+    hint.textContent = '';
+  }
+}
+if (db) db.ref('games/battleship').on('value', s => { bsState = s.val(); renderBS(); });
+
+// ============================================================
+// GAME 3: TIẾN LÊN (2 người, 13 lá)
+// ============================================================
+const RANKS = ['3','4','5','6','7','8','9','10','J','Q','K','A','2'];
+const SUITS = ['♠','♣','♦','♥'];
+let tlState = null;
+let tlSelected = new Set();
+const tlHand = $('tlHand'), tlTable = $('tlTable'), tlStatus = $('tlStatus'), tlMsg = $('tlMsg');
+
+function cardEl(id, opts){
+  const rank = id >> 2, suit = id & 3;
+  const el = document.createElement('div');
+  el.className = 'pcard ' + (suit >= 2 ? 'red' : 'blk') + (opts && opts.static ? ' static' : '');
+  const rk = document.createElement('div'); rk.className = 'rk'; rk.textContent = RANKS[rank];
+  const st = document.createElement('div'); st.className = 'st'; st.textContent = SUITS[suit];
+  const big = document.createElement('div'); big.className = 'big'; big.textContent = SUITS[suit];
+  el.appendChild(rk); el.appendChild(st); el.appendChild(big);
+  return el;
+}
+function comboOf(ids){
+  if (!ids.length) return null;
+  const s = [...ids].sort((a, b) => a - b);
+  const n = s.length, ranks = s.map(i => i >> 2);
+  const allSame = ranks.every(r => r === ranks[0]);
+  const top = s[n - 1];
+  if (n === 1) return { t: 'single', v: top, len: 1, name: 'lá lẻ' };
+  if (allSame){
+    if (n === 2) return { t: 'pair', v: top, len: 2, name: 'đôi' };
+    if (n === 3) return { t: 'triple', v: top, len: 3, name: 'sám cô' };
+    if (n === 4) return { t: 'four', v: top, len: 4, name: 'tứ quý' };
+    return null;
+  }
+  if (n >= 3){
+    let run = true;
+    for (let k = 1; k < n; k++) if (ranks[k] !== ranks[k - 1] + 1){ run = false; break; }
+    if (run && ranks[n - 1] < 12) return { t: 'straight', v: top, len: n, name: 'sảnh ' + n };
+  }
+  if (n >= 6 && n % 2 === 0){
+    let ok = true;
+    for (let k = 0; k < n; k += 2){
+      if (ranks[k] !== ranks[k + 1]){ ok = false; break; }
+      if (k > 0 && ranks[k] !== ranks[k - 2] + 1){ ok = false; break; }
+    }
+    if (ok && ranks[n - 1] < 12) return { t: 'dseq', v: top, len: n / 2, name: (n / 2) + ' đôi thông' };
+  }
+  return null;
+}
+function beats(nc, oc){
+  if (!oc) return true;
+  const oldHeo1 = oc.t === 'single' && (oc.v >> 2) === 12;
+  const oldHeo2 = oc.t === 'pair' && (oc.v >> 2) === 12;
+  if (oldHeo1 && (nc.t === 'four' || (nc.t === 'dseq' && nc.len >= 3))) return true;
+  if (oldHeo2 && (nc.t === 'four' || (nc.t === 'dseq' && nc.len >= 4))) return true;
+  if (oc.t === 'dseq' && oc.len === 3 && nc.t === 'four') return true;
+  if (oc.t === 'four' && nc.t === 'dseq' && nc.len >= 4) return true;
+  if (nc.t !== oc.t) return false;
+  if ((nc.t === 'straight' || nc.t === 'dseq') && nc.len !== oc.len) return false;
+  return nc.v > oc.v;
+}
+function tlFresh(){
+  const deck = Array.from({ length: 52 }, (_, i) => i);
+  for (let i = deck.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  const hHieu = deck.slice(0, 13).sort((a, b) => a - b);
+  const hHuyen = deck.slice(13, 26).sort((a, b) => a - b);
+  const lowest = Math.min(hHieu[0], hHuyen[0]);
+  const starter = hHieu.includes(lowest) ? 'hieu' : 'huyen';
+  return { hands: { hieu: hHieu, huyen: hHuyen }, turn: starter, table: null, winner: null, mustCard: lowest, lastPlayer: null };
+}
+$('tlDeal').addEventListener('click', () => {
+  if (!db) return;
+  if (tlState && !tlState.winner && (tlState.hands) && !confirm('Ván đang chơi dở — chia bài mới?')) return;
+  tlSelected.clear();
+  db.ref('games/tienlen').set(tlFresh());
+});
+$('tlPlay').addEventListener('click', () => {
+  if (!db || !tlState || tlState.winner) return;
+  if (tlState.turn !== myKey()){ tlMsg.textContent = 'Chưa tới lượt bạn nhé 😄'; return; }
+  const ids = [...tlSelected];
+  if (!ids.length){ tlMsg.textContent = 'Chọn bài muốn đánh trước đã 🃏'; return; }
+  const combo = comboOf(ids);
+  if (!combo){ tlMsg.textContent = 'Bộ bài không hợp lệ (lẻ / đôi / sám / tứ quý / sảnh / đôi thông)'; return; }
+  const table = tlState.table;
+  const oc = table ? comboOf(table.ids || []) : null;
+  if (tlState.mustCard != null && !table && !ids.includes(tlState.mustCard)){
+    tlMsg.textContent = 'Lượt đầu phải đánh kèm lá ' + RANKS[tlState.mustCard >> 2] + SUITS[tlState.mustCard & 3] + ' (lá nhỏ nhất)';
+    return;
+  }
+  if (!beats(combo, oc)){ tlMsg.textContent = 'Bộ này không chặt được ' + (oc ? oc.name : '') + ' trên bàn 😅'; return; }
+  const hand = (tlState.hands && tlState.hands[myKey()]) || [];
+  const newHand = hand.filter(c => !ids.includes(c));
+  const upd = {
+    ['hands/' + myKey()]: newHand,
+    table: { ids: ids.sort((a, b) => a - b), player: myKey(), name: combo.name },
+    turn: oppKey(),
+    lastPlayer: myKey(),
+    mustCard: null
+  };
+  if (!newHand.length) upd.winner = myKey();
+  tlSelected.clear();
+  tlMsg.textContent = '';
+  db.ref('games/tienlen').update(upd);
+});
+$('tlPass').addEventListener('click', () => {
+  if (!db || !tlState || tlState.winner) return;
+  if (tlState.turn !== myKey()){ tlMsg.textContent = 'Chưa tới lượt bạn nhé 😄'; return; }
+  if (!tlState.table){ tlMsg.textContent = 'Bàn đang trống — bạn phải ra bài, không bỏ lượt được'; return; }
+  tlSelected.clear();
+  db.ref('games/tienlen').update({ table: null, turn: tlState.lastPlayer || oppKey() });
+});
+function renderTL(){
+  $('tlOppName').textContent = nameOf(oppKey());
+  if (!tlState || !tlState.hands){
+    tlStatus.innerHTML = 'Bấm <b>Chia bài mới</b> để bắt đầu 🃏';
+    tlHand.innerHTML = ''; $('tlOppBacks').innerHTML = ''; $('tlOppCount').textContent = '';
+    tlTable.innerHTML = '<span class="tl-table-empty">Bàn trống — chờ chia bài 🃏</span>';
+    $('tlTableWho').textContent = ''; tlMsg.textContent = '';
+    return;
+  }
+  const st = tlState;
+  const myHand = (st.hands[myKey()] || []).slice().sort((a, b) => a - b);
+  const oppCount = (st.hands[oppKey()] || []).length;
+
+  // bài đối phương (úp)
+  const backs = $('tlOppBacks');
+  backs.innerHTML = '';
+  for (let i = 0; i < oppCount; i++) backs.appendChild(Object.assign(document.createElement('div'), { className: 'tl-back' }));
+  $('tlOppCount').textContent = oppCount + ' lá';
+
+  // bàn
+  if (st.table && st.table.ids && st.table.ids.length){
+    tlTable.innerHTML = '';
+    st.table.ids.forEach(id => tlTable.appendChild(cardEl(id, { static: true })));
+    $('tlTableWho').textContent = nameOf(st.table.player) + ' vừa đánh ' + (st.table.name || '');
+  } else {
+    tlTable.innerHTML = '<span class="tl-table-empty">' + (st.winner ? 'Ván đã kết thúc' : 'Bàn trống — ra bài tuỳ ý') + '</span>';
+    $('tlTableWho').textContent = '';
+  }
+
+  // tay bài của tôi
+  tlHand.innerHTML = '';
+  myHand.forEach(id => {
+    const el = cardEl(id);
+    if (tlSelected.has(id)) el.classList.add('sel');
+    el.addEventListener('click', () => {
+      if (st.winner) return;
+      if (tlSelected.has(id)) tlSelected.delete(id); else tlSelected.add(id);
+      el.classList.toggle('sel');
+    });
+    tlHand.appendChild(el);
+  });
+
+  const mine = st.turn === myKey();
+  $('tlPlay').disabled = !mine || !!st.winner;
+  $('tlPass').disabled = !mine || !!st.winner || !st.table;
+  if (st.winner){
+    tlStatus.classList.add('win');
+    tlStatus.innerHTML = '🏆 <b>' + nameOf(st.winner) + '</b> hết bài trước — thắng! ' + (st.winner === myKey() ? 'Về nhất luôn 😎' : 'Ván sau gỡ nha 🥺');
+  } else {
+    tlStatus.classList.remove('win');
+    tlStatus.innerHTML = '<span class="turn-dot"></span> ' + (mine
+      ? 'Lượt của <b>bạn</b> — ' + (st.table ? 'chặt ' + (st.table.name || 'bài trên bàn') + ' hoặc bỏ lượt' : 'ra bài tuỳ ý')
+      : 'Đang chờ <b>' + nameOf(st.turn) + '</b> đánh…');
+  }
+}
+if (db) db.ref('games/tienlen').on('value', s => {
+  tlState = s.val();
+  if (tlState && tlState.hands){
+    const h = tlState.hands[myKey()] || [];
+    tlSelected = new Set([...tlSelected].filter(id => h.includes(id)));
+  }
+  renderTL();
+});
+showGame('menu');
+renderCaro(); renderBS(); renderTL();
 
 })();
 </script>
