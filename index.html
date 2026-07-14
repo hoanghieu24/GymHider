@@ -1456,6 +1456,10 @@ if (!db) $('fbBanner').classList.add('show');
 
 // ===== Sender identity =====
 let currentSender = localStorage.getItem('hh_sender') || 'Hiếu';
+const keyOf = (name) => name === 'Hiếu' ? 'hieu' : 'huyen';
+const nameOf = (key) => key === 'hieu' ? 'Hiếu' : 'Huyền';
+const myKey = () => keyOf(currentSender);
+const oppKey = () => myKey() === 'hieu' ? 'huyen' : 'hieu';
 const btnHieu = $('btnHieu'), btnHuyen = $('btnHuyen');
 function paintSender(){
   btnHieu.classList.toggle('active', currentSender === 'Hiếu');
@@ -2564,10 +2568,6 @@ galFileInput.addEventListener('change', async () => {
 // ============================================================
 // GAMES — 3 trò chơi realtime giữa Hiếu & Huyền qua Firebase
 // ============================================================
-const keyOf = (name) => name === 'Hiếu' ? 'hieu' : 'huyen';
-const nameOf = (key) => key === 'hieu' ? 'Hiếu' : 'Huyền';
-const myKey = () => keyOf(currentSender);
-const oppKey = () => myKey() === 'hieu' ? 'huyen' : 'hieu';
 
 // --- điều hướng menu game ---
 const gamesMenu = $('gamesMenu');
