@@ -1493,6 +1493,27 @@ img{ max-width:100%; }
   #missBtn{ width:31px !important; height:31px !important; }
 }
 
+
+/* ===== FIX VỠ KHUNG CHAT (header + thanh nhập) ===== */
+/* Grid item mặc định min-width:auto → không chịu co, gây tràn. Ép co được: */
+.chat-shell > *{ min-width:0; }
+.chat-input{ min-width:0; }
+.chat-top{ min-width:0; }
+/* Khung điện thoại giả lập: ẩn cặp avatar để nhường chỗ cho tiêu đề + nút */
+.chat-shell.phone .avatar-pair{ display:none; }
+.chat-shell.phone .chat-top-title{ font-size:14.5px; }
+.chat-shell.phone .chat-top-sub{ font-size:9.5px; }
+.chat-shell.phone .chat-top-right{ gap:5px; }
+.chat-shell.phone .streak-chip{ font-size:10px; padding:4px 8px; gap:3px; }
+/* Nếu vẫn chật (cửa sổ rất hẹp) → cụm phải được phép co, chip chuỗi nhường trước */
+.chat-top-right{ min-width:0; }
+.streak-chip{ flex-shrink:1; overflow:hidden; text-overflow:ellipsis; }
+#missBtn, #chatSearchBtn, #themeBtn, .view-toggle{ flex-shrink:0; }
+/* Thanh nhập: mọi tầng đều co được, nút gửi không bao giờ bị đẩy ra ngoài */
+.chat-input > *{ min-width:0; }
+.chat-input .round-btn, .chat-input .send-fab{ flex-shrink:0; min-width:36px; }
+.msg-input{ width:100%; }
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
@@ -1672,7 +1693,7 @@ img{ max-width:100%; }
           <button class="rec-cancel" id="recCancel" title="Huỷ ghi âm">✕</button>
         </div>
         <div class="input-wrap" id="inputWrap">
-          <textarea class="msg-input" id="msgInput" rows="1" placeholder="Nhắn gì đó cho người ấy… (dán ảnh Ctrl+V cũng được)" maxlength="500"></textarea>
+          <textarea class="msg-input" id="msgInput" rows="1" placeholder="Nhắn gì đó cho người ấy…" title="Mẹo: dán ảnh Ctrl+V hoặc kéo-thả ảnh vào khung chat" maxlength="500"></textarea>
           <button class="emo-toggle" id="emoToggle" type="button" title="Emoji & nhãn dán">😊</button>
           <div class="emo-panel" id="emoPanel">
             <div class="picker-tabs">
