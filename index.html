@@ -1429,6 +1429,43 @@ img{ max-width:100%; }
 }
 .load-older:active{ transform:scale(.96); }
 
+
+/* ============ FIX TRÀN KHUNG CHAT ============ */
+/* Header: tiêu đề tự co, cụm nút không đẩy tràn */
+.chat-top-text{ flex:1 1 auto; min-width:0; }
+.chat-top .avatar-pair{ flex-shrink:0; }
+.chat-top-right{ flex-shrink:0; }
+/* Ô nhập: cho phép co lại, không bị placeholder dài đẩy nút gửi ra ngoài */
+.input-wrap{ min-width:0; }
+.msg-input{ min-width:0; }
+/* Nút thao tác tin nhắn: NỔI cạnh bong bóng, không chiếm chỗ ngang nữa */
+.m-col{ position:relative; }
+.m-tools{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:6;
+  background:rgba(24,15,34,.85); border:1px solid var(--line-soft);
+  border-radius:30px; padding:3px 5px; gap:3px;
+}
+.m-row.own .m-tools{ right:calc(100% + 6px); }
+.m-row.other .m-tools{ left:calc(100% + 6px); }
+/* Trên cảm ứng: nút nằm gọn DƯỚI bong bóng, luôn hiện, không tràn ngang */
+@media (hover:none){
+  .m-tools{ position:static; transform:none; margin-top:3px; background:transparent; border:none; padding:0; }
+}
+/* Khung điện thoại giả lập trên desktop: thu gọn header + bong bóng */
+.chat-shell.phone .chat-top{ gap:8px; }
+.chat-shell.phone .chat-top-right{ gap:6px; }
+.chat-shell.phone #chatSearchBtn, .chat-shell.phone #themeBtn{ width:29px !important; height:29px !important; font-size:13px; }
+.chat-shell.phone .view-toggle{ padding:3px; }
+.chat-shell.phone .view-toggle button{ width:28px; height:24px; font-size:12px; }
+.chat-shell.phone .m-col{ max-width:66%; }
+.chat-shell.phone .round-btn, .chat-shell.phone .send-fab{ width:36px; height:36px; }
+.chat-shell.phone .chat-input{ gap:6px; padding-left:10px; padding-right:10px; }
+.chat-shell.phone .msg-input{ font-size:13px; padding:9px 38px 9px 13px; }
+.seen-tag{ padding-right:6px; }
+@media (max-width:640px){
+  .m-col{ max-width:72%; }
+}
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
@@ -1558,7 +1595,7 @@ img{ max-width:100%; }
     <div class="chat-shell">
       <div class="chat-top">
         <div class="avatar-pair"><div class="a a1">H</div><div class="a a2">H</div></div>
-        <div style="min-width:0;">
+        <div class="chat-top-text" style="min-width:0;">
           <div class="chat-top-title">Không gian của hai người</div>
           <div class="chat-top-sub"><span class="dot-online"></span> luôn kết nối · riêng tư</div>
         </div>
@@ -1607,7 +1644,7 @@ img{ max-width:100%; }
           <button class="rec-cancel" id="recCancel" title="Huỷ ghi âm">✕</button>
         </div>
         <div class="input-wrap" id="inputWrap">
-          <textarea class="msg-input" id="msgInput" rows="1" placeholder="Nhắn gì đó cho người ấy… " maxlength="500"></textarea>
+          <textarea class="msg-input" id="msgInput" rows="1" placeholder="Nhắn gì đó cho người ấy… (dán ảnh Ctrl+V cũng được)" maxlength="500"></textarea>
           <button class="emo-toggle" id="emoToggle" type="button" title="Emoji & nhãn dán">😊</button>
           <div class="emo-panel" id="emoPanel">
             <div class="picker-tabs">
@@ -2544,7 +2581,7 @@ function renderMessages(list){
       delBtn.addEventListener('click', e => { e.stopPropagation(); deleteMessage(m.key); });
       tools.appendChild(delBtn);
     }
-    row.appendChild(tools);
+    col.appendChild(tools);
 
     msgList.appendChild(row);
     if (openPickerKey === m.key) showPicker(m.key, row, own);
