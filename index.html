@@ -1538,6 +1538,45 @@ img{ max-width:100%; }
   .bg-sw{ width:78px; height:52px; }
 }
 
+
+/* ===== Bắn tàu: trượt rõ hơn, trúng cháy, kéo-thả ===== */
+.bs-cell.miss::after{
+  content:''; width:42%; height:42%; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #D8ECFF, #7FB4E8 62%, rgba(127,180,232,.3));
+  box-shadow:0 0 10px rgba(150,200,255,.55), inset 0 -1px 2px rgba(0,0,0,.3);
+  animation:splashDot .5s ease both;
+}
+.bs-cell.miss{ background:rgba(120,170,240,.07); }
+.bs-cell.hit{ animation:hitGlow 1.8s ease-in-out infinite; }
+.bs-cell.hit, .bs-cell.sunk{ font-size:clamp(13px,2.1vw,20px); }
+@keyframes hitGlow{
+  0%,100%{ box-shadow:inset 0 0 5px rgba(255,120,60,.35); }
+  50%{ box-shadow:inset 0 0 15px rgba(255,160,70,.75); }
+}
+.bs-grid.placing{ touch-action:none; }
+.bs-grid.placing .bs-cell{ cursor:grab; }
+.dock-ship{ cursor:grab; touch-action:none; user-select:none; position:relative; }
+.dock-ship:active{ cursor:grabbing; }
+.dock-size{
+  position:absolute; top:-7px; right:-7px; width:18px; height:18px; border-radius:50%;
+  background:var(--gold); color:var(--bg0); font-size:10px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; pointer-events:none;
+}
+.dock-label{ width:100%; text-align:center; font-size:12px; color:var(--gold); margin-bottom:2px; font-weight:600; letter-spacing:.02em; }
+.drag-ghost{
+  position:fixed; z-index:7000; pointer-events:none; display:flex; gap:3px; opacity:.9;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));
+}
+.drag-ghost.ver{ flex-direction:column; }
+.drag-ghost .gseg{
+  border-radius:6px; background:linear-gradient(180deg,#A9BFD6,#46596F);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.3);
+}
+@media (max-width:640px){
+  .dock-label{ font-size:11px; }
+  .bs-place-hint{ font-size:11px; line-height:1.7; }
+}
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
@@ -3532,8 +3571,7 @@ for (let i = 0; i < 100; i++){
   a.addEventListener('mouseenter', () => bsEnemyHover(i));
   bsEnemyGrid.appendChild(a); bsEnemyCells.push(a);
   const b = document.createElement('div'); b.className = 'bs-cell';
-  b.addEventListener('click', () => bsMyClick(i));
-  b.addEventListener('mouseenter', () => bsMyHover(i));
+  b.addEventListener('pointerdown', e => bsCellPointerDown(e, i));
   bsMyGrid.appendChild(b); bsMyCells.push(b);
 }
 bsMyGrid.addEventListener('mouseleave', () => clearPreview(bsMyCells));
@@ -3621,47 +3659,143 @@ function isPlacing(){
   return !me.ready;
 }
 
-// ===== xếp tàu thủ công =====
-function bsMyHover(i){
-  if (!isPlacing()) return;
-  clearPreview(bsMyCells);
-  if (!bsPlace.remaining.length) return;
-  const size = bsPlace.remaining[bsPlace.sel];
-  const cells = candidateCells(i, size, bsPlace.hor);
-  const occ = new Set(shipsFlat(bsPlace.ships));
-  if (!cells){ bsMyCells[i].classList.add('prev-bad'); return; }
-  const bad = cells.some(c => occ.has(c));
-  cells.forEach(c => bsMyCells[c].classList.add(bad ? 'prev-bad' : 'prev-ok'));
+// ===== XẾP TÀU BẰNG KÉO-THẢ (chuột & cảm ứng) =====
+let drag = null; // {size, hor, fromShip, dockIdx, grab, ghost, lastHead, lastX, lastY, moved, outside}
+function gridCellFromPoint(x, y){
+  const r = bsMyGrid.getBoundingClientRect();
+  if (x < r.left || x >= r.right || y < r.top || y >= r.bottom) return -1;
+  const c = Math.min(9, Math.max(0, Math.floor((x - r.left) / (r.width / 10))));
+  const rw = Math.min(9, Math.max(0, Math.floor((y - r.top) / (r.height / 10))));
+  return rw * 10 + c;
 }
-function bsMyClick(i){
-  if (!isPlacing()) return;
-  // bấm vào tàu đã đặt → nhấc lên xếp lại
-  const hitShip = bsPlace.ships.findIndex(cells => cells.includes(i));
-  if (hitShip >= 0){
-    const size = bsPlace.ships[hitShip].length;
-    bsPlace.ships.splice(hitShip, 1);
-    bsPlace.remaining.push(size);
-    bsPlace.sel = bsPlace.remaining.length - 1;
-    SFX.pickup();
-    renderBS(); return;
+function makeGhost(size, hor){
+  const cs = bsMyGrid.getBoundingClientRect().width / 10;
+  const g = document.createElement('div');
+  g.className = 'drag-ghost' + (hor ? '' : ' ver');
+  for (let k = 0; k < size; k++){
+    const seg = document.createElement('div');
+    seg.className = 'gseg';
+    seg.style.width = Math.max(16, cs - 4) + 'px';
+    seg.style.height = Math.max(16, cs - 4) + 'px';
+    g.appendChild(seg);
   }
-  if (!bsPlace.remaining.length) return;
-  const size = bsPlace.remaining[bsPlace.sel];
-  const cells = candidateCells(i, size, bsPlace.hor);
-  const occ = new Set(shipsFlat(bsPlace.ships));
-  if (!cells || cells.some(c => occ.has(c))){ SFX.deny(); toast('Chỗ này không đặt được tàu ' + size + ' ô'); return; }
-  bsPlace.ships.push(cells);
-  bsPlace.remaining.splice(bsPlace.sel, 1);
-  bsPlace.sel = Math.min(bsPlace.sel, Math.max(0, bsPlace.remaining.length - 1));
-  SFX.place();
+  document.body.appendChild(g);
+  return g;
+}
+function dragOcc(){
+  return new Set(shipsFlat(bsPlace.ships.filter((_, i) => !drag || i !== drag.fromShip)));
+}
+function updateDrag(x, y){
+  if (!drag) return;
+  drag.lastX = x; drag.lastY = y;
+  drag.ghost.style.left = (x - 16) + 'px';
+  drag.ghost.style.top = (y - 16) + 'px';
   clearPreview(bsMyCells);
+  drag.lastHead = null;
+  const cell = gridCellFromPoint(x, y);
+  drag.outside = cell < 0;
+  if (cell < 0) return;
+  const head = cell - (drag.hor ? drag.grab : drag.grab * 10);
+  const cells = candidateCells(head, drag.size, drag.hor);
+  if (!cells){ bsMyCells[cell].classList.add('prev-bad'); return; }
+  const occ = dragOcc();
+  const bad = cells.some(c => occ.has(c));
+  cells.forEach(c => bsMyCells[c] && bsMyCells[c].classList.add(bad ? 'prev-bad' : 'prev-ok'));
+  if (!bad) drag.lastHead = head;
+}
+function endDrag(commit){
+  if (!drag) return;
+  clearPreview(bsMyCells);
+  drag.ghost.remove();
+  const d = drag; drag = null;
+  if (commit){
+    if (d.lastHead != null){
+      const cells = candidateCells(d.lastHead, d.size, d.hor);
+      if (d.fromShip >= 0) bsPlace.ships[d.fromShip] = cells;
+      else { bsPlace.ships.push(cells); bsPlace.remaining.splice(d.dockIdx, 1); }
+      SFX.place();
+    } else if (d.fromShip >= 0 && d.outside){
+      // kéo tàu ra khỏi biển → trả về bến
+      const size = d.size;
+      bsPlace.ships.splice(d.fromShip, 1);
+      bsPlace.remaining.push(size);
+      SFX.pickup();
+      toast('Đã trả tàu ' + size + ' ô về bến ⚓');
+    } else if (d.moved){ SFX.deny(); }
+  }
   renderBS();
+}
+function startDrag(e, size, hor, fromShip, dockIdx, grab){
+  if (!isPlacing() || drag) return;
+  e.preventDefault();
+  drag = { size, hor, fromShip, dockIdx, grab: grab || 0, ghost: makeGhost(size, hor),
+    lastHead: null, lastX: e.clientX, lastY: e.clientY,
+    startX: e.clientX, startY: e.clientY, moved: false, outside: false };
+  updateDrag(e.clientX, e.clientY);
+}
+document.addEventListener('pointermove', e => {
+  if (!drag) return;
+  if (Math.abs(e.clientX - drag.startX) + Math.abs(e.clientY - drag.startY) > 7) drag.moved = true;
+  updateDrag(e.clientX, e.clientY);
+});
+document.addEventListener('pointerup', () => {
+  if (!drag) return;
+  const d = drag;
+  if (!d.moved && d.fromShip >= 0){
+    // chạm nhẹ (không kéo) vào tàu đã đặt = xoay tại chỗ
+    endDrag(false);
+    rotateShip(d.fromShip);
+    return;
+  }
+  endDrag(true);
+});
+document.addEventListener('pointercancel', () => endDrag(false));
+function rotateShip(idx){
+  const cells = bsPlace.ships[idx];
+  if (!cells) return;
+  const hor = cells.length === 1 || cells[1] === cells[0] + 1;
+  const occ = new Set(shipsFlat(bsPlace.ships.filter((_, i) => i !== idx)));
+  const nc = candidateCells(cells[0], cells.length, !hor);
+  if (nc && !nc.some(c => occ.has(c))){
+    bsPlace.ships[idx] = nc;
+    SFX.pickup();
+    renderBS();
+  } else { SFX.deny(); toast('Không đủ chỗ để xoay tàu ở đây — kéo ra chỗ rộng hơn nhé'); }
+}
+function bsCellPointerDown(e, i){
+  if (!isPlacing()) return;
+  const idx = bsPlace.ships.findIndex(cells => cells.includes(i));
+  if (idx < 0) return;
+  const cells = bsPlace.ships[idx];
+  const hor = cells.length === 1 || cells[1] === cells[0] + 1;
+  startDrag(e, cells.length, hor, idx, -1, cells.indexOf(i));
+}
+// nổ hoa lửa tại ô (dùng chung engine pháo hoa, không phát tiếng đôi)
+function cellBurst(el, big){
+  try {
+    const r = el.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const n = big ? 24 : 14;
+    const cols = ['#FFB25C', '#F07E9E', '#FFD98A', '#FF7A4D'];
+    for (let k = 0; k < n; k++){
+      const a = Math.PI * 2 * k / n + Math.random() * .4;
+      const sp = 1.2 + Math.random() * 2.8;
+      fwParts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - .5, life: 1, col: cols[k % cols.length], r: 1.2 + Math.random() * 1.7 });
+    }
+    if (!fwRunning){ fwRunning = true; fwLoop(); }
+  } catch(e){}
 }
 function paintRotate(){ $('bsRotate').textContent = bsPlace.hor ? '🔄 Ngang' : '🔄 Dọc'; }
 $('bsRotate').addEventListener('click', () => { bsPlace.hor = !bsPlace.hor; paintRotate(); SFX.pickup(); });
 document.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'r' && $('view-bs').classList.contains('active') && isPlacing()){
     bsPlace.hor = !bsPlace.hor; paintRotate();
+    if (drag){
+      drag.hor = !drag.hor;
+      drag.ghost.remove();
+      drag.ghost = makeGhost(drag.size, drag.hor);
+      updateDrag(drag.lastX, drag.lastY);
+    }
   }
 });
 paintRotate();
@@ -3819,12 +3953,21 @@ function renderFleetBar(el, ships, shots){
 function renderDock(){
   const dock = $('bsDock');
   dock.innerHTML = '';
+  if (bsPlace.remaining.length){
+    const lb = document.createElement('div');
+    lb.className = 'dock-label';
+    lb.textContent = '⚓ Bến tàu — giữ và KÉO tàu thả vào biển của bạn 👇';
+    dock.appendChild(lb);
+  }
   bsPlace.remaining.forEach((size, i) => {
     const chip = document.createElement('div');
-    chip.className = 'dock-ship' + (i === bsPlace.sel ? ' sel' : '');
-    chip.title = 'Tàu ' + size + ' ô — bấm chọn rồi đặt lên biển';
+    chip.className = 'dock-ship';
+    chip.title = 'Giữ và kéo tàu ' + size + ' ô vào biển';
     for (let k = 0; k < size; k++) chip.appendChild(Object.assign(document.createElement('div'), { className: 'seg' }));
-    chip.addEventListener('click', () => { bsPlace.sel = i; SFX.pickup(); renderDock(); });
+    const tag = document.createElement('span');
+    tag.className = 'dock-size'; tag.textContent = size;
+    chip.appendChild(tag);
+    chip.addEventListener('pointerdown', e => startDrag(e, size, bsPlace.hor, -1, i, 0));
     dock.appendChild(chip);
   });
 }
@@ -3849,6 +3992,7 @@ function renderBS(){
   $('bsRotate').disabled = !iAmPlacing;
   $('bsReady').disabled = !iAmPlacing || bsPlace.remaining.length > 0;
   dock.classList.toggle('show', iAmPlacing);
+  bsMyGrid.classList.toggle('placing', iAmPlacing);
   items.classList.toggle('show', st.phase === 'battle' && !st.winner);
   if (iAmPlacing) renderDock();
 
@@ -3919,14 +4063,20 @@ function renderBS(){
     bsStatus.innerHTML = '⚓ Xếp tàu — ' + nameOf(myKey()) + ' ' + (me.ready ? '✅' : '⏳') + ' · ' + nameOf(oppKey()) + ' ' + (opp.ready ? '✅' : '⏳');
     hint.innerHTML = me.ready
       ? 'Đã sẵn sàng! Đang chờ ' + nameOf(oppKey()) + ' xếp xong…'
-      : 'Chọn tàu bên trên → rê chuột (hoặc chạm trên điện thoại) lên <b>biển của bạn</b> để đặt. Bấm tàu đã đặt để nhấc lên xếp lại. Phím <b>R</b> hoặc nút 🔄 để xoay ngang/dọc, hoặc 🎲 xếp ngẫu nhiên cho nhanh.';
+      : '🖐 <b>Kéo</b> tàu từ bến thả vào biển · <b>kéo</b> tàu trên biển để dời chỗ · <b>chạm nhẹ</b> vào tàu để xoay tại chỗ · kéo tàu <b>ra ngoài biển</b> để trả về bến · phím <b>R</b> xoay hướng (cả lúc đang kéo) · 🎲 xếp nhanh.';
   } else {
     bsStatus.classList.remove('win');
     const mine = st.turn === myKey();
     bsStatus.innerHTML = '<span class="turn-dot"></span> ' + (mine
-      ? 'Lượt <b>bạn</b> — trúng được bắn tiếp! Có thể dùng 🛰/💣 bên dưới'
+      ? 'Lượt <b>bạn</b> — trúng được bắn tiếp!'
       : 'Đang chờ <b>' + nameOf(st.turn) + '</b> bắn…');
-    hint.textContent = '';
+    if (bsMode === 'radar'){
+      hint.innerHTML = '🛰 <b>Radar đang bật:</b> bấm 1 ô bên biển đối phương làm <b>tâm quét</b> — cả vùng 3×3 quanh đó sẽ lộ ô nào có tàu (🎯) mà không bắn. Dùng xong mất lượt. Bấm lại nút Radar để huỷ.';
+    } else if (bsMode === 'bomb'){
+      hint.innerHTML = '💣 <b>Bom lớn đang bật:</b> bấm 1 ô bên biển đối phương làm <b>tâm nổ</b> — cả vùng 3×3 quanh đó bị nã cùng lúc. Dùng xong mất lượt. Bấm lại nút Bom để huỷ.';
+    } else {
+      hint.innerHTML = 'Vật phẩm (mỗi thứ 1 lần/ván, chỉ dùng trong lượt của bạn): 🛰 <b>Radar</b> soi tàu vùng 3×3 không bắn · 💣 <b>Bom lớn</b> nã cả vùng 3×3. Bấm nút để bật rồi chọn tâm trên biển địch.';
+    }
   }
 }
 if (db) db.ref('games/battleship').on('value', s => {
@@ -3967,8 +4117,8 @@ if (db) db.ref('games/battleship').on('value', s => {
     const stg = document.querySelector('.bs-stage');
     stg.classList.remove('shake'); void stg.offsetWidth; stg.classList.add('shake');
   }
-  newBooms.my.forEach(i => bsMyCells[i] && bsMyCells[i].classList.add('boom'));
-  newBooms.enemy.forEach(i => bsEnemyCells[i] && bsEnemyCells[i].classList.add('boom'));
+  newBooms.my.forEach(i => { if (bsMyCells[i]){ bsMyCells[i].classList.add('boom'); cellBurst(bsMyCells[i]); } });
+  newBooms.enemy.forEach(i => { if (bsEnemyCells[i]){ bsEnemyCells[i].classList.add('boom'); cellBurst(bsEnemyCells[i], newBooms.enemy.length > 2); } });
   setTimeout(() => bsMyCells.concat(bsEnemyCells).forEach(c => c.classList.remove('boom')), 700);
 });
 
