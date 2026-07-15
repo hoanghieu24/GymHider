@@ -1514,6 +1514,30 @@ img{ max-width:100%; }
 .chat-input .round-btn, .chat-input .send-fab{ flex-shrink:0; min-width:36px; }
 .msg-input{ width:100%; }
 
+
+/* ===== Avatar riêng + trang trí chat ===== */
+.m-avatar.has-img{ background-size:cover !important; background-position:center; text-indent:-999px; overflow:hidden; border:1.5px solid rgba(255,255,255,.35); }
+.avatar-pair .a.has-img{ background-size:cover !important; background-position:center; text-indent:-999px; overflow:hidden; }
+.deco-row{ display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 6px; }
+.bg-sw{
+  position:relative; width:86px; height:58px; border-radius:12px; cursor:pointer;
+  border:2px solid var(--line-soft); background-color:rgba(255,255,255,.04); overflow:hidden;
+  transition:all .15s ease; background-size:cover;
+}
+.bg-sw:hover{ transform:translateY(-2px); border-color:var(--line); }
+.bg-sw.cur{ border-color:var(--gold); box-shadow:0 0 14px rgba(232,196,138,.4); }
+.bg-sw span{
+  position:absolute; left:0; right:0; bottom:0; font-size:9.5px; text-align:center; color:var(--text);
+  background:linear-gradient(to top, rgba(10,6,16,.8), transparent); padding:8px 2px 3px; pointer-events:none;
+}
+.deco-btns{ display:flex; gap:8px; margin:4px 0 6px; flex-wrap:wrap; }
+.deco-btns .btn-mini.cur-img{ border-color:var(--gold); box-shadow:0 0 12px rgba(232,196,138,.35); }
+.deco-ava-row{ display:flex; align-items:center; gap:12px; margin-top:6px; flex-wrap:wrap; }
+.deco-ava{ width:58px !important; height:58px !important; font-size:22px !important; flex-shrink:0; }
+@media (max-width:640px){
+  .bg-sw{ width:78px; height:52px; }
+}
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
@@ -2002,6 +2026,31 @@ img{ max-width:100%; }
       <button class="ghost" id="memCancel">Huỷ</button>
       <button class="btn-gold" id="memSave"><span class="gico">💾</span><div class="gspin"></div> Lưu kỷ niệm</button>
     </div>
+  </div>
+</div>
+
+<!-- ===== Modal: trang trí đoạn chat ===== -->
+<div class="overlay" id="decoOverlay">
+  <div class="modal wide">
+    <h3>Trang trí đoạn chat 🎨</h3>
+    <div class="note">Màu bong bóng và hình nền đồng bộ cho cả hai · avatar là của riêng từng người.</div>
+    <label>Màu bong bóng</label>
+    <div class="deco-row" id="decoThemes"></div>
+    <label>Hình nền đoạn chat</label>
+    <div class="deco-row" id="decoBgs"></div>
+    <div class="deco-btns">
+      <button class="btn-mini" id="bgUploadBtn">🖼 Dùng ảnh của hai đứa</button>
+      <button class="btn-mini rose" id="bgClearBtn">Bỏ nền</button>
+      <input type="file" id="bgFileInput" accept="image/*" hidden />
+    </div>
+    <label>Avatar của bạn (<span id="decoWho"></span>)</label>
+    <div class="deco-ava-row">
+      <div class="m-avatar deco-ava" id="decoAvaPreview">H</div>
+      <button class="btn-mini" id="avaUploadBtn">📷 Đổi avatar</button>
+      <button class="btn-mini rose" id="avaClearBtn">Xoá avatar</button>
+      <input type="file" id="avaFileInput" accept="image/*" hidden />
+    </div>
+    <div class="modal-actions"><button class="ghost" id="decoClose" style="flex:1;">Xong ✨</button></div>
   </div>
 </div>
 
@@ -2519,7 +2568,7 @@ function renderMessages(list){
 
     const av = document.createElement('div');
     av.className = 'm-avatar ' + avatarClass(m.sender) + (lastOfGroup ? '' : ' ghost');
-    av.textContent = m.sender.charAt(0);
+    setAvatarEl(av, m.sender);
     row.appendChild(av);
 
     const col = document.createElement('div');
@@ -2679,7 +2728,7 @@ typingBubbleEl.innerHTML = '<div class="m-avatar"></div><div class="m-col other"
 function syncTypingBubble(){
   const av = typingBubbleEl.querySelector('.m-avatar');
   av.className = 'm-avatar ' + (oppKey() === 'hieu' ? 'hieu' : 'huyen');
-  av.textContent = nameOf(oppKey()).charAt(0);
+  setAvatarEl(av, nameOf(oppKey()));
   const active = Date.now() < oppTypingUntil;
   if (active){
     const nearBottom = msgList.scrollHeight - msgList.scrollTop - msgList.clientHeight < 160;
@@ -3115,7 +3164,7 @@ function applyTheme(key){
   curTheme = CHAT_THEMES[key] ? key : 'rose';
   chatShell.style.setProperty('--bub-a', t.a);
   chatShell.style.setProperty('--bub-b', t.b);
-  themePop.querySelectorAll('.theme-sw').forEach(sw => sw.classList.toggle('cur', sw.dataset.k === curTheme));
+  $('decoThemes').querySelectorAll('.theme-sw').forEach(sw => sw.classList.toggle('cur', sw.dataset.k === curTheme));
 }
 Object.entries(CHAT_THEMES).forEach(([k, t]) => {
   const sw = document.createElement('div');
@@ -3124,12 +3173,11 @@ Object.entries(CHAT_THEMES).forEach(([k, t]) => {
   sw.addEventListener('click', e => {
     e.stopPropagation();
     if (db) db.ref('chatTheme').set(k); else applyTheme(k);
-    themePop.classList.remove('open');
     toast('Đã đổi màu đoạn chat: ' + t.name + ' 🎨');
   });
-  themePop.appendChild(sw);
+  $('decoThemes').appendChild(sw);
 });
-$('themeBtn').addEventListener('click', e => { e.stopPropagation(); themePop.classList.toggle('open'); });
+$('themeBtn').addEventListener('click', e => { e.stopPropagation(); openDeco(); });
 document.addEventListener('click', e => {
   if (!e.target.closest('#themePop') && !e.target.closest('#themeBtn')) themePop.classList.remove('open');
 });
@@ -4857,6 +4905,128 @@ if (db) db.ref('memories').on('value', s => {
   renderTimeline();
 });
 else renderTimeline();
+
+// ===== AVATAR RIÊNG + HÌNH NỀN CHAT (đồng bộ) =====
+let profileAvatars = {};
+let chatBgData = null;
+function setAvatarEl(el, senderName){
+  const p = profileAvatars[keyOf(senderName)];
+  const url = p && p.avatar;
+  if (url){
+    el.classList.add('has-img');
+    el.style.backgroundImage = 'url("' + url + '")';
+    el.textContent = '';
+  } else {
+    el.classList.remove('has-img');
+    el.style.backgroundImage = '';
+    el.textContent = senderName.charAt(0);
+  }
+}
+function paintHeaderAvatars(){
+  const a1 = document.querySelector('.avatar-pair .a1');
+  const a2 = document.querySelector('.avatar-pair .a2');
+  if (a1) setAvatarEl(a1, 'Hiếu');
+  if (a2) setAvatarEl(a2, 'Huyền');
+}
+const CHAT_BGS = [
+  { id: 'none', name: 'Mặc định', css: '' },
+  { id: 'rose', name: 'Hồng mơ', css: `radial-gradient(500px 260px at 15% 0%, rgba(240,126,158,.20), transparent 60%), radial-gradient(460px 280px at 90% 100%, rgba(232,196,138,.16), transparent 60%)` },
+  { id: 'stars', name: 'Đêm sao', css: `radial-gradient(1.6px 1.6px at 12% 22%, rgba(255,255,255,.45), transparent 100%), radial-gradient(1.2px 1.2px at 34% 64%, rgba(255,255,255,.35), transparent 100%), radial-gradient(1.8px 1.8px at 58% 18%, rgba(232,196,138,.5), transparent 100%), radial-gradient(1.2px 1.2px at 76% 48%, rgba(255,255,255,.3), transparent 100%), radial-gradient(1.5px 1.5px at 88% 82%, rgba(240,126,158,.45), transparent 100%), radial-gradient(1.2px 1.2px at 22% 88%, rgba(255,255,255,.35), transparent 100%), radial-gradient(1.6px 1.6px at 46% 40%, rgba(255,255,255,.25), transparent 100%), linear-gradient(180deg, rgba(20,14,34,.5), rgba(12,8,20,.3))` },
+  { id: 'hearts', name: 'Tim tim', css: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Ctext x='8' y='30' font-size='15' opacity='0.07'%3E%E2%9D%A4%3C/text%3E%3Ctext x='32' y='52' font-size='10' opacity='0.05'%3E%E2%9D%A4%3C/text%3E%3C/svg%3E") repeat` },
+  { id: 'sunset', name: 'Hoàng hôn', css: `linear-gradient(180deg, rgba(217,94,74,.16), rgba(124,74,207,.10) 60%, transparent)` },
+  { id: 'ocean', name: 'Đại dương', css: `linear-gradient(180deg, rgba(42,106,207,.18), rgba(91,184,240,.06) 55%, transparent)` },
+  { id: 'matcha', name: 'Matcha', css: `radial-gradient(520px 300px at 80% 0%, rgba(63,143,92,.18), transparent 60%), radial-gradient(420px 260px at 10% 100%, rgba(123,201,143,.10), transparent 60%)` }
+];
+function applyChatBg(bg){
+  if (!bg || !bg.type || bg.type === 'none'){ msgList.style.background = ''; }
+  else if (bg.type === 'preset'){
+    const p = CHAT_BGS.find(x => x.id === bg.id);
+    msgList.style.background = p ? p.css : '';
+  } else if (bg.type === 'image' && bg.url){
+    msgList.style.background = 'linear-gradient(rgba(16,10,24,.55), rgba(16,10,24,.68)), url("' + bg.url + '") center/cover no-repeat';
+  }
+  paintBgSel();
+}
+function paintBgSel(){
+  const cur = chatBgData || { type: 'none' };
+  $('decoBgs').querySelectorAll('.bg-sw').forEach(sw => {
+    sw.classList.toggle('cur', (cur.type === 'preset' && sw.dataset.id === cur.id) || ((!cur.type || cur.type === 'none') && sw.dataset.id === 'none'));
+  });
+  $('bgUploadBtn').classList.toggle('cur-img', cur.type === 'image');
+}
+// dựng swatch nền
+CHAT_BGS.forEach(p => {
+  const sw = document.createElement('div');
+  sw.className = 'bg-sw';
+  sw.dataset.id = p.id;
+  sw.title = p.name;
+  sw.style.background = p.css || 'rgba(255,255,255,.05)';
+  const lb = document.createElement('span'); lb.textContent = p.name;
+  sw.appendChild(lb);
+  sw.addEventListener('click', () => {
+    const val = p.id === 'none' ? { type: 'none' } : { type: 'preset', id: p.id };
+    if (db) db.ref('chatBg').set(val); else { chatBgData = val; applyChatBg(val); }
+    toast('Đã đổi nền: ' + p.name + ' 🖼');
+  });
+  $('decoBgs').appendChild(sw);
+});
+if (db){
+  db.ref('profiles').on('value', s => {
+    profileAvatars = s.val() || {};
+    paintHeaderAvatars();
+    renderMessages(lastMessages);
+    paintDecoAva();
+  });
+  db.ref('chatBg').on('value', s => { chatBgData = s.val(); applyChatBg(chatBgData); });
+}
+paintHeaderAvatars();
+// modal trang trí
+function paintDecoAva(){
+  $('decoWho').textContent = currentSender;
+  setAvatarEl($('decoAvaPreview'), currentSender);
+  $('decoAvaPreview').className = 'm-avatar deco-ava ' + (myKey() === 'hieu' ? 'hieu' : 'huyen') + ($('decoAvaPreview').classList.contains('has-img') ? ' has-img' : '');
+  setAvatarEl($('decoAvaPreview'), currentSender);
+}
+function openDeco(){ paintDecoAva(); paintBgSel(); $('decoOverlay').classList.add('open'); }
+$('decoClose').addEventListener('click', () => $('decoOverlay').classList.remove('open'));
+$('decoOverlay').addEventListener('click', e => { if (e.target === $('decoOverlay')) $('decoOverlay').classList.remove('open'); });
+// upload avatar
+$('avaUploadBtn').addEventListener('click', () => { if (requireUploadReady()) $('avaFileInput').click(); });
+$('avaFileInput').addEventListener('change', async function(){
+  const f = this.files[0]; this.value = '';
+  if (!f || !f.type.startsWith('image/')) return;
+  const btn = $('avaUploadBtn'); btn.disabled = true;
+  try {
+    const small = await compressImage(f);
+    const url = await uploadToCloudinary(small);
+    await db.ref('profiles/' + myKey() + '/avatar').set(url);
+    toast('Đã đổi avatar mới xinh 📷');
+  } catch(e){ toast('Đổi avatar thất bại 💔'); }
+  finally { btn.disabled = false; }
+});
+$('avaClearBtn').addEventListener('click', () => {
+  if (!db) return;
+  db.ref('profiles/' + myKey() + '/avatar').remove().then(() => toast('Đã xoá avatar'));
+});
+// upload nền
+$('bgUploadBtn').addEventListener('click', () => { if (requireUploadReady()) $('bgFileInput').click(); });
+$('bgFileInput').addEventListener('change', async function(){
+  const f = this.files[0]; this.value = '';
+  if (!f || !f.type.startsWith('image/')) return;
+  const btn = $('bgUploadBtn'); btn.disabled = true;
+  try {
+    const small = await compressImage(f);
+    const url = await uploadToCloudinary(small);
+    await db.ref('chatBg').set({ type: 'image', url });
+    toast('Đã đặt ảnh làm nền chat 🖼');
+  } catch(e){ toast('Đặt nền thất bại 💔'); }
+  finally { btn.disabled = false; }
+});
+$('bgClearBtn').addEventListener('click', () => {
+  if (db) db.ref('chatBg').set({ type: 'none' });
+  else { chatBgData = { type: 'none' }; applyChatBg(chatBgData); }
+  toast('Đã bỏ hình nền');
+});
 
 // ===== NÚT "NHỚ CẬU" 💘 — tim nổ trên máy người kia ngay lập tức =====
 let lastMissSent = 0, missInit = false, lastMissTs = 0;
