@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="theme-color" content="#120B1A" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
 <title>Hiếu &amp; Huyền — Đếm ngày yêu thương</title>
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dzdldby9a/image/upload/v1783762136/ChatGPT_Image_16_28_46_11_thg_7_2026_ykltjr.png">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1399,6 +1399,36 @@ img{ max-width:100%; }
   .qa-input,.jar-compose textarea,.wc-input-row input,.we-add input{ font-size:16px; }
 }
 
+
+/* ============ FIX MOBILE: chống văng tab Safari + cảm ứng ============ */
+@media (max-width: 640px){
+  /* backdrop-filter hàng loạt là nguyên nhân crash tab Safari iOS — tắt hết trên mobile */
+  *{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+  :root{ --glass:rgba(38,27,50,.88); --glass-strong:rgba(50,36,64,.93); }
+  .topbar{ background:rgba(30,20,42,.96); }
+  .chat-shell{ background:rgba(32,22,44,.96); }
+  .modal{ background:#241636; }
+  .emo-panel,.theme-pop,.emo-pop{ background:#241636; }
+  /* giảm hiệu ứng nặng GPU trên điện thoại */
+  .monogram, .glow-ring{ animation:none; }
+  .ring-fill{ filter:none; }
+  .ring-days{ filter:none; }
+  .wheel-wrap canvas{ filter:drop-shadow(0 8px 16px rgba(0,0,0,.4)); }
+}
+/* Điện thoại không có hover → luôn hiện các nút thao tác */
+@media (hover:none){
+  .m-tools{ opacity:.85; }
+  .tool-btn{ background:rgba(255,255,255,.09); }
+  .photo-upload-btn, .duo-frame .swap{ opacity:1 !important; }
+  .gal-item .gal-meta{ opacity:1; }
+}
+.load-older{
+  display:block; margin:4px auto 12px; padding:8px 20px; border-radius:30px;
+  border:1px solid var(--line); background:var(--gold-soft); color:var(--gold);
+  font-family:'Be Vietnam Pro',sans-serif; font-size:12px; font-weight:600; cursor:pointer;
+}
+.load-older:active{ transform:scale(.96); }
+
 @media (prefers-reduced-motion: reduce){
   *{ animation:none !important; transition:none !important; }
 }
@@ -1928,6 +1958,12 @@ const pad = (n) => (n < 10 ? '0' + n : '' + n);
 
 // ===== Toast =====
 let toastTimer = null;
+window.addEventListener('error', e => {
+  try { toast('⚠️ Lỗi: ' + (e.message || 'không rõ')); } catch(_){}
+});
+window.addEventListener('unhandledrejection', e => {
+  try { toast('⚠️ Lỗi: ' + ((e.reason && e.reason.message) || 'promise')); } catch(_){}
+});
 function toast(msg){
   const t = $('toast'); t.textContent = msg; t.classList.add('show');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
@@ -1953,6 +1989,7 @@ function makeStars(){
 makeStars();
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function drawSky(){
+  if (document.hidden){ if (!reduceMotion) requestAnimationFrame(drawSky); return; }
   sctx.clearRect(0, 0, sky.width, sky.height);
   for (const s of stars){
     s.tw += .02; s.y -= s.sp * .12;
@@ -2268,6 +2305,7 @@ wireDuo('right', 'frameRight', 'imgRight', 'overlayRight', 'swapRight', 'fileRig
 // ============================================================
 const msgList = $('msgList'), msgInput = $('msgInput'), sendBtn = $('sendBtn');
 let lastMessages = [];
+let chatWindow = 25; // mở chat chỉ hiện 25 tin gần nhất — kéo lên tự tải thêm
 let replyingTo = null;
 let openPickerKey = null;
 
@@ -2356,9 +2394,25 @@ function renderMessages(list){
   }
   const sorted = [...flist].sort((a, b) => a.ts - b.ts);
   msgList.innerHTML = '';
+  let view = sorted;
+  if (!chatSearchQ && sorted.length > chatWindow){
+    view = sorted.slice(-chatWindow);
+    const older = sorted.length - chatWindow;
+    const more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'load-older';
+    more.textContent = '↑ Kéo lên để xem ' + older + ' tin cũ hơn';
+    more.addEventListener('click', () => {
+      const prevH = msgList.scrollHeight, prevTop = msgList.scrollTop;
+      chatWindow += 50;
+      renderMessages(lastMessages);
+      msgList.scrollTop = msgList.scrollHeight - prevH + prevTop;
+    });
+    msgList.appendChild(more);
+  }
   let prevSender = null, prevDay = null;
 
-  sorted.forEach((m, i) => {
+  view.forEach((m, i) => {
     const dLabel = dayLabel(m.ts);
     if (dLabel !== prevDay){
       const sep = document.createElement('div');
@@ -2371,7 +2425,7 @@ function renderMessages(list){
 
     const own = m.sender === currentSender;
     const grouped = prevSender === m.sender;
-    const next = sorted[i + 1];
+    const next = view[i + 1];
     const lastOfGroup = !next || next.sender !== m.sender || dayLabel(next.ts) !== dLabel;
 
     const row = document.createElement('div');
@@ -2911,10 +2965,20 @@ if (db){
 
 // --- Nút cuộn xuống + badge ---
 const scrollFab = $('scrollFab');
+let loadingOlder = false;
 msgList.addEventListener('scroll', () => {
   const nearBottom = msgList.scrollHeight - msgList.scrollTop - msgList.clientHeight < 120;
   scrollFab.classList.toggle('show', !nearBottom);
   if (nearBottom) clearUnread();
+  // kéo lên gần đầu → tự tải thêm tin cũ, giữ nguyên chỗ đang đọc
+  if (msgList.scrollTop < 60 && !loadingOlder && !chatSearchQ && lastMessages.length > chatWindow){
+    loadingOlder = true;
+    const prevH = msgList.scrollHeight, prevTop = msgList.scrollTop;
+    chatWindow += 50;
+    renderMessages(lastMessages);
+    msgList.scrollTop = msgList.scrollHeight - prevH + prevTop;
+    setTimeout(() => { loadingOlder = false; }, 200);
+  }
 });
 scrollFab.addEventListener('click', () => { scrollChatToEnd(); clearUnread(); markSeen(); });
 
