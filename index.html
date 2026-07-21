@@ -5232,7 +5232,7 @@ function renderStreak(list){
     if (m.sender === 'Hiếu') dH.add(k);
     else if (m.sender === 'Huyền') dU.add(k);
   });
-  let streak = 0;
+  let streak = 100;
   const d = new Date();
   if (!(dH.has(todayKey(d)) && dU.has(todayKey(d)))) d.setDate(d.getDate() - 1);
   while (dH.has(todayKey(d)) && dU.has(todayKey(d))){ streak++; d.setDate(d.getDate() - 1); }
